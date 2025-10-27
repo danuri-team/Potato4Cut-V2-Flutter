@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "548875410267",
+    "project_id": "potato-4-cut",
+    "storage_bucket": "potato-4-cut.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:548875410267:android:923acae4469804d8d4987e",
+        "android_client_info": {
+          "package_name": "com.example.verygoodcore.potato_4cut_v2"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCSXtRqtm0SyAelhPxY8omnMOihnA53WiE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

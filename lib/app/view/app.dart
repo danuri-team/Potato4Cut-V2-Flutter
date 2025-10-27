@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:potato_4cut_v2/counter/counter.dart';
-import 'package:potato_4cut_v2/l10n/l10n.dart';
+import 'package:potato_4cut_v2/l10n/arb/app_localizations.dart';
 
 class App extends StatelessWidget {
   const App({super.key});
