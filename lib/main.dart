@@ -3,25 +3,22 @@ import 'dart:developer';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:potato_4cut_v2/firebase_options.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await dotenv.load(fileName: "assets/config/.env");
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
   final fcmToken = await FirebaseMessaging.instance.getToken(
-    vapidKey:
-        "BGENgkNHKVUWM8pqooNEPreA79UjHFxicApDnTD9pMfCy3b_KWZnj4aSgyKgX9IHZz2lIymptVD3UgiXOFpfYak",
+    vapidKey: dotenv.env['vapidKey'],
   );
-  FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
   log('fcmToken = $fcmToken');
   runApp(const MyApp());
 }
 
-Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
-  print("Handling a background message: ");
-}
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
