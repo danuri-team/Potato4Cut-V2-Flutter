@@ -4,7 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:potato_4cut_v2/core/router/router_helper.dart';
 import 'package:potato_4cut_v2/core/theme/app_color.dart';
 import 'package:potato_4cut_v2/core/theme/app_text_style.dart';
-import 'package:potato_4cut_v2/core/ui/default_scaffold.dart';
+import 'package:potato_4cut_v2/core/ui/default_layout.dart';
 
 class BottomNavBar extends StatelessWidget {
   const BottomNavBar({super.key, this.appBar, required this.body});
