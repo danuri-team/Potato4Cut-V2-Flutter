@@ -5,6 +5,7 @@ abstract class RoutePath{
   RoutePath._();
 
   static const String splash = '/splash';
+  static const String login = '/login';
   static const String home = '/home';
   static const String takePhotoStep1 = '/take-photo-step1';
   static const String takePhotoStep2 = '/take-photo-step2';
@@ -26,6 +27,9 @@ abstract class AppNavigation{
 
   //splash
   static void goSplash(BuildContext context) => context.go(RoutePath.splash);
+
+  //login
+  static void goLogin(BuildContext context) => context.go(RoutePath.login);
   
   //home
   static void goHome(BuildContext context) => context.go(RoutePath.home);
