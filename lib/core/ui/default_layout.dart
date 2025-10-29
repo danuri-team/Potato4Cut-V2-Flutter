@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-class DefaultScaffold extends StatelessWidget {
-  const DefaultScaffold({
+class DefaultLayout extends StatelessWidget {
+  const DefaultLayout({
     super.key,
     this.appBar,
     required this.body,
