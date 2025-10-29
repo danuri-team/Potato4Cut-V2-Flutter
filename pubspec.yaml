@@ -34,8 +34,12 @@ flutter:
 
   assets: 
     - assets/images/
+    - assets/config/
 
-  # fonts:
+  fonts:
+    - family: UhBeeSe_hyun
+      fonts: 
+        - asset: assets/fonts/UhBee Se_hyun.ttf
   #   - family: Schyler
   #     fonts:
   #       - asset: fonts/Schyler-Regular.ttf
