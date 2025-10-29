@@ -4,21 +4,21 @@ import 'package:go_router/go_router.dart';
 abstract class RoutePath{
   RoutePath._();
 
-  static const String splash = 'splash';
-  static const String home = 'home';
-  static const String takePhotoStep1 = 'take-photo-step1';
-  static const String takePhotoStep2 = 'take-photo-step2';
-  static const String takePhotoStep3 = 'take-photo-step3';
-  static const String makeFrameStep1 = 'make-frame-step1';
-  static const String makeFrameStep2 = 'make-frame-step2';
-  static const String makeFrameStep3 = 'make-frame-step3';
-  static const String store = 'store';
-  static const String frameDetails = 'frame-details'; 
-  static const String buyFrame = 'buy-frame';
-  static const String gallery = 'gallery';
-  static const String profile = 'profile';
-  static const String profileManagement = 'profile-management';
-  static const String purchaseAndProductionHistory = 'purchase-and-production-history';
+  static const String splash = '/splash';
+  static const String home = '/home';
+  static const String takePhotoStep1 = '/take-photo-step1';
+  static const String takePhotoStep2 = '/take-photo-step2';
+  static const String takePhotoStep3 = '/take-photo-step3';
+  static const String makeFrameStep1 = '/make-frame-step1';
+  static const String makeFrameStep2 = '/make-frame-step2';
+  static const String makeFrameStep3 = '/make-frame-step3';
+  static const String store = '/store';
+  static const String frameDetails = '/frame-details'; 
+  static const String buyFrame = '/buy-frame';
+  static const String gallery = '/gallery';
+  static const String profile = '/profile';
+  static const String profileManagement = '/profile-management';
+  static const String purchaseAndProductionHistory = '/purchase-and-production-history';
 }
 
 abstract class AppNavigation{
