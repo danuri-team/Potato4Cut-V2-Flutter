@@ -36,8 +36,8 @@ abstract class AppNavigation{
 
   //take a photo
   static void gotakePhotoStep1(BuildContext context) => context.push(RoutePath.takePhotoStep1); 
-  static void goPhotoStep2(BuildContext context) => context.push(RoutePath.takePhotoStep2);
-  static void goPhotoStep3(BuildContext context) => context.push(RoutePath.takePhotoStep3);
+  static void gotakePhotoStep2(BuildContext context) => context.push(RoutePath.takePhotoStep2);
+  static void gotakePhotoStep3(BuildContext context) => context.push(RoutePath.takePhotoStep3);
 
   //make a frame
   static void goMakeFrameStep1(BuildContext context) => context.push(RoutePath.makeFrameStep1);
@@ -56,4 +56,7 @@ abstract class AppNavigation{
   static void goProfile(BuildContext context) => context.go(RoutePath.profile);
   static void goProfileManagement(BuildContext context) => context.go(RoutePath.profileManagement);
   static void goPurchaseAndProductionHistory(BuildContext context) => context.go(RoutePath.purchaseAndProductionHistory);
+
+  //pop
+  static void pop(BuildContext context) => context.pop(context);
 }
