@@ -37,9 +37,9 @@ flutter:
     - assets/config/
 
   fonts:
-    - family: UhBeeSe_hyun
+    - family: ownglyph_pdh
       fonts: 
-        - asset: assets/fonts/UhBee Se_hyun.ttf
+        - asset: assets/fonts/ownglyph_pdh.ttf
   #   - family: Schyler
   #     fonts:
   #       - asset: fonts/Schyler-Regular.ttf

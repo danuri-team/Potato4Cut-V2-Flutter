@@ -16,14 +16,20 @@ class DefaultLayout extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Container(
-          margin: EdgeInsets.only(top: 14.h),
-          height: 46.h,
-          child: appBar,
-        ),
-      ),
-      body: SafeArea(child: body),
+      appBar: appBar == null
+          ? null
+          : PreferredSize(
+              preferredSize: Size.fromHeight(60.h),
+              child: SafeArea(
+                child: Container(
+                  padding: EdgeInsets.symmetric(horizontal: 16.w),
+                  margin: EdgeInsets.only(top: 14.h),
+                  height: 46.h,
+                  child: appBar,
+                ),
+              ),
+            ),
+      body: body,
       bottomNavigationBar: bottomNavigationBar,
     );
   }
