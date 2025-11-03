@@ -2,14 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-class MakeFrameBox extends StatefulWidget {
-  const MakeFrameBox({super.key});
+class MakeFrameCard extends StatefulWidget {
+  const MakeFrameCard({super.key});
 
   @override
-  State<MakeFrameBox> createState() => _MakeFrameBoxState();
+  State<MakeFrameCard> createState() => _MakeFrameBoxState();
 }
 
-class _MakeFrameBoxState extends State<MakeFrameBox> {
+class _MakeFrameBoxState extends State<MakeFrameCard> {
   bool isTapped = false;
 
   @override

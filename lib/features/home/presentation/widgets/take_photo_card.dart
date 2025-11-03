@@ -2,14 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-class TakePhotoBox extends StatefulWidget {
-  const TakePhotoBox({super.key});
+class TakePhotoCard extends StatefulWidget {
+  const TakePhotoCard({super.key});
 
   @override
-  State<TakePhotoBox> createState() => _TakePhotoBoxState();
+  State<TakePhotoCard> createState() => _TakePhotoBoxState();
 }
 
-class _TakePhotoBoxState extends State<TakePhotoBox> {
+class _TakePhotoBoxState extends State<TakePhotoCard> {
   bool isTapped = false;
 
   @override
