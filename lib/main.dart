@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:potato_4cut_v2/core/router/router.dart';
+import 'package:potato_4cut_v2/core/theme/app_color.dart';
 // import 'package:potato_4cut_v2/firebase_options.dart';
 
 void main() async {
@@ -28,8 +29,9 @@ class App extends StatelessWidget {
   Widget build(BuildContext context) {
     return ScreenUtilInit(
       designSize: const Size(375, 812),
-      child: MaterialApp.router(
+      builder: (context, child) => MaterialApp.router(
         title: 'Potato 4Cut V2',
+        theme: ThemeData(scaffoldBackgroundColor: AppColor.background1),
         routerConfig: router,
       ),
     );
