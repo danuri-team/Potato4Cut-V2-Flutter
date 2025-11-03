@@ -12,6 +12,7 @@ import 'package:potato_4cut_v2/core/theme/app_color.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await dotenv.load(fileName: "assets/config/.env");
+  await ScreenUtil.ensureScreenSize();
   // await Firebase.initializeApp(
   //   options: DefaultFirebaseOptions.currentPlatform,
   // );

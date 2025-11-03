@@ -51,7 +51,7 @@ class BottomNavBar extends StatelessWidget {
         selectedLabelStyle: AppTextStyle.caption2.copyWith(
           fontWeight: FontWeight.w500,
         ),
-        selectedItemColor: AppColor.static2,
+        selectedItemColor: const Color(0xFFE8A025),
         unselectedItemColor: AppColor.interaction2,
         type: BottomNavigationBarType.fixed,
         items: [

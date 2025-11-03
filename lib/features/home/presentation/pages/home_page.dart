@@ -2,9 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:potato_4cut_v2/core/theme/app_text_style.dart';
+import 'package:potato_4cut_v2/core/ui/custom_search_bar.dart';
 import 'package:potato_4cut_v2/core/ui/default_layout.dart';
-import 'package:potato_4cut_v2/features/home/presentation/widgets/make_frame_box.dart';
-import 'package:potato_4cut_v2/features/home/presentation/widgets/take_photo_box.dart';
+import 'package:potato_4cut_v2/features/home/presentation/widgets/make_frame_card.dart';
+import 'package:potato_4cut_v2/features/home/presentation/widgets/take_photo_card.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -22,14 +23,18 @@ class HomePage extends StatelessWidget {
           ),
         ],
       ),
-      body: Center(
-        child: Column(
-          children: [
-            SizedBox(height: 20.h),
-            const TakePhotoBox(),
-            SizedBox(height: 20.h),
-            const MakeFrameBox(),
-          ],
+      body: SingleChildScrollView(
+        child: Center(
+          child: Column(
+            children: [
+              SizedBox(height: 20.h),
+              const CustomSearchBar(),
+              SizedBox(height: 20.h),
+              const TakePhotoCard(),
+              SizedBox(height: 20.h),
+              const MakeFrameCard(),
+            ],
+          ),
         ),
       ),
     );
