@@ -45,6 +45,7 @@ class BottomNavBar extends StatelessWidget {
       appBar: appBar,
       body: body,
       bottomNavigationBar: BottomNavigationBar(
+        backgroundColor: AppColor.background1,
         currentIndex: _currentIndex(context),
         onTap: (index) => _onItemTapped(index, context),
         showSelectedLabels: true,
