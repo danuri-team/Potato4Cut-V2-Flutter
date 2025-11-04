@@ -1,6 +1,7 @@
 import 'package:flutter/widgets.dart';
 import 'package:go_router/go_router.dart';
 import 'package:potato_4cut_v2/core/router/router_helper.dart';
+import 'package:potato_4cut_v2/features/gallery/presentation/pages/gallery_page.dart';
 import 'package:potato_4cut_v2/features/login/presentation/pages/login_page.dart';
 import 'package:potato_4cut_v2/features/profile/presentation/pages/profile_page.dart';
 import 'package:potato_4cut_v2/features/splash/presentation/pages/splash_page.dart';
@@ -15,7 +16,7 @@ final GlobalKey<NavigatorState> shellNavigationKey =
 
 GoRouter router = GoRouter(
   navigatorKey: routerNavigationKey,
-  initialLocation: RoutePath.profile,
+  initialLocation: RoutePath.gallery,
   routes: [
     GoRoute(
       path: RoutePath.splash,
@@ -36,6 +37,10 @@ GoRouter router = GoRouter(
         GoRoute(
           path: RoutePath.profile,
           builder: (context, state) => const ProfilePage(),
+        ),
+        GoRoute(
+          path: RoutePath.gallery,
+          builder: (context, state) => const GalleryPage(),
         ),
       ],
     ),
