@@ -25,6 +25,7 @@ class DefaultLayout extends StatelessWidget {
                   padding: EdgeInsets.symmetric(horizontal: 16.w),
                   margin: EdgeInsets.only(top: 14.h),
                   height: 46.h,
+                  alignment: Alignment.centerLeft,
                   child: appBar,
                 ),
               ),
