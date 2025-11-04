@@ -25,14 +25,7 @@ class GalleryPage extends StatelessWidget {
           const Filter(),
         ],
       ),
-      body: Center(
-        child: Column(
-          children: [
-            SizedBox(height: 20.h),
-            const GalleryFrameList(),
-          ],
-        ),
-      ),
+      body: const GalleryFrameList(),
     );
   }
 }
