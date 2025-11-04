@@ -4,6 +4,7 @@ import 'package:potato_4cut_v2/core/router/router_helper.dart';
 import 'package:potato_4cut_v2/features/gallery/presentation/pages/gallery_page.dart';
 import 'package:potato_4cut_v2/features/login/presentation/pages/login_page.dart';
 import 'package:potato_4cut_v2/features/profile/presentation/pages/profile_page.dart';
+import 'package:potato_4cut_v2/features/profile/presentation/pages/puchase_and_production_history_page.dart';
 import 'package:potato_4cut_v2/features/splash/presentation/pages/splash_page.dart';
 import 'package:potato_4cut_v2/core/ui/bottom_nav_bar.dart';
 import 'package:potato_4cut_v2/features/home/presentation/pages/home_page.dart';
@@ -16,7 +17,7 @@ final GlobalKey<NavigatorState> shellNavigationKey =
 
 GoRouter router = GoRouter(
   navigatorKey: routerNavigationKey,
-  initialLocation: RoutePath.gallery,
+  initialLocation: RoutePath.purchaseAndProductionHistory,
   routes: [
     GoRoute(
       path: RoutePath.splash,
@@ -25,6 +26,10 @@ GoRouter router = GoRouter(
     GoRoute(
       path: RoutePath.login,
       builder: (context, state) => const LoginPage(),
+    ),
+    GoRoute(
+      path: RoutePath.purchaseAndProductionHistory,
+      builder: (context, state) => const PuchaseAndProductionHistoryPage(),
     ),
     ShellRoute(
       navigatorKey: shellNavigationKey,

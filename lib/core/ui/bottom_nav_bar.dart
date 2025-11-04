@@ -7,9 +7,8 @@ import 'package:potato_4cut_v2/core/theme/app_text_style.dart';
 import 'package:potato_4cut_v2/core/ui/default_layout.dart';
 
 class BottomNavBar extends StatelessWidget {
-  const BottomNavBar({super.key, this.appBar, required this.body});
+  const BottomNavBar({super.key, required this.body});
 
-  final Widget? appBar;
   final Widget body;
 
   int _currentIndex(BuildContext context) {
@@ -42,7 +41,6 @@ class BottomNavBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return DefaultLayout(
-      appBar: appBar,
       body: body,
       bottomNavigationBar: BottomNavigationBar(
         backgroundColor: AppColor.background1,
