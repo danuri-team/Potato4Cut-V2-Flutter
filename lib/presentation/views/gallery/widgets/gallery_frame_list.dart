@@ -1,7 +1,7 @@
 import 'package:flutter/widgets.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:potato_4cut_v2/core/theme/app_text_style.dart';
-import 'package:potato_4cut_v2/core/ui/loading_frame.dart';
+import 'package:potato_4cut_v2/presentation/widgets/loading_frame.dart';
 
 class GalleryFrameList extends StatelessWidget {
   const GalleryFrameList({super.key});

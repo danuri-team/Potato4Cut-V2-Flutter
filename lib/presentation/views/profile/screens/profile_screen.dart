@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:potato_4cut_v2/core/ui/default_layout.dart';
-import 'package:potato_4cut_v2/features/profile/presentation/widgets/withdraw_and_logout.dart';
-import 'package:potato_4cut_v2/features/profile/presentation/widgets/setting_card_list.dart';
-import 'package:potato_4cut_v2/features/profile/presentation/widgets/user_profile.dart';
+import 'package:potato_4cut_v2/presentation/widgets/default_layout.dart';
+import 'package:potato_4cut_v2/presentation/views/profile/widgets/withdraw_and_logout.dart';
+import 'package:potato_4cut_v2/presentation/views/profile/widgets/setting_card_list.dart';
+import 'package:potato_4cut_v2/presentation/views/profile/widgets/user_profile.dart';
 
-class ProfilePage extends StatelessWidget {
-  const ProfilePage({super.key});
+class ProfileScreen extends StatelessWidget {
+  const ProfileScreen({super.key});
 
   @override
   Widget build(BuildContext context) {

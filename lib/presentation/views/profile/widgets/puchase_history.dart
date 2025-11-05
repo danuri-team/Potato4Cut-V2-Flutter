@@ -1,12 +1,12 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
 import 'package:potato_4cut_v2/core/theme/app_text_style.dart';
-import 'package:potato_4cut_v2/core/ui/filter.dart';
-import 'package:potato_4cut_v2/core/ui/loading_frame.dart';
+import 'package:potato_4cut_v2/presentation/widgets/filter.dart';
+import 'package:potato_4cut_v2/presentation/widgets/loading_frame.dart';
 
-class ProductionHistory extends StatelessWidget {
-  const ProductionHistory({super.key});
+class PuchaseHistory extends StatelessWidget {
+  const PuchaseHistory({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -16,7 +16,7 @@ class ProductionHistory extends StatelessWidget {
           padding: EdgeInsets.symmetric(horizontal: 15.w),
           child: Row(
             children: [
-              Text('제작 내역', style: AppTextStyle.headLine2),
+              Text('구매 내역', style: AppTextStyle.headLine2),
               const Spacer(),
               const Filter(),
             ],

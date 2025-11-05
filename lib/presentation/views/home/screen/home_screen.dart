@@ -2,13 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:potato_4cut_v2/core/theme/app_text_style.dart';
-import 'package:potato_4cut_v2/core/ui/custom_search_bar.dart';
-import 'package:potato_4cut_v2/core/ui/default_layout.dart';
-import 'package:potato_4cut_v2/features/home/presentation/widgets/make_frame_card.dart';
-import 'package:potato_4cut_v2/features/home/presentation/widgets/take_photo_card.dart';
+import 'package:potato_4cut_v2/presentation/widgets/custom_search_bar.dart';
+import 'package:potato_4cut_v2/presentation/widgets/default_layout.dart';
+import 'package:potato_4cut_v2/presentation/views/home/widgets/make_frame_card.dart';
+import 'package:potato_4cut_v2/presentation/views/home/widgets/take_photo_card.dart';
 
-class HomePage extends StatelessWidget {
-  const HomePage({super.key});
+class HomeScreen extends StatelessWidget {
+  const HomeScreen({super.key});
 
   @override
   Widget build(BuildContext context) {

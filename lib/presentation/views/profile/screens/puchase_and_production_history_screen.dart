@@ -1,13 +1,13 @@
 import 'package:flutter/widgets.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:potato_4cut_v2/core/ui/default_layout.dart';
-import 'package:potato_4cut_v2/core/ui/submit_button.dart';
-import 'package:potato_4cut_v2/features/profile/presentation/widgets/production_history.dart';
-import 'package:potato_4cut_v2/features/profile/presentation/widgets/puchase_history.dart';
+import 'package:potato_4cut_v2/presentation/widgets/default_layout.dart';
+import 'package:potato_4cut_v2/presentation/widgets/submit_button.dart';
+import 'package:potato_4cut_v2/presentation/views/profile/widgets/production_history.dart';
+import 'package:potato_4cut_v2/presentation/views/profile/widgets/puchase_history.dart';
 
-class PuchaseAndProductionHistoryPage extends StatelessWidget {
-  const PuchaseAndProductionHistoryPage({super.key});
+class PuchaseAndProductionHistoryScreen extends StatelessWidget {
+  const PuchaseAndProductionHistoryScreen({super.key});
 
   @override
   Widget build(BuildContext context) {

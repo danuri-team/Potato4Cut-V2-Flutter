@@ -1,13 +1,13 @@
 import 'package:flutter/widgets.dart';
 import 'package:go_router/go_router.dart';
 import 'package:potato_4cut_v2/core/router/router_helper.dart';
-import 'package:potato_4cut_v2/features/gallery/presentation/pages/gallery_page.dart';
-import 'package:potato_4cut_v2/features/login/presentation/pages/login_page.dart';
-import 'package:potato_4cut_v2/features/profile/presentation/pages/profile_page.dart';
-import 'package:potato_4cut_v2/features/profile/presentation/pages/puchase_and_production_history_page.dart';
-import 'package:potato_4cut_v2/features/splash/presentation/pages/splash_page.dart';
-import 'package:potato_4cut_v2/core/ui/bottom_nav_bar.dart';
-import 'package:potato_4cut_v2/features/home/presentation/pages/home_page.dart';
+import 'package:potato_4cut_v2/presentation/views/gallery/screen/gallery_screen.dart';
+import 'package:potato_4cut_v2/presentation/views/home/screen/home_screen.dart';
+import 'package:potato_4cut_v2/presentation/views/login/screens/login_screen.dart';
+import 'package:potato_4cut_v2/presentation/views/profile/screens/profile_screen.dart';
+import 'package:potato_4cut_v2/presentation/views/profile/screens/puchase_and_production_history_screen.dart';
+import 'package:potato_4cut_v2/presentation/views/splash/screen/splash_screen.dart';
+import 'package:potato_4cut_v2/presentation/widgets/bottom_nav_bar.dart';
 
 final GlobalKey<NavigatorState> routerNavigationKey =
     GlobalKey<NavigatorState>();
@@ -21,15 +21,15 @@ GoRouter router = GoRouter(
   routes: [
     GoRoute(
       path: RoutePath.splash,
-      builder: (context, state) => const SplashPage(),
+      builder: (context, state) => const SplashScreen(),
     ),
     GoRoute(
       path: RoutePath.login,
-      builder: (context, state) => const LoginPage(),
+      builder: (context, state) => const LoginScreen(),
     ),
     GoRoute(
       path: RoutePath.purchaseAndProductionHistory,
-      builder: (context, state) => const PuchaseAndProductionHistoryPage(),
+      builder: (context, state) => const PuchaseAndProductionHistoryScreen(),
     ),
     ShellRoute(
       navigatorKey: shellNavigationKey,
@@ -37,15 +37,15 @@ GoRouter router = GoRouter(
       routes: [
         GoRoute(
           path: RoutePath.home,
-          builder: (context, state) => const HomePage(),
+          builder: (context, state) => const HomeScreen(),
         ),
         GoRoute(
           path: RoutePath.profile,
-          builder: (context, state) => const ProfilePage(),
+          builder: (context, state) => const ProfileScreen(),
         ),
         GoRoute(
           path: RoutePath.gallery,
-          builder: (context, state) => const GalleryPage(),
+          builder: (context, state) => const GalleryScreen(),
         ),
       ],
     ),
