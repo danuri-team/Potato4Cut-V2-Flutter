@@ -40,12 +40,6 @@ class SettingCardList extends StatelessWidget {
       children: [
         settingCard(text: '언어 설정', onTap: () {}),
         SizedBox(height: 16.h),
-        settingCard(text: '알림 설정', onTap: () {}),
-        SizedBox(height: 16.h),
-        settingCard(text: '구매내역/제작내역', onTap: () {}),
-        SizedBox(height: 16.h),
-        settingCard(text: '문의하기/신고하기', onTap: () {}),
-        SizedBox(height: 16.h),
         settingCard(text: '개인정보 처리방침', onTap: () {}),
         SizedBox(height: 16.h),
         settingCard(text: '이용 약관', onTap: () {}),
