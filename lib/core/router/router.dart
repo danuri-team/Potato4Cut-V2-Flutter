@@ -11,6 +11,9 @@ import 'package:potato_4cut_v2/features/sign_up/pages/sign_up_step3_page.dart';
 import 'package:potato_4cut_v2/features/splash/presentation/pages/splash_page.dart';
 import 'package:potato_4cut_v2/core/ui/bottom_nav_bar.dart';
 import 'package:potato_4cut_v2/features/home/presentation/pages/home_page.dart';
+import 'package:potato_4cut_v2/features/take_photo/presentation/pages/take_photo_step1_page.dart';
+import 'package:potato_4cut_v2/features/take_photo/presentation/pages/take_photo_step2_page.dart';
+import 'package:potato_4cut_v2/features/take_photo/presentation/pages/take_photo_step3_page.dart';
 
 final GlobalKey<NavigatorState> routerNavigationKey =
     GlobalKey<NavigatorState>();
@@ -20,7 +23,7 @@ final GlobalKey<NavigatorState> shellNavigationKey =
 
 GoRouter router = GoRouter(
   navigatorKey: routerNavigationKey,
-  initialLocation: RoutePath.signUpStep3,
+  initialLocation: RoutePath.takePhotoStep1,
   routes: [
     GoRoute(
       path: RoutePath.splash,
@@ -45,6 +48,17 @@ GoRouter router = GoRouter(
     GoRoute(
       path: RoutePath.purchaseAndProductionHistory,
       builder: (context, state) => const PuchaseAndProductionHistoryPage(),
+=======
+      path: RoutePath.takePhotoStep1,
+      builder: (context, state) => const TakePhotoStep1Page(),
+    ),
+    GoRoute(
+      path: RoutePath.takePhotoStep2,
+      builder: (context, state) => const TakePhotoStep2Page(),
+    ),
+    GoRoute(
+      path: RoutePath.takePhotoStep3,
+      builder: (context, state) => const TakePhotoStep3Page(),
     ),
     ShellRoute(
       navigatorKey: shellNavigationKey,
