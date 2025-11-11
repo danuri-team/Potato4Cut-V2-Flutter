@@ -9,6 +9,7 @@ class SubmitButton extends StatelessWidget {
     super.key,
     required this.onTap,
     this.prefixSvg,
+    this.suffixSvg,
     required this.width,
     required this.text,
     required this.isActivate,
@@ -16,6 +17,7 @@ class SubmitButton extends StatelessWidget {
 
   final double width;
   final SvgPicture? prefixSvg;
+  final SvgPicture? suffixSvg;
   final String text;
   final bool isActivate;
   final Function() onTap;
@@ -23,12 +25,12 @@ class SubmitButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: onTap,
+      onTap: isActivate ? onTap : () {},
       child: Container(
         width: width,
         height: 48.h,
         decoration: ShapeDecoration(
-          color: isActivate ? const Color(0xFFEEB752) : AppColor.fill2,
+          color: isActivate ? const Color(0xFFE8A025) : AppColor.fill2,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(12),
           ),
@@ -36,7 +38,13 @@ class SubmitButton extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            if (prefixSvg != null) prefixSvg!,
+            if (prefixSvg != null)
+              Row(
+                children: [
+                  prefixSvg!,
+                  SizedBox(width: 6.w),
+                ],
+              ),
             SizedBox(width: 6.w),
             Text(
               text,
@@ -45,6 +53,13 @@ class SubmitButton extends StatelessWidget {
                 color: isActivate ? AppColor.static1 : AppColor.label4,
               ),
             ),
+            if (suffixSvg != null)
+              Row(
+                children: [
+                  SizedBox(width: 6.w),
+                  suffixSvg!,
+                ],
+              ),
           ],
         ),
       ),
