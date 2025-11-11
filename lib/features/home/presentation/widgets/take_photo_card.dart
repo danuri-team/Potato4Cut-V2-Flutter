@@ -17,7 +17,7 @@ class _TakePhotoBoxState extends State<TakePhotoCard> {
     return GestureDetector(
       onTapDown: (details) => setState(() => isTapped = !isTapped),
       onTapUp: (details) => setState(() => isTapped = !isTapped),
-      onTapCancel:() => setState(() => isTapped = false),
+      onTapCancel: () => setState(() => isTapped = false),
       child: Container(
         width: 343.w,
         height: 174.h,
