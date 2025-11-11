@@ -10,7 +10,6 @@ class SubmitButton extends StatelessWidget {
     required this.onTap,
     this.prefixSvg,
     this.suffixSvg,
-    this.svg,
     required this.width,
     required this.text,
     required this.isActivate,

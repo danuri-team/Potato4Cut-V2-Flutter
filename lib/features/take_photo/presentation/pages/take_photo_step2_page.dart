@@ -61,7 +61,6 @@ class TakePhotoStep2Page extends ConsumerWidget {
                 }
               },
               width: 343.w,
-              svg: SvgPicture.asset('assets/images/camera.svg'),
               text: '사진찍기',
               isActivate: true,
             ),
