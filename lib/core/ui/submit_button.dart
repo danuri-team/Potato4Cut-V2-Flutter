@@ -38,14 +38,7 @@ class SubmitButton extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            if (prefixSvg != null)
-              Row(
-                children: [
-                  prefixSvg!,
-                  SizedBox(width: 6.w),
-                ],
-              ),
-            SizedBox(width: 6.w),
+            if (prefixSvg != null) ...[prefixSvg!, SizedBox(width: 6.w)],
             Text(
               text,
               style: AppTextStyle.body1Normal.copyWith(
@@ -53,13 +46,7 @@ class SubmitButton extends StatelessWidget {
                 color: isActivate ? AppColor.static1 : AppColor.label4,
               ),
             ),
-            if (suffixSvg != null)
-              Row(
-                children: [
-                  SizedBox(width: 6.w),
-                  suffixSvg!,
-                ],
-              ),
+            if (suffixSvg != null) ...[SizedBox(width: 6.w), suffixSvg!],
           ],
         ),
       ),
