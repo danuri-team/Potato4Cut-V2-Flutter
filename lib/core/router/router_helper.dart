@@ -13,6 +13,7 @@ abstract class RoutePath{
   static const String takePhotoStep1 = '/take-photo-step1';
   static const String takePhotoStep2 = '/take-photo-step2';
   static const String takePhotoStep3 = '/take-photo-step3';
+  static const String takePhotoStep4 = '/take-photo-step4';
   static const String makeFrameStep1 = '/make-frame-step1';
   static const String makeFrameStep2 = '/make-frame-step2';
   static const String makeFrameStep3 = '/make-frame-step3';
@@ -46,6 +47,7 @@ abstract class AppNavigation{
   static void gotakePhotoStep1(BuildContext context) => context.push(RoutePath.takePhotoStep1); 
   static void gotakePhotoStep2(BuildContext context) => context.push(RoutePath.takePhotoStep2);
   static void gotakePhotoStep3(BuildContext context) => context.push(RoutePath.takePhotoStep3);
+  static void gotakePhotoStep4(BuildContext context) => context.push(RoutePath.takePhotoStep4);
 
   //make a frame
   static void goMakeFrameStep1(BuildContext context) => context.push(RoutePath.makeFrameStep1);
