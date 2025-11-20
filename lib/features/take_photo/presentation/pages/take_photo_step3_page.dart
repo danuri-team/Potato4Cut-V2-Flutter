@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:potato_4cut_v2/core/theme/app_color.dart';
@@ -7,12 +8,13 @@ import 'package:potato_4cut_v2/core/ui/custom_back_button.dart';
 import 'package:potato_4cut_v2/core/ui/default_layout.dart';
 import 'package:potato_4cut_v2/core/ui/submit_button.dart';
 import 'package:potato_4cut_v2/features/take_photo/presentation/widgets/current_progress_indicator.dart';
+import 'package:potato_4cut_v2/features/take_photo/presentation/widgets/share_button.dart';
 
-class TakePhotoStep3Page extends StatelessWidget {
+class TakePhotoStep3Page extends ConsumerWidget {
   const TakePhotoStep3Page({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return DefaultLayout(
       appBar: const CustomBackButton(),
       body: Column(
@@ -41,33 +43,7 @@ class TakePhotoStep3Page extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              GestureDetector(
-                onTap: () {},
-                child: Container(
-                  width: 166.w,
-                  height: 48.h,
-                  decoration: ShapeDecoration(
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
-                      side: BorderSide(width: 1, color: AppColor.line2),
-                    ),
-                  ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      SvgPicture.asset('assets/images/frame_share.svg'),
-                      SizedBox(width: 6.w),
-                      Text(
-                        '공유하기',
-                        style: AppTextStyle.body1Normal.copyWith(
-                          fontWeight: FontWeight.w600,
-                          color: AppColor.label3,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
+              const ShareButton(),
               SizedBox(width: 12.w),
               SubmitButton(
                 onTap: () {},

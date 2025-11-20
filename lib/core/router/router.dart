@@ -23,7 +23,7 @@ final GlobalKey<NavigatorState> shellNavigationKey =
 
 GoRouter router = GoRouter(
   navigatorKey: routerNavigationKey,
-  initialLocation: RoutePath.takePhotoStep2,
+  initialLocation: RoutePath.takePhotoStep3,
   routes: [
     GoRoute(
       path: RoutePath.splash,
