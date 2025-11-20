@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:potato_4cut_v2/core/router/router_helper.dart';
+import 'package:potato_4cut_v2/core/util/throttle.dart';
 
 class TakePhotoCard extends StatefulWidget {
   const TakePhotoCard({super.key});
@@ -18,6 +20,7 @@ class _TakePhotoBoxState extends State<TakePhotoCard> {
       onTapDown: (details) => setState(() => isTapped = !isTapped),
       onTapUp: (details) => setState(() => isTapped = !isTapped),
       onTapCancel: () => setState(() => isTapped = false),
+      onTap: () => Throttle.run(() => AppNavigation.gotakePhotoStep1(context)),
       child: Container(
         width: 343.w,
         height: 174.h,

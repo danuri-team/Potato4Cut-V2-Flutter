@@ -84,19 +84,23 @@ class _FrameListState extends State<FrameList> {
                 _isExpanded = true;
               });
             },
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  '더보기',
-                  style: AppTextStyle.label1Normal.copyWith(
-                    fontWeight: FontWeight.w600,
-                    color: AppColor.label3,
+            child: SizedBox(
+              width: 58.w,
+              height: 28.h,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    '더보기',
+                    style: AppTextStyle.label1Normal.copyWith(
+                      fontWeight: FontWeight.w600,
+                      color: AppColor.label3,
+                    ),
                   ),
-                ),
-                SizedBox(width: 4.w),
-                SvgPicture.asset('assets/images/circle_plus.svg'),
-              ],
+                  SizedBox(width: 4.w),
+                  SvgPicture.asset('assets/images/circle_plus.svg'),
+                ],
+              ),
             ),
           ),
         ],
