@@ -22,7 +22,7 @@ class LoginScreen extends StatelessWidget {
             SizedBox(height: 107.h),
             const AppleAuthBar(),
             SizedBox(height: 12.h),
-            const GoogleAuthBar(),
+            GoogleAuthBar(),
           ],
         ),
       ),
