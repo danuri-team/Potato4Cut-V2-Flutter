@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
@@ -24,14 +22,14 @@ void main() async {
   final GoogleSignIn googleSignInInstance = GoogleSignIn.instance;
   await googleSignInInstance.initialize();
   final account = await googleSignInInstance.authenticate();
-  final response = await UserDataSource().googleLogin(
+  
+  await UserDataSource().googleLogin(
     GoogleLoginRequest(
       provider: SocialProvider.GOOGLE,
       oauthToken: account.authentication.idToken!,
       deviceToken: fcmToken!,
     ),
   );
-  log('response = $response');
   // runApp(const App());
 }
 

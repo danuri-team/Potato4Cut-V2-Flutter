@@ -12,7 +12,6 @@ class UserDataSource {
     await dio.post(
       '/api/v1/auth/login',
       data: request.toJson(),
-      options: Options(headers: {'Authorization': ''}),
     );
   }
 
