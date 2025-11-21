@@ -51,7 +51,7 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions android = FirebaseOptions(
     apiKey: 'AIzaSyCSXtRqtm0SyAelhPxY8omnMOihnA53WiE',
-    appId: '1:548875410267:android:cb2f1a35b4e8c072d4987e',
+    appId: '1:548875410267:android:643918a4bbc066f6d4987e',
     messagingSenderId: '548875410267',
     projectId: 'potato-4-cut',
     storageBucket: 'potato-4-cut.firebasestorage.app',
@@ -59,10 +59,13 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions ios = FirebaseOptions(
     apiKey: 'AIzaSyBtHcAGyg4VVVPGyscReww1Sp4aqbTbw0c',
-    appId: '1:548875410267:ios:2510de2f2ca4209ad4987e',
+    appId: '1:548875410267:ios:7ebf5dd3203362ffd4987e',
     messagingSenderId: '548875410267',
     projectId: 'potato-4-cut',
     storageBucket: 'potato-4-cut.firebasestorage.app',
-    iosBundleId: 'com.example.potato4cutV2',
+    androidClientId: '548875410267-s7v4rul72vj0ldgshqrak55ipfhdbcgg.apps.googleusercontent.com',
+    iosClientId: '548875410267-7chlsnita8f66ojtui8gjpsmt3omum3v.apps.googleusercontent.com',
+    iosBundleId: 'com.potato.fourcut',
   );
+
 }
