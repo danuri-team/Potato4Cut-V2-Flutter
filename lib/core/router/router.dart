@@ -26,11 +26,11 @@ GoRouter router = GoRouter(
   routes: [
     GoRoute(
       path: RoutePath.splash,
-      builder: (context, state) => const SplashScreen(),
+      builder: (context, state) => const SplashPage(),
     ),
     GoRoute(
       path: RoutePath.login,
-      builder: (context, state) => const LoginScreen(),
+      builder: (context, state) => const LoginPage(),
     ),
     GoRoute(
       path: RoutePath.signUpStep1,
@@ -46,7 +46,7 @@ GoRouter router = GoRouter(
     ),
     GoRoute(
       path: RoutePath.purchaseAndProductionHistory,
-      builder: (context, state) => const PuchaseAndProductionHistoryScreen(),
+      builder: (context, state) => const PuchaseAndProductionHistoryPage(),
     ),
     GoRoute(
       path: RoutePath.takePhotoStep1,
@@ -62,15 +62,15 @@ GoRouter router = GoRouter(
       routes: [
         GoRoute(
           path: RoutePath.home,
-          builder: (context, state) => const HomeScreen(),
+          builder: (context, state) => const HomePage(),
         ),
         GoRoute(
           path: RoutePath.profile,
-          builder: (context, state) => const ProfileScreen(),
+          builder: (context, state) => const ProfilePage(),
         ),
         GoRoute(
           path: RoutePath.gallery,
-          builder: (context, state) => const GalleryScreen(),
+          builder: (context, state) => const GalleryPage(),
         ),
       ],
     ),
