@@ -9,7 +9,7 @@ plugins {
 }
 
 android {
-    namespace = "com.example.potato_4cut_v2"
+    namespace = "com.potato.fourcut"
     compileSdk = flutter.compileSdkVersion
     ndkVersion = flutter.ndkVersion
 
@@ -24,7 +24,7 @@ android {
 
     defaultConfig {
         // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
-        applicationId = "com.example.potato_4cut_v2"
+        applicationId = "com.potato.fourcut"
         // You can update the following values to match your application needs.
         // For more information, see: https://flutter.dev/to/review-gradle-config.
         minSdk = flutter.minSdkVersion
