@@ -63,6 +63,6 @@ class DefaultFirebaseOptions {
     messagingSenderId: '548875410267',
     projectId: 'potato-4-cut',
     storageBucket: 'potato-4-cut.firebasestorage.app',
-    iosBundleId: 'com.example.potato4cutV2',
+    iosBundleId: 'com.potato.4cut',
   );
 }
