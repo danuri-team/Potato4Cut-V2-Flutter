@@ -28,8 +28,25 @@
 	<true/>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+	<key>NSCameraUsageDescription</key>
+	<string>사진 촬영을 위해 카메라 접근이 필요합니다.</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>사진 저장을 위해 앨범 접근이 필요합니다.</string>
 	<key>NSPushNotificationUsageDescription</key>
 	<string>앱에서 새로운 네컷 소식을 보내기 위해 사용됩니다.</string>
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>com.googleusercontent.apps.548875410267-u3bdf5oibk15m7e7r8cphiksql2ep8gs</string>
+			</array>
+		</dict>
+	</array>
+	<key>GIDClientID</key>
+	<string>548875410267-u3bdf5oibk15m7e7r8cphiksql2ep8gs.apps.googleusercontent.com</string>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
 	<key>UIBackgroundModes</key>
