@@ -59,7 +59,7 @@ GoRouter router = GoRouter(
     ),
     GoRoute(
       path: RoutePath.takePhotoStep3,
-      builder: (context, state) => const TakePhotoStep3Page(),
+      builder: (context, state) => TakePhotoStep3Page(),
     ),
     ShellRoute(
       navigatorKey: shellNavigationKey,
