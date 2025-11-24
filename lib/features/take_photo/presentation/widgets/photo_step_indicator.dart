@@ -8,7 +8,7 @@ class PhotoStepIndicator extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final photoCount = ref.read(photoProvider.notifier).photoCount;
+    ref.watch(photoProvider);
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 5.33.w, vertical: 2.67.h),
       width: 32.w,
@@ -21,6 +21,7 @@ class PhotoStepIndicator extends ConsumerWidget {
           childAspectRatio: 9.33.w / 12.h,
         ),
         itemBuilder: (context, index) {
+          final photoCount = ref.read(photoProvider.notifier).photoCount;
           return Container(
             decoration: BoxDecoration(
               color: index < photoCount
