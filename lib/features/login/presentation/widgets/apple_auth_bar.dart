@@ -2,12 +2,46 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:potato_4cut_v2/core/router/router_helper.dart';
 import 'package:potato_4cut_v2/core/theme/app_color.dart';
 import 'package:potato_4cut_v2/core/theme/app_text_style.dart';
 import 'package:potato_4cut_v2/features/login/provider/auth_provider.dart';
+import 'package:potato_4cut_v2/features/login/provider/auth_state.dart';
 
 class AppleAuthBar extends ConsumerWidget {
   const AppleAuthBar({super.key});
+
+  appleLogin(WidgetRef ref, BuildContext context, AuthState authState) async {
+    try {
+      await ref.read(authProvider.notifier).loginWithApple();
+
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Apple 로그인 성공'),
+            backgroundColor: Colors.green,
+          ),
+        );
+
+        if (authState.newUser == true) {
+          AppNavigation.goSignUpStep1(context);
+        } else if (authState.newUser == false) {
+          AppNavigation.goHome(context);
+        }
+
+        ScaffoldMessenger.of(context).removeCurrentSnackBar();
+      }
+    } catch (e) {
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Apple 로그인 실패: ${e.toString()}'),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -15,31 +49,7 @@ class AppleAuthBar extends ConsumerWidget {
     final isLoading = authState.isLoadingFor('APPLE');
 
     return GestureDetector(
-      onTap: authState.isLoading
-          ? null
-          : () async {
-              try {
-                await ref.read(authProvider.notifier).loginWithApple();
-
-                if (context.mounted) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text('Apple 로그인 성공'),
-                      backgroundColor: Colors.green,
-                    ),
-                  );
-                }
-              } catch (e) {
-                if (context.mounted) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: Text('Apple 로그인 실패: ${e.toString()}'),
-                      backgroundColor: Colors.red,
-                    ),
-                  );
-                }
-              }
-            },
+      onTap: authState.isLoading ? null : () => appleLogin(ref, context, authState),
       child: Container(
         width: 345.w,
         height: 48.h,
