@@ -1,7 +1,7 @@
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:potato_4cut_v2/core/provider/photo_provider.dart';
+import 'package:potato_4cut_v2/features/take_photo/provider/photo_provider.dart';
 
 class PhotoStepIndicator extends ConsumerWidget {
   const PhotoStepIndicator({super.key});

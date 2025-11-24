@@ -4,12 +4,12 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:potato_4cut_v2/core/enum/take_photo_flow_type.dart';
-import 'package:potato_4cut_v2/core/provider/camera_controller_provider.dart';
-import 'package:potato_4cut_v2/core/provider/countdown_provider.dart';
-import 'package:potato_4cut_v2/core/provider/current_page_index_provider.dart';
-import 'package:potato_4cut_v2/core/provider/take_photo_flow_provider.dart';
+import 'package:potato_4cut_v2/features/take_photo/provider/camera_controller_provider.dart';
+import 'package:potato_4cut_v2/features/take_photo/provider/countdown_provider.dart';
+import 'package:potato_4cut_v2/features/take_photo/provider/current_page_index_provider.dart';
+import 'package:potato_4cut_v2/features/take_photo/provider/take_photo_flow_provider.dart';
 import 'package:potato_4cut_v2/core/theme/app_color.dart';
-import 'package:potato_4cut_v2/core/provider/photo_provider.dart';
+import 'package:potato_4cut_v2/features/take_photo/provider/photo_provider.dart';
 import 'package:potato_4cut_v2/core/theme/app_text_style.dart';
 
 class TakePhotoBox extends ConsumerStatefulWidget {
