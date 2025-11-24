@@ -1,27 +1,33 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:potato_4cut_v2/core/theme/app_color.dart';
 import 'package:potato_4cut_v2/core/theme/app_text_style.dart';
+import 'package:potato_4cut_v2/core/util/throttle.dart';
+import 'package:potato_4cut_v2/features/take_photo/provider/finished_photo_provider.dart';
 import 'package:share_plus/share_plus.dart';
 
-class ShareButton extends StatelessWidget {
+class ShareButton extends ConsumerWidget {
   const ShareButton({super.key});
 
-  Future<void> share() async {
-    //예시 이미지
-    final photo1 = await ImagePicker().pickImage(source: ImageSource.gallery);
-
-    SharePlus.instance.share(ShareParams(files: [photo1!, photo1]));
+  Future<void> sharePhoto(File photo) async {
+    final xfile = XFile(photo.path);
+    final url = dotenv.env['sharingUrl']!;
+    SharePlus.instance.share(ShareParams(files: [xfile], uri: Uri.parse(url)));
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final finishedPhoto = ref.watch(finishedPhotoProvider);
     return GestureDetector(
-      onTap: () async {
-        await share();
-      },
+      onTap: finishedPhoto == null
+          ? null
+          : () => Throttle.run(() => sharePhoto(finishedPhoto)),
       child: Container(
         width: 166.w,
         height: 48.h,
