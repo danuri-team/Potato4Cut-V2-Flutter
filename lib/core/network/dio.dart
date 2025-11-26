@@ -17,6 +17,7 @@ class _AppDio with DioMixin implements AppDio {
       baseUrl: dotenv.env['apiBaseUrl']!,
       headers: {
         'Content-Type': 'application/json',
+        // 'Content-Type': 'multipart/form-data',
       },
       sendTimeout: const Duration(seconds: 30),
       connectTimeout: const Duration(seconds: 30),
@@ -24,21 +25,16 @@ class _AppDio with DioMixin implements AppDio {
       receiveDataWhenStatusError: true,
     );
 
-    interceptors.addAll(
-      [
-        InterceptorsWrapper(
-          onError: (error, handler) async {
-            return handler.reject(error);
-          },
-          onRequest: (options, handler) async {
-            return handler.next(options);
-          },
-        ),
-        LogInterceptor(
-          requestBody: true,
-          responseBody: true,
-        ),
-      ],
-    );
+    interceptors.addAll([
+      InterceptorsWrapper(
+        onError: (error, handler) async {
+          return handler.reject(error);
+        },
+        onRequest: (options, handler) async {
+          return handler.next(options);
+        },
+      ),
+      LogInterceptor(requestBody: true, responseBody: true),
+    ]);
   }
 }

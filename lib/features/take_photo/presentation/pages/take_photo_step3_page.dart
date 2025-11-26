@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:io';
 import 'package:flutter/material.dart';
 
@@ -13,6 +14,7 @@ import 'package:potato_4cut_v2/core/ui/custom_back_button.dart';
 import 'package:potato_4cut_v2/core/ui/default_layout.dart';
 import 'package:potato_4cut_v2/core/ui/submit_button.dart';
 import 'package:potato_4cut_v2/core/util/throttle.dart';
+import 'package:potato_4cut_v2/features/take_photo/data/data_sources/photos_data_source.dart';
 import 'package:potato_4cut_v2/features/take_photo/data/data_sources/photos_data_source_impl.dart';
 import 'package:potato_4cut_v2/features/take_photo/presentation/widgets/current_progress_indicator.dart';
 import 'package:potato_4cut_v2/features/take_photo/presentation/widgets/finished_photo.dart';
@@ -42,11 +44,13 @@ class TakePhotoStep3Page extends ConsumerWidget {
         children: [
           ElevatedButton(
             onPressed: () async {
-              final photo = await ImagePicker().pickImage(
-                source: ImageSource.gallery,
-              );
-              final file = File(photo!.path);
-              PhotosDataSourceImpl(AppDio.getInstance()).savePhoto(file);
+              // final photo = await ImagePicker().pickImage(
+              //   source: ImageSource.gallery,
+              // );
+              // final file = File(photo!.path);
+              final dio = AppDio.getInstance();
+              // PhotosDataSourceImpl(dio).savePhoto(file);
+              PhotosDataSourceImpl(dio).getMyInfo();
             },
             child: Text('api'),
           ),

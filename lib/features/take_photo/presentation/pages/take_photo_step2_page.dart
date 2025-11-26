@@ -3,7 +3,6 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:potato_4cut_v2/core/enum/take_photo_flow_type.dart';
 import 'package:potato_4cut_v2/features/take_photo/provider/camera_controller_provider.dart';
 import 'package:potato_4cut_v2/features/take_photo/provider/countdown_provider.dart';
@@ -149,7 +148,6 @@ class TakePhotoStep2Page extends ConsumerWidget {
     );
   }
 
-  final imagePicker = ImagePicker();
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     _initCamera(ref);
