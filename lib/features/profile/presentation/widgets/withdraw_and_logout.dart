@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:potato_4cut_v2/core/theme/app_color.dart';
+import 'package:potato_4cut_v2/features/login/provider/stoarage_provider.dart';
 
-class WithdrawAndLogout extends StatelessWidget {
+class WithdrawAndLogout extends ConsumerWidget {
   const WithdrawAndLogout({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return SizedBox(
       width: 125.w,
       height: 14.h,
@@ -32,7 +34,9 @@ class WithdrawAndLogout extends StatelessWidget {
             endIndent: 3.h,
           ),
           GestureDetector(
-            onTap: () {},
+            onTap: () async{
+              await ref.read(storageProvider.notifier).logout();
+            },
             child: Text(
               '로그아웃',
               style: TextStyle(
