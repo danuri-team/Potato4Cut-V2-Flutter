@@ -11,7 +11,11 @@ import 'package:potato_4cut_v2/features/login/provider/auth_state.dart';
 class AppleAuthBar extends ConsumerWidget {
   const AppleAuthBar({super.key});
 
-  appleLogin(WidgetRef ref, BuildContext context, AuthState authState) async {
+  Future<void> appleLogin(
+    WidgetRef ref,
+    BuildContext context,
+    AuthState authState,
+  ) async {
     try {
       await ref.read(authProvider.notifier).loginWithApple();
 
@@ -49,7 +53,11 @@ class AppleAuthBar extends ConsumerWidget {
     final isLoading = authState.isLoadingFor('APPLE');
 
     return GestureDetector(
-      onTap: authState.isLoading ? null : () => appleLogin(ref, context, authState),
+      onTap: authState.isLoading
+          ? null
+          : () async {
+              await appleLogin(ref, context, authState);
+            },
       child: Container(
         width: 345.w,
         height: 48.h,

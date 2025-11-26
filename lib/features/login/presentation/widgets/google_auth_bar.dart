@@ -11,7 +11,11 @@ import 'package:potato_4cut_v2/features/login/provider/auth_state.dart';
 class GoogleAuthBar extends ConsumerWidget {
   const GoogleAuthBar({super.key});
 
-  googleLogin(WidgetRef ref, BuildContext context, AuthState authState) async {
+  Future<void> googleLogin(
+    WidgetRef ref,
+    BuildContext context,
+    AuthState authState,
+  ) async {
     try {
       await ref.read(authProvider.notifier).loginWithGoogle();
 
@@ -28,7 +32,7 @@ class GoogleAuthBar extends ConsumerWidget {
         } else if (authState.newUser == false) {
           AppNavigation.goHome(context);
         }
-        
+
         ScaffoldMessenger.of(context).removeCurrentSnackBar();
       }
     } catch (e) {
@@ -51,7 +55,9 @@ class GoogleAuthBar extends ConsumerWidget {
     return GestureDetector(
       onTap: authState.isLoading
           ? null
-          : () => googleLogin(ref, context, authState),
+          : () async {
+              await googleLogin(ref, context, authState);
+            },
       child: Container(
         width: 345.w,
         height: 48.h,

@@ -5,6 +5,7 @@ import 'package:potato_4cut_v2/features/login/data/datasources/auth_remote_datas
 import 'package:potato_4cut_v2/features/login/data/repositories/auth_repository_impl.dart';
 import 'package:potato_4cut_v2/features/login/domain/repositories/auth_repository.dart';
 import 'package:potato_4cut_v2/features/login/provider/auth_state.dart';
+import 'package:potato_4cut_v2/features/login/provider/stoarage_provider.dart';
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 
 final authRemoteDataSourceProvider = Provider<AuthRemoteDataSource>((ref) {
@@ -20,8 +21,9 @@ class AuthNotifier extends StateNotifier<AuthState> {
   final AuthRepository _repository;
   final FcmService _fcmService;
   final GoogleSignIn _googleSignIn;
+  final Ref ref;
 
-  AuthNotifier(this._repository, this._fcmService, this._googleSignIn)
+  AuthNotifier(this._repository, this._fcmService, this._googleSignIn, this.ref)
     : super(const AuthState());
 
   Future<void> loginWithApple() async {
@@ -67,6 +69,7 @@ class AuthNotifier extends StateNotifier<AuthState> {
       await _googleSignIn.signOut();
 
       final googleUser = await _googleSignIn.signIn();
+
       if (googleUser == null) {
         state = state.copyWith(isLoading: false, loadingProvider: null);
         return;
@@ -110,6 +113,8 @@ class AuthNotifier extends StateNotifier<AuthState> {
         errorMessage: null,
         newUser: result.newUser,
       );
+
+      ref.read(storageProvider.notifier).login();
     } catch (e) {
       state = state.copyWith(
         status: AuthStatus.unauthenticated,
@@ -185,5 +190,5 @@ final authProvider = StateNotifierProvider<AuthNotifier, AuthState>((ref) {
   final repository = ref.watch(authRepositoryProvider);
   final fcmService = ref.watch(fcmServiceProvider);
   final googleSignIn = ref.watch(googleSignInProvider);
-  return AuthNotifier(repository, fcmService, googleSignIn);
+  return AuthNotifier(repository, fcmService, googleSignIn, ref);
 });
