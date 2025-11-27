@@ -17,7 +17,6 @@ class _AppDio with DioMixin implements AppDio {
       baseUrl: dotenv.env['apiBaseUrl']!,
       headers: {
         'Content-Type': 'application/json',
-        // 'Content-Type': 'multipart/form-data',
       },
       sendTimeout: const Duration(seconds: 30),
       connectTimeout: const Duration(seconds: 30),
