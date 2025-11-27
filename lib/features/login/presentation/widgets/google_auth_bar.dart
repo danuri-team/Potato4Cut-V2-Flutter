@@ -27,11 +27,11 @@ class GoogleAuthBar extends ConsumerWidget {
           ),
         );
 
-        // if (authState.newUser == true) {
-        //   AppNavigation.goSignUpStep1(context);
-        // } else if (authState.newUser == false) {
-        //   AppNavigation.goHome(context);
-        // }
+        if (authState.newUser == true) {
+          AppNavigation.goSignUpStep1(context);
+        } else if (authState.newUser == false) {
+          AppNavigation.goHome(context);
+        }
 
         ScaffoldMessenger.of(context).removeCurrentSnackBar();
       }
