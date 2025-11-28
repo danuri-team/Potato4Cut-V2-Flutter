@@ -4,6 +4,10 @@ import 'package:potato_4cut_v2/core/services/fcm_service.dart';
 import 'package:potato_4cut_v2/features/login/data/datasources/auth_remote_datasource.dart';
 import 'package:potato_4cut_v2/features/login/data/repositories/auth_repository_impl.dart';
 import 'package:potato_4cut_v2/features/login/domain/repositories/auth_repository.dart';
+import 'package:potato_4cut_v2/features/login/domain/use_cases/auth_use_cases.dart';
+import 'package:potato_4cut_v2/features/login/domain/use_cases/login_use_case.dart';
+import 'package:potato_4cut_v2/features/login/domain/use_cases/logout_use_case.dart';
+import 'package:potato_4cut_v2/features/login/domain/use_cases/refresh_token_use_case.dart';
 import 'package:potato_4cut_v2/features/login/provider/auth_state.dart';
 import 'package:potato_4cut_v2/features/login/provider/stoarage_provider.dart';
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
@@ -17,13 +21,42 @@ final authRepositoryProvider = Provider<AuthRepository>((ref) {
   return AuthRepositoryImpl(remoteDataSource: remoteDataSource);
 });
 
+final loginUseCaseProvider = Provider<LoginUseCase>((ref) {
+  final repository = ref.watch(authRepositoryProvider);
+  return LoginUseCase(repository);
+});
+
+final refreshTokenUseCaseProvider = Provider<RefreshTokenUseCase>((ref) {
+  final repository = ref.watch(authRepositoryProvider);
+  return RefreshTokenUseCase(repository);
+});
+
+final logoutUseCaseProvider = Provider((ref) {
+  final repository = ref.watch(authRepositoryProvider);
+  return LogoutUseCase(repository);
+});
+
+final authUseCasesProvider = Provider<AuthUseCases>((ref) {
+  final loginUseCase = ref.watch(loginUseCaseProvider);
+  final refreshTokenUseCase = ref.watch(refreshTokenUseCaseProvider);
+  final logoutUseCase = ref.watch(logoutUseCaseProvider);
+  return AuthUseCases(loginUseCase, refreshTokenUseCase, logoutUseCase);
+});
+
+final authProvider = StateNotifierProvider<AuthNotifier, AuthState>((ref) {
+  final useCases = ref.watch(authUseCasesProvider);
+  final fcmService = ref.watch(fcmServiceProvider);
+  final googleSignIn = ref.watch(googleSignInProvider);
+  return AuthNotifier(useCases, fcmService, googleSignIn, ref);
+});
+
 class AuthNotifier extends StateNotifier<AuthState> {
-  final AuthRepository _repository;
+  final AuthUseCases _useCases;
   final FcmService _fcmService;
   final GoogleSignIn _googleSignIn;
   final Ref ref;
 
-  AuthNotifier(this._repository, this._fcmService, this._googleSignIn, this.ref)
+  AuthNotifier(this._useCases, this._fcmService, this._googleSignIn, this.ref)
     : super(const AuthState());
 
   Future<void> loginWithApple() async {
@@ -97,10 +130,10 @@ class AuthNotifier extends StateNotifier<AuthState> {
     try {
       final deviceToken = await _fcmService.getToken();
 
-      final result = await _repository.login(
-        provider: provider,
-        token: token,
-        deviceToken: deviceToken,
+      final result = await _useCases.loginUseCase.login(
+        provider,
+        token,
+        deviceToken,
       );
 
       state = state.copyWith(
@@ -139,7 +172,7 @@ class AuthNotifier extends StateNotifier<AuthState> {
     }
 
     try {
-      final result = await _repository.refreshToken(state.refreshToken!);
+      final result = await _useCases.refreshTokenUseCase.refreshToken(state.refreshToken!);
 
       state = state.copyWith(
         status: AuthStatus.authenticated,
@@ -165,7 +198,7 @@ class AuthNotifier extends StateNotifier<AuthState> {
     state = state.copyWith(isLoading: true);
 
     try {
-      await _repository.logout();
+      await _useCases.logoutUseCase.logout();
 
       state = const AuthState(
         status: AuthStatus.unauthenticated,
@@ -184,11 +217,4 @@ class AuthNotifier extends StateNotifier<AuthState> {
 
 final googleSignInProvider = Provider<GoogleSignIn>((ref) {
   return GoogleSignIn(scopes: ['email']);
-});
-
-final authProvider = StateNotifierProvider<AuthNotifier, AuthState>((ref) {
-  final repository = ref.watch(authRepositoryProvider);
-  final fcmService = ref.watch(fcmServiceProvider);
-  final googleSignIn = ref.watch(googleSignInProvider);
-  return AuthNotifier(repository, fcmService, googleSignIn, ref);
 });
