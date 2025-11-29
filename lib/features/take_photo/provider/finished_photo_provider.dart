@@ -28,4 +28,8 @@ class FinishedPhotoNotifier extends StateNotifier<File?> {
     final file2 = await file1.writeAsBytes(pngBytes);
     state = file2;
   }
+
+  void resetState(){
+    state = null;
+  }
 }
