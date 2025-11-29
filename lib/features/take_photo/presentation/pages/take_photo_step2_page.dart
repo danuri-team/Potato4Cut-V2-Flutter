@@ -4,9 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:potato_4cut_v2/core/enum/take_photo_flow_type.dart';
+import 'package:potato_4cut_v2/features/take_photo/presentation/view_model/photo_view_model.dart';
 import 'package:potato_4cut_v2/features/take_photo/provider/camera_controller_provider.dart';
 import 'package:potato_4cut_v2/features/take_photo/provider/countdown_provider.dart';
 import 'package:potato_4cut_v2/features/take_photo/provider/current_page_index_provider.dart';
+import 'package:potato_4cut_v2/features/take_photo/provider/cut_ids_provider.dart';
 import 'package:potato_4cut_v2/features/take_photo/provider/take_photo_flow_provider.dart';
 import 'package:potato_4cut_v2/core/router/router_helper.dart';
 import 'package:potato_4cut_v2/core/theme/app_text_style.dart';
@@ -21,8 +23,15 @@ import 'package:potato_4cut_v2/features/take_photo/presentation/widgets/outlined
 import 'package:potato_4cut_v2/features/take_photo/presentation/widgets/photo_step_indicator.dart';
 import 'package:potato_4cut_v2/features/take_photo/presentation/widgets/take_photo_box.dart';
 
-class TakePhotoStep2Page extends ConsumerWidget {
-  TakePhotoStep2Page({super.key});
+class TakePhotoStep2Page extends ConsumerStatefulWidget {
+  const TakePhotoStep2Page({super.key});
+
+  @override
+  ConsumerState<TakePhotoStep2Page> createState() => _TakePhotoStep2PageState();
+}
+
+class _TakePhotoStep2PageState extends ConsumerState<TakePhotoStep2Page> {
+  bool _isLoading = false;
 
   void _resetPhotoFlow(WidgetRef ref) {
     ref
@@ -97,7 +106,7 @@ class TakePhotoStep2Page extends ConsumerWidget {
         ),
         SizedBox(width: 12.w),
         SubmitButton(
-          onTap: () {
+          onTap: () async {
             photoNotifier.confirmPhoto(currentPageIndex);
 
             if (photoNotifier.allPhotosConfirmed) {
@@ -115,8 +124,65 @@ class TakePhotoStep2Page extends ConsumerWidget {
   }
 
   Widget _nextButton(BuildContext context) {
+    if (_isLoading) {
+      return Container(
+        width: 343.w,
+        height: 48.h,
+        decoration: ShapeDecoration(
+          color: const Color(0xFFE8A025),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12),
+          ),
+        ),
+        child: Center(
+          child: SizedBox(
+            width: 20.w,
+            height: 20.h,
+            child: const CircularProgressIndicator(
+              strokeWidth: 2,
+              valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+            ),
+          ),
+        ),
+      );
+    }
+
     return SubmitButton(
-      onTap: () => Throttle.run(() => AppNavigation.gotakePhotoStep3(context)),
+      onTap: () => Throttle.run(() async {
+        setState(() {
+          _isLoading = true;
+        });
+
+        try {
+          final photos = ref.watch(photoProvider);
+          final List<File> images = [];
+
+          for (var photo in photos) {
+            images.add(photo.file!);
+          }
+
+          final result = await ref
+              .read(photoViewModel.notifier)
+              .savePhotos(images);
+
+          final List<String> cutIds = [];
+          for (var element in result.data) {
+            cutIds.add(element.cutId);
+          }
+
+          ref.read(cutIdsProvider.notifier).update((state) => cutIds,);
+
+          if (mounted) {
+            AppNavigation.gotakePhotoStep3(context);
+          }
+        } finally {
+          if (mounted) {
+            setState(() {
+              _isLoading = false;
+            });
+          }
+        }
+      }),
       width: 343.w,
       text: '다음으로',
       isActivate: true,
@@ -133,7 +199,7 @@ class TakePhotoStep2Page extends ConsumerWidget {
     return switch (flow) {
       TakePhotoFlowType.TakePhoto => _takePhotoButton(ref),
       TakePhotoFlowType.Confirming => _reTakeAndconfirmationButton(ref),
-      TakePhotoFlowType.AfterConfirmation => _nextButton(context),
+      TakePhotoFlowType.AfterConfirmation => _nextButton(context,),
     };
   }
 
@@ -149,7 +215,7 @@ class TakePhotoStep2Page extends ConsumerWidget {
   }
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Widget build(BuildContext context) {
     _initCamera(ref);
 
     return DefaultLayout(
