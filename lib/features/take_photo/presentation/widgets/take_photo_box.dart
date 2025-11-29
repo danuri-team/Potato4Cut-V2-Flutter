@@ -1,53 +1,146 @@
-import 'dart:developer';
-
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/svg.dart';
+import 'package:potato_4cut_v2/core/enum/take_photo_flow_type.dart';
+import 'package:potato_4cut_v2/features/take_photo/provider/camera_controller_provider.dart';
+import 'package:potato_4cut_v2/features/take_photo/provider/countdown_provider.dart';
+import 'package:potato_4cut_v2/features/take_photo/provider/current_page_index_provider.dart';
+import 'package:potato_4cut_v2/features/take_photo/provider/take_photo_flow_provider.dart';
 import 'package:potato_4cut_v2/core/theme/app_color.dart';
+import 'package:potato_4cut_v2/features/take_photo/provider/photo_provider.dart';
+import 'package:potato_4cut_v2/core/theme/app_text_style.dart';
 
-class TakePhotoBox extends StatefulWidget {
+class TakePhotoBox extends ConsumerStatefulWidget {
   const TakePhotoBox({super.key});
 
   @override
-  State<TakePhotoBox> createState() => TakePhotoBoxState();
+  ConsumerState<TakePhotoBox> createState() => TakePhotoBoxState();
 }
 
-class TakePhotoBoxState extends State<TakePhotoBox> {
-  CameraController? cameraController;
+class TakePhotoBoxState extends ConsumerState<TakePhotoBox> {
+  final pageController = PageController(viewportFraction: 0.85);
+
+  @override
+  void initState() {
+    super.initState();
+    pageController.addListener(() {
+      final pageIndex = pageController.page?.round() ?? 0;
+      ref.read(currentPageIndexProvider.notifier).update((state) => pageIndex);
+    });
+  }
 
   @override
   void dispose() {
     super.dispose();
-    cameraController!.dispose();
+    pageController.dispose();
   }
 
-  Future<void> settingCamera() async {
-    final cameras = await availableCameras();
-    log('camera length = $cameras');
-    cameraController = CameraController(
-      cameras[0],
-      ResolutionPreset.max,
-      enableAudio: true,
+  Widget _cameraPreview(CameraController controller, int? countdown) {
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: 12.w),
+      child: CameraPreview(
+        controller,
+        child: countdown != null && countdown > 0
+            ? Center(
+                child: Text(
+                  '$countdown',
+                  style: AppTextStyle.heading1.copyWith(
+                    fontWeight: FontWeight.w700,
+                    color: AppColor.static1,
+                  ),
+                ),
+              )
+            : const SizedBox.shrink(),
+      ),
     );
-    await cameraController!.initialize();
+  }
+
+  Widget _photoPreview(PhotoItem photoItem, {bool showConfirmedmark = false}) {
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: 12.w),
+      child: Container(
+        decoration: BoxDecoration(
+          image: DecorationImage(
+            image: FileImage(photoItem.file!),
+            fit: BoxFit.cover,
+          ),
+        ),
+        child: showConfirmedmark
+            ? Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  SvgPicture.asset('assets/images/white_check.svg'),
+                  SizedBox(height: 10.h),
+                  Text(
+                    '확정',
+                    style: AppTextStyle.heading1.copyWith(
+                      fontWeight: FontWeight.w500,
+                      color: AppColor.static1,
+                    ),
+                  ),
+                ],
+              )
+            : const SizedBox.shrink(),
+      ),
+    );
+  }
+
+  Widget _photoBox(
+    int index,
+    PhotoItem photoItem,
+    TakePhotoFlowType takePhotoFlow,
+    CameraController cameraController,
+  ) {
+    final countdown = ref.watch(countdownProvider);
+    final currentPageIndex = ref.watch(currentPageIndexProvider);
+
+    switch (takePhotoFlow) {
+      case TakePhotoFlowType.TakePhoto:
+        return _cameraPreview(cameraController, countdown);
+
+      case TakePhotoFlowType.Confirming:
+        final isRetaking = index == currentPageIndex && countdown != null;
+        return isRetaking
+            ? _cameraPreview(cameraController, countdown > 0 ? countdown : null)
+            : _photoPreview(
+                photoItem,
+                showConfirmedmark: photoItem.isConfirmed,
+              );
+
+      case TakePhotoFlowType.AfterConfirmation:
+        return _photoPreview(photoItem, showConfirmedmark: true);
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder(
-      future: settingCamera(),
-      builder: (context, snapshot) {
-        if (cameraController != null) {
-          return Container(
-            width: 343.w,
-            height: 444.h,
-            color: AppColor.static2,
-            child: CameraPreview(cameraController!),
+    final photos = ref.watch(photoProvider);
+    final takePhotoFlow = ref.watch(takePhotoFlowProvider);
+    final cameraController = ref.watch(cameraControllerProvider);
+
+    return SizedBox(
+      width: double.infinity,
+      height: 414.h,
+      child: PageView.builder(
+        controller: pageController,
+        itemCount: takePhotoFlow == TakePhotoFlowType.TakePhoto
+            ? 1
+            : photos.length,
+        itemBuilder: (context, index) {
+          if (cameraController == null) {
+            return Container(color: AppColor.static2);
+          }
+
+          return _photoBox(
+            index,
+            photos[index],
+            takePhotoFlow,
+            cameraController,
           );
-        } else {
-          return SizedBox.shrink();
-        }
-      },
+        },
+      ),
     );
   }
 }

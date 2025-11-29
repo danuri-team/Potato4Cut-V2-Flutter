@@ -24,21 +24,16 @@ class _AppDio with DioMixin implements AppDio {
       receiveDataWhenStatusError: true,
     );
 
-    interceptors.addAll(
-      [
-        InterceptorsWrapper(
-          onError: (error, handler) async {
-            return handler.reject(error);
-          },
-          onRequest: (options, handler) async {
-            return handler.next(options);
-          },
-        ),
-        LogInterceptor(
-          requestBody: true,
-          responseBody: true,
-        ),
-      ],
-    );
+    interceptors.addAll([
+      InterceptorsWrapper(
+        onError: (error, handler) async {
+          return handler.reject(error);
+        },
+        onRequest: (options, handler) async {
+          return handler.next(options);
+        },
+      ),
+      LogInterceptor(requestBody: true, responseBody: true),
+    ]);
   }
 }

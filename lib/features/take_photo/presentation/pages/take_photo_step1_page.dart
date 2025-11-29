@@ -2,11 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:potato_4cut_v2/core/router/router_helper.dart';
 import 'package:potato_4cut_v2/core/theme/app_text_style.dart';
+import 'package:potato_4cut_v2/core/ui/custom_back_button.dart';
 import 'package:potato_4cut_v2/core/ui/default_layout.dart';
 import 'package:potato_4cut_v2/core/ui/submit_button.dart';
-import 'package:potato_4cut_v2/features/take_photo/presentation/widgets/current_page_index_bar.dart';
+import 'package:potato_4cut_v2/core/util/throttle.dart';
+import 'package:potato_4cut_v2/features/take_photo/presentation/widgets/current_progress_indicator.dart';
 import 'package:potato_4cut_v2/features/take_photo/presentation/widgets/frame_list.dart';
-import 'package:potato_4cut_v2/features/take_photo/presentation/widgets/take_photo_appbar.dart';
 
 class TakePhotoStep1Page extends StatelessWidget {
   const TakePhotoStep1Page({super.key});
@@ -14,13 +15,13 @@ class TakePhotoStep1Page extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return DefaultLayout(
-      appBar: const TakePhotoAppbar(),
+      appBar: const CustomBackButton(),
       body: Padding(
         padding: EdgeInsets.only(left: 16.w, right: 16.w, bottom: 16.h),
         child: Column(
           children: [
-            SizedBox(height: 12.h),
-            const CurrentPageIndexBar(),
+            SizedBox(height: 6.h),
+            const CurrentProgressIndicator(),
             SizedBox(height: 14.h),
             Align(
               alignment: Alignment.centerLeft,
@@ -31,7 +32,9 @@ class TakePhotoStep1Page extends StatelessWidget {
             const Spacer(),
             SubmitButton(
               onTap: () {
-                AppNavigation.gotakePhotoStep2(context);
+                Throttle.run(() {
+                  AppNavigation.gotakePhotoStep2(context);
+                });
               },
               width: 343.w,
               text: '확인',

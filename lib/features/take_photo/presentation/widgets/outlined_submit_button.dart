@@ -4,8 +4,8 @@ import 'package:flutter_svg/svg.dart';
 import 'package:potato_4cut_v2/core/theme/app_color.dart';
 import 'package:potato_4cut_v2/core/theme/app_text_style.dart';
 
-class SubmitButton extends StatelessWidget {
-  const SubmitButton({
+class OutlinedSubmitButton extends StatelessWidget {
+  const OutlinedSubmitButton({
     super.key,
     required this.onTap,
     this.prefixSvg,
@@ -30,9 +30,9 @@ class SubmitButton extends StatelessWidget {
         width: width,
         height: 48.h,
         decoration: ShapeDecoration(
-          color: isActivate ? const Color(0xFFE8A025) : AppColor.fill2,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(12),
+            side: BorderSide(width: 1, color: AppColor.line2),
           ),
         ),
         child: Row(
@@ -43,7 +43,7 @@ class SubmitButton extends StatelessWidget {
               text,
               style: AppTextStyle.body1Normal.copyWith(
                 fontWeight: FontWeight.w600,
-                color: isActivate ? AppColor.static1 : AppColor.label4,
+                color: isActivate ? Color(0xFFE8A025) : AppColor.label1,
               ),
             ),
             if (suffixSvg != null) ...[SizedBox(width: 6.w), suffixSvg!],
