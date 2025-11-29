@@ -6,6 +6,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:potato_4cut_v2/core/router/router_helper.dart';
 import 'package:potato_4cut_v2/core/theme/app_color.dart';
 import 'package:potato_4cut_v2/core/theme/app_text_style.dart';
 import 'package:potato_4cut_v2/core/util/throttle.dart';
@@ -15,10 +16,12 @@ import 'package:share_plus/share_plus.dart';
 class ShareButton extends ConsumerWidget {
   const ShareButton({super.key});
 
-  Future<void> sharePhoto(File photo) async {
+  Future<void> sharePhoto(File photo, BuildContext context) async {
     final xfile = XFile(photo.path);
     final url = dotenv.env['sharingUrl']!;
     SharePlus.instance.share(ShareParams(files: [xfile], uri: Uri.parse(url)));
+
+    AppNavigation.goHome(context);
   }
 
   @override
@@ -27,7 +30,7 @@ class ShareButton extends ConsumerWidget {
     return GestureDetector(
       onTap: finishedPhoto == null
           ? null
-          : () => Throttle.run(() => sharePhoto(finishedPhoto)),
+          : () => Throttle.run(() => sharePhoto(finishedPhoto, context)),
       child: Container(
         width: 166.w,
         height: 48.h,
