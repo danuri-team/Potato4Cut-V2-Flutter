@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:hive_ce_flutter/hive_flutter.dart';
 import 'package:potato_4cut_v2/core/router/router.dart';
 import 'package:potato_4cut_v2/core/theme/app_color.dart';
 // import 'package:potato_4cut_v2/firebase_options.dart';
@@ -14,6 +15,8 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await dotenv.load(fileName: "assets/config/.env");
   await ScreenUtil.ensureScreenSize();
+  await Hive.initFlutter();
+
   // await Firebase.initializeApp(
   //   options: DefaultFirebaseOptions.currentPlatform,
   // );
