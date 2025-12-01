@@ -1,4 +1,3 @@
-import 'dart:developer';
 
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
@@ -23,7 +22,6 @@ class TakePhotoBoxState extends State<TakePhotoBox> {
 
   Future<void> settingCamera() async {
     final cameras = await availableCameras();
-    log('camera length = $cameras');
     cameraController = CameraController(
       cameras[0],
       ResolutionPreset.max,
