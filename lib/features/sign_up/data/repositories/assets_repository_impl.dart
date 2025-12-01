@@ -5,8 +5,7 @@ import 'package:potato_4cut_v2/features/sign_up/domain/repositories/assets_repos
 class AssetsRepositoryImpl implements AssetsRepository {
   final AssetsDataSource _dataSource;
 
-  const AssetsRepositoryImpl({required AssetsDataSource dataSource})
-    : _dataSource = dataSource;
+  const AssetsRepositoryImpl(this._dataSource);
 
   @override
   Future<ProfilePresetEntity> getProfilePreset() async{
