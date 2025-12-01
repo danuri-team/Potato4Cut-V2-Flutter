@@ -5,9 +5,9 @@ import 'package:potato_4cut_v2/features/gallery/presentation/pages/gallery_page.
 import 'package:potato_4cut_v2/features/login/presentation/pages/login_page.dart';
 import 'package:potato_4cut_v2/features/profile/presentation/pages/profile_page.dart';
 import 'package:potato_4cut_v2/features/profile/presentation/pages/puchase_and_production_history_page.dart';
-import 'package:potato_4cut_v2/features/sign_up/pages/sign_up_step1_page.dart';
-import 'package:potato_4cut_v2/features/sign_up/pages/sign_up_step2_page.dart';
-import 'package:potato_4cut_v2/features/sign_up/pages/sign_up_step3_page.dart';
+import 'package:potato_4cut_v2/features/sign_up/presentation/pages/sign_up_step1_page.dart';
+import 'package:potato_4cut_v2/features/sign_up/presentation/pages/sign_up_step2_page.dart';
+import 'package:potato_4cut_v2/features/sign_up/presentation/pages/sign_up_step3_page.dart';
 import 'package:potato_4cut_v2/features/splash/presentation/pages/splash_page.dart';
 import 'package:potato_4cut_v2/core/ui/bottom_nav_bar.dart';
 import 'package:potato_4cut_v2/features/home/presentation/pages/home_page.dart';
@@ -23,7 +23,7 @@ final GlobalKey<NavigatorState> shellNavigationKey =
 
 GoRouter router = GoRouter(
   navigatorKey: routerNavigationKey,
-  initialLocation: RoutePath.takePhotoStep3,
+  initialLocation: RoutePath.login,
   routes: [
     GoRoute(
       path: RoutePath.splash,

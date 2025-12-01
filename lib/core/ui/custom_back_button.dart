@@ -14,7 +14,7 @@ class CustomBackButton extends StatelessWidget {
       onTap: () {
         Throttle.run(() {
           AppNavigation.pop(context);
-          onTap;
+          onTap?.call();
         });
       },
       child: SvgPicture.asset('assets/images/chevron_left.svg'),
