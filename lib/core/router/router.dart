@@ -13,6 +13,7 @@ import 'package:potato_4cut_v2/core/ui/bottom_nav_bar.dart';
 import 'package:potato_4cut_v2/features/home/presentation/pages/home_page.dart';
 import 'package:potato_4cut_v2/features/take_photo/presentation/pages/take_photo_step1_page.dart';
 import 'package:potato_4cut_v2/features/take_photo/presentation/pages/take_photo_step2_page.dart';
+import 'package:potato_4cut_v2/features/take_photo/presentation/pages/take_photo_step3_page.dart';
 
 final GlobalKey<NavigatorState> routerNavigationKey =
     GlobalKey<NavigatorState>();
@@ -54,7 +55,11 @@ GoRouter router = GoRouter(
     ),
     GoRoute(
       path: RoutePath.takePhotoStep2,
-      builder: (context, state) => const TakePhotoStep2Page(),
+      builder: (context, state) => TakePhotoStep2Page(),
+    ),
+    GoRoute(
+      path: RoutePath.takePhotoStep3,
+      builder: (context, state) => TakePhotoStep3Page(),
     ),
     ShellRoute(
       navigatorKey: shellNavigationKey,

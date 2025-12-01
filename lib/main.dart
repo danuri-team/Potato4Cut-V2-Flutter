@@ -25,7 +25,10 @@ class App extends StatelessWidget {
         designSize: const Size(375, 812),
         builder: (context, child) => MaterialApp.router(
           title: 'Potato 4Cut V2',
-          theme: ThemeData(scaffoldBackgroundColor: AppColor.background1),
+          theme: ThemeData(
+            scaffoldBackgroundColor: AppColor.background1,
+            splashColor: Colors.transparent,
+          ),
           routerConfig: router,
         ),
       ),
