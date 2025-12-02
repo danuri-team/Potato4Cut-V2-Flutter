@@ -3,9 +3,11 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hive_ce_flutter/hive_flutter.dart';
 import 'package:potato_4cut_v2/core/constants/hive_keys.dart';
 import 'package:potato_4cut_v2/core/enum/local_storage_event_type.dart';
+import 'package:potato_4cut_v2/core/router/router_helper.dart';
 import 'package:potato_4cut_v2/core/theme/app_color.dart';
 import 'package:potato_4cut_v2/core/theme/app_text_style.dart';
 import 'package:potato_4cut_v2/core/ui/submit_button.dart';
+import 'package:potato_4cut_v2/core/util/throttle.dart';
 
 class DefaultLayout extends StatefulWidget {
   const DefaultLayout({
@@ -24,16 +26,17 @@ class DefaultLayout extends StatefulWidget {
 }
 
 class _DefaultLayoutState extends State<DefaultLayout> {
-  bool _isDialogShowing = false;
+  static bool _isDialogShowing = false;
 
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (!_isDialogShowing) {
+    if (!_isDialogShowing) {
+      _isDialogShowing = true;
+      WidgetsBinding.instance.addPostFrameCallback((_) {
         _checkAndShowPermissionDialog();
-      }
-    });
+      });
+    }
   }
 
   Future<void> _checkAndShowPermissionDialog() async {
@@ -41,8 +44,7 @@ class _DefaultLayoutState extends State<DefaultLayout> {
     await box.delete(SettingsKeys.permissionShown);
     final isShown = box.get(SettingsKeys.permissionShown, defaultValue: false);
 
-    if (!isShown && !_isDialogShowing) {
-      _isDialogShowing = true;
+    if (!isShown) {
       await _showPermissionRequestDialog();
       _isDialogShowing = false;
     }
@@ -70,7 +72,7 @@ class _DefaultLayoutState extends State<DefaultLayout> {
     );
   }
 
-  Future<void> _showPermissionRequestDialog() async {
+  _showPermissionRequestDialog() async {
     return showDialog<void>(
       context: context,
       barrierDismissible: false,
@@ -116,8 +118,10 @@ class _DefaultLayoutState extends State<DefaultLayout> {
                 SizedBox(height: 32.h),
                 SubmitButton(
                   onTap: () {
-                    Navigator.of(context).pop();
-                    _savePermissionChoice(true);
+                    Throttle.run(() {
+                      _savePermissionChoice(true);
+                      AppNavigation.pop(context);
+                    });
                   },
                   width: 287.w,
                   text: "동의",
@@ -126,8 +130,10 @@ class _DefaultLayoutState extends State<DefaultLayout> {
                 SizedBox(height: 10.h),
                 SubmitButton(
                   onTap: () {
-                    Navigator.of(context).pop();
-                    _savePermissionChoice(false);
+                    Throttle.run(() {
+                      _savePermissionChoice(false);
+                      AppNavigation.pop(context);
+                    });
                   },
                   width: 287.w,
                   text: "거부",
