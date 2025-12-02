@@ -1,12 +1,10 @@
 import 'dart:io';
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:gal/gal.dart';
-import 'package:potato_4cut_v2/core/network/dio.dart';
 import 'package:potato_4cut_v2/core/router/router_helper.dart';
 import 'package:potato_4cut_v2/core/theme/app_color.dart';
 import 'package:potato_4cut_v2/core/theme/app_text_style.dart';
@@ -47,7 +45,6 @@ class TakePhotoStep3Page extends ConsumerWidget {
     }
     await Gal.putImage(photo.path);
 
-    // 모든 상태 초기화
     ref.read(photoProvider.notifier).reset();
     ref.read(currentPageIndexProvider.notifier).update((state) => 0,);
     ref.read(cutIdsProvider.notifier).update((state) => [],);
@@ -64,25 +61,6 @@ class TakePhotoStep3Page extends ConsumerWidget {
       appBar: const CustomBackButton(),
       body: Column(
         children: [
-          ElevatedButton(
-            onPressed: () async {
-              try {
-                final dio = AppDio.getInstance();
-                await dio.post(
-                  '/api/v1/auth/refresh',
-                  data: {
-                    'refreshToken':
-                        'eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJkNWY1ZDA2OC0wOTdmLTQzMDYtOWVjNi1kNzI1OTM5ZmM5NDUiLCJyb2xlIjoiVVNFUiIsImlhdCI6MTc2NDMxMzkzMiwiZXhwIjoxNzY0OTE4NzMyfQ.inaCJQVqntFE3EBKUy-e1NXt-mYjTcjlecU1VY9hA9XSG5QtrrCuELc_hbpsoS7n',
-                  },
-                );
-              } on DioException {
-                rethrow;
-              } catch (e) {
-                throw Exception('Unexpected error during token refresh: $e');
-              }
-            },
-            child: Text('refresh token'),
-          ),
           SizedBox(height: 6.h),
           const CurrentProgressIndicator(),
           SizedBox(height: 24.h),

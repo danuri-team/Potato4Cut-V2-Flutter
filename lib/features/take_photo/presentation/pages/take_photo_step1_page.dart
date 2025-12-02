@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:potato_4cut_v2/core/router/router_helper.dart';
 import 'package:potato_4cut_v2/core/theme/app_text_style.dart';
 import 'package:potato_4cut_v2/core/ui/custom_back_button.dart';
@@ -8,7 +7,6 @@ import 'package:potato_4cut_v2/core/ui/default_layout.dart';
 import 'package:potato_4cut_v2/core/ui/submit_button.dart';
 import 'package:potato_4cut_v2/core/util/throttle.dart';
 import 'package:potato_4cut_v2/features/take_photo/presentation/widgets/current_progress_indicator.dart';
-import 'package:potato_4cut_v2/features/take_photo/presentation/widgets/frame_list.dart';
 import 'package:potato_4cut_v2/features/take_photo/presentation/widgets/potato4cut_frame.dart';
 
 class TakePhotoStep1Page extends StatelessWidget {
