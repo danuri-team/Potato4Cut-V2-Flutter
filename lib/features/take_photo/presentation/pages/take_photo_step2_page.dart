@@ -80,7 +80,10 @@ class _TakePhotoStep2PageState extends ConsumerState<TakePhotoStep2Page> {
   Widget _takePhotoButton(WidgetRef ref) {
     return SubmitButton(
       onTap: () async {
-        await takeFourContinuousPhotos(ref);
+        final countDown = ref.read(countdownProvider);
+        if (countDown == null) {
+          await takeFourContinuousPhotos(ref);
+        }
       },
       width: 343.w,
       text: '사진찍기',
@@ -170,7 +173,7 @@ class _TakePhotoStep2PageState extends ConsumerState<TakePhotoStep2Page> {
             cutIds.add(element.cutId);
           }
 
-          ref.read(cutIdsProvider.notifier).update((state) => cutIds,);
+          ref.read(cutIdsProvider.notifier).update((state) => cutIds);
 
           if (mounted) {
             AppNavigation.gotakePhotoStep3(context);
@@ -199,7 +202,7 @@ class _TakePhotoStep2PageState extends ConsumerState<TakePhotoStep2Page> {
     return switch (flow) {
       TakePhotoFlowType.TakePhoto => _takePhotoButton(ref),
       TakePhotoFlowType.Confirming => _reTakeAndconfirmationButton(ref),
-      TakePhotoFlowType.AfterConfirmation => _nextButton(context,),
+      TakePhotoFlowType.AfterConfirmation => _nextButton(context),
     };
   }
 
