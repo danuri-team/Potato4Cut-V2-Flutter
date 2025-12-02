@@ -41,7 +41,6 @@ class _DefaultLayoutState extends State<DefaultLayout> {
 
   Future<void> _checkAndShowPermissionDialog() async {
     final box = await Hive.openBox(LocalStorageEventType.SETTINGS.toString());
-    await box.delete(SettingsKeys.permissionShown);
     final isShown = box.get(SettingsKeys.permissionShown, defaultValue: false);
 
     if (!isShown) {
