@@ -18,22 +18,13 @@ class GoogleAuthBar extends ConsumerWidget {
   ) async {
     try {
       await ref.read(authProvider.notifier).loginWithGoogle();
-
-      if (context.mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Google 로그인 성공'),
-            backgroundColor: Colors.green,
-          ),
-        );
-
+      final status = ref.read(authProvider).status;
+      if (status == AuthStatus.authenticated) {
         if (authState.newUser == true) {
           AppNavigation.goSignUpStep1(context);
         } else if (authState.newUser == false) {
           AppNavigation.goHome(context);
         }
-
-        ScaffoldMessenger.of(context).removeCurrentSnackBar();
       }
     } catch (e) {
       if (context.mounted) {
@@ -80,6 +71,9 @@ class GoogleAuthBar extends ConsumerWidget {
             else
               SvgPicture.asset('assets/images/google_auth_logo.svg'),
             SizedBox(width: 6.w),
+            Text(
+              '${authState.isLoading}, ${authState.user?.userId[0]}, ${authState.status.name}',
+            ),
             Text(
               isLoading ? '로그인 중...' : 'Google로 계속하기',
               style: AppTextStyle.body1Normal.copyWith(

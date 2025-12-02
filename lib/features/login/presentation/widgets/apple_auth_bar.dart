@@ -19,21 +19,13 @@ class AppleAuthBar extends ConsumerWidget {
     try {
       await ref.read(authProvider.notifier).loginWithApple();
 
-      if (context.mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Apple 로그인 성공'),
-            backgroundColor: Colors.green,
-          ),
-        );
-
+      final status = ref.read(authProvider).status;
+      if (status == AuthStatus.authenticated) {
         if (authState.newUser == true) {
           AppNavigation.goSignUpStep1(context);
         } else if (authState.newUser == false) {
           AppNavigation.goHome(context);
         }
-
-        ScaffoldMessenger.of(context).removeCurrentSnackBar();
       }
     } catch (e) {
       if (context.mounted) {
