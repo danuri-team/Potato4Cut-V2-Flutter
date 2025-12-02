@@ -1,11 +1,9 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:potato_4cut_v2/core/router/router_helper.dart';
 import 'package:potato_4cut_v2/core/theme/app_color.dart';
 import 'package:potato_4cut_v2/core/theme/app_text_style.dart';
 import 'package:potato_4cut_v2/core/util/throttle.dart';
@@ -17,10 +15,7 @@ class ShareButton extends ConsumerWidget {
 
   Future<void> sharePhoto(File photo, BuildContext context) async {
     final xfile = XFile(photo.path);
-    final url = dotenv.env['sharingUrl']!;
-    SharePlus.instance.share(ShareParams(files: [xfile], uri: Uri.parse(url)));
-
-    AppNavigation.goHome(context);
+    SharePlus.instance.share(ShareParams(files: [xfile]));
   }
 
   @override
