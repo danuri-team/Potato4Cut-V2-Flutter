@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:potato_4cut_v2/core/router/router_helper.dart';
 import 'package:potato_4cut_v2/core/theme/app_text_style.dart';
 import 'package:potato_4cut_v2/core/ui/custom_back_button.dart';
@@ -8,6 +9,7 @@ import 'package:potato_4cut_v2/core/ui/submit_button.dart';
 import 'package:potato_4cut_v2/core/util/throttle.dart';
 import 'package:potato_4cut_v2/features/take_photo/presentation/widgets/current_progress_indicator.dart';
 import 'package:potato_4cut_v2/features/take_photo/presentation/widgets/frame_list.dart';
+import 'package:potato_4cut_v2/features/take_photo/presentation/widgets/potato4cut_frame.dart';
 
 class TakePhotoStep1Page extends StatelessWidget {
   const TakePhotoStep1Page({super.key});
@@ -25,10 +27,10 @@ class TakePhotoStep1Page extends StatelessWidget {
             SizedBox(height: 14.h),
             Align(
               alignment: Alignment.centerLeft,
-              child: Text('원하는 프레임을 선택해주세요!', style: AppTextStyle.heading1),
+              child: Text('현재 적용된 프레임입니다', style: AppTextStyle.heading1),
             ),
-            SizedBox(height: 20.h),
-            const FrameList(),
+            SizedBox(height: 46.h),
+            const Potato4cutFrame(),
             const Spacer(),
             SubmitButton(
               onTap: () {
