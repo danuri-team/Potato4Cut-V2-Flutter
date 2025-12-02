@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:io';
 import 'package:flutter/material.dart';
 
@@ -28,11 +29,7 @@ class TakePhotoStep3Page extends ConsumerWidget {
 
   final repaintBoundaryKey = GlobalKey();
 
-  Future<void> save4CutPhotos(
-    File photo,
-    WidgetRef ref,
-    BuildContext context,
-  ) async {
+  Future<void> save4CutPhotos(File photo, WidgetRef ref) async {
     final cutIds = ref.watch(cutIdsProvider);
 
     await ref
@@ -46,12 +43,12 @@ class TakePhotoStep3Page extends ConsumerWidget {
     await Gal.putImage(photo.path);
 
     ref.read(photoProvider.notifier).reset();
-    ref.read(currentPageIndexProvider.notifier).update((state) => 0,);
-    ref.read(cutIdsProvider.notifier).update((state) => [],);
+    ref.read(currentPageIndexProvider.notifier).update((state) => 0);
+    ref.read(cutIdsProvider.notifier).update((state) => []);
     ref.read(finishedPhotoProvider.notifier).resetState();
-    ref.read(takePhotoFlowProvider.notifier).update((state) => TakePhotoFlowType.TakePhoto,);
-
-    AppNavigation.goHome(context);
+    ref
+        .read(takePhotoFlowProvider.notifier)
+        .update((state) => TakePhotoFlowType.TakePhoto);
   }
 
   @override
@@ -67,6 +64,26 @@ class TakePhotoStep3Page extends ConsumerWidget {
           Text('완성된 사진,\n친구들에게 바로 공유해보세요!', style: AppTextStyle.heading1),
           SizedBox(height: 16.h),
           FinishedPhoto(repaintBoundaryKey: repaintBoundaryKey),
+          GestureDetector(
+            onTap: () => Throttle.run(() => AppNavigation.goHome(context),),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  '메인페이지로 가기',
+                  style: AppTextStyle.label1Normal.copyWith(
+                    color: AppColor.label2,
+                  ),
+                ),
+                SizedBox(width: 8.w),
+                SvgPicture.asset(
+                  'assets/images/chevron_right_gray.svg',
+                  width: 16.w,
+                  height: 16.h,
+                ),
+              ],
+            ),
+          ),
           const Spacer(),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -77,7 +94,7 @@ class TakePhotoStep3Page extends ConsumerWidget {
                 onTap: finishedPhoto == null
                     ? () {}
                     : () => Throttle.run(
-                        () => save4CutPhotos(finishedPhoto, ref, context),
+                        () => save4CutPhotos(finishedPhoto, ref),
                       ),
                 width: 166.w,
                 text: '저장하기',
