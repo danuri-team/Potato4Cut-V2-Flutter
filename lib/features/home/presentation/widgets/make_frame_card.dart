@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:potato_4cut_v2/core/ui/in_development.dart';
 
 class MakeFrameCard extends StatefulWidget {
   const MakeFrameCard({super.key});
@@ -18,6 +19,10 @@ class _MakeFrameBoxState extends State<MakeFrameCard> {
       onTapDown: (details) => setState(() => isTapped = !isTapped),
       onTapUp: (details) => setState(() => isTapped = !isTapped),
       onTapCancel: () => setState(() => isTapped = false),
+      onTap: () => showDialog(
+        context: context,
+        builder: (context) => const InDevelopment(),
+      ),
       child: Container(
         width: 343.w,
         height: 174.h,
