@@ -72,9 +72,6 @@ class GoogleAuthBar extends ConsumerWidget {
               SvgPicture.asset('assets/images/google_auth_logo.svg'),
             SizedBox(width: 6.w),
             Text(
-              '${authState.isLoading}, ${authState.user?.userId[0]}, ${authState.status.name}',
-            ),
-            Text(
               isLoading ? '로그인 중...' : 'Google로 계속하기',
               style: AppTextStyle.body1Normal.copyWith(
                 fontWeight: FontWeight.w600,
