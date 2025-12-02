@@ -33,6 +33,12 @@ class TakePhotoStep2Page extends ConsumerStatefulWidget {
 class _TakePhotoStep2PageState extends ConsumerState<TakePhotoStep2Page> {
   bool _isLoading = false;
 
+  @override
+  void initState() {
+    super.initState();
+    _initCamera(ref);
+  }
+
   void _resetPhotoFlow(WidgetRef ref) {
     ref
         .read(takePhotoFlowProvider.notifier)
@@ -156,34 +162,26 @@ class _TakePhotoStep2PageState extends ConsumerState<TakePhotoStep2Page> {
           _isLoading = true;
         });
 
-        try {
-          final photos = ref.watch(photoProvider);
-          final List<File> images = [];
+        final photos = ref.watch(photoProvider);
+        final List<File> images = [];
 
-          for (var photo in photos) {
-            images.add(photo.file!);
-          }
+        for (var photo in photos) {
+          images.add(photo.file!);
+        }
 
-          final result = await ref
-              .read(photoViewModel.notifier)
-              .savePhotos(images);
+        final result = await ref
+            .read(photoViewModel.notifier)
+            .savePhotos(images);
 
-          final List<String> cutIds = [];
-          for (var element in result.data) {
-            cutIds.add(element.cutId);
-          }
+        final List<String> cutIds = [];
+        for (var element in result.data) {
+          cutIds.add(element.cutId);
+        }
 
-          ref.read(cutIdsProvider.notifier).update((state) => cutIds);
+        ref.read(cutIdsProvider.notifier).update((state) => cutIds);
 
-          if (mounted) {
-            AppNavigation.gotakePhotoStep3(context);
-          }
-        } finally {
-          if (mounted) {
-            setState(() {
-              _isLoading = false;
-            });
-          }
+        if (mounted) {
+          AppNavigation.gotakePhotoStep3(context);
         }
       }),
       width: 343.w,
@@ -219,8 +217,6 @@ class _TakePhotoStep2PageState extends ConsumerState<TakePhotoStep2Page> {
 
   @override
   Widget build(BuildContext context) {
-    _initCamera(ref);
-
     return DefaultLayout(
       appBar: CustomBackButton(onTap: () => _resetPhotoFlow(ref)),
       body: Column(
