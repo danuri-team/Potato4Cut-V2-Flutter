@@ -1,6 +1,4 @@
 import 'package:dio/dio.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:potato_4cut_v2/core/network/dio.dart';
 import 'package:potato_4cut_v2/core/storage/token_storage.dart';
 import 'package:potato_4cut_v2/features/login/data/models/login_request_dto.dart';
 import 'package:potato_4cut_v2/features/login/data/models/login_response_dto.dart';
@@ -14,7 +12,7 @@ abstract class AuthRemoteDataSource {
 class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   final Dio _dio;
 
-  AuthRemoteDataSourceImpl({Dio? dio}) : _dio = dio ?? AppDio.getInstance();
+  AuthRemoteDataSourceImpl({required Dio dio}) : _dio = dio;
 
   final token = TokenStorage().getAccessToken();
 

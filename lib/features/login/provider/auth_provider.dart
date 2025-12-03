@@ -1,6 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:potato_4cut_v2/core/network/dio.dart';
 import 'package:potato_4cut_v2/core/services/fcm_service.dart';
 import 'package:potato_4cut_v2/core/storage/token_storage.dart';
 import 'package:potato_4cut_v2/features/login/data/datasources/auth_remote_datasource.dart';
@@ -15,7 +16,8 @@ import 'package:potato_4cut_v2/features/login/provider/stoarage_provider.dart';
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 
 final authRemoteDataSourceProvider = Provider<AuthRemoteDataSource>((ref) {
-  return AuthRemoteDataSourceImpl();
+  final dio = ref.watch(dioProvider);
+  return AuthRemoteDataSourceImpl(dio: dio);
 });
 
 final authRepositoryProvider = Provider<AuthRepository>((ref) {
