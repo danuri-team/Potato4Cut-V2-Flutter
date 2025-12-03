@@ -1,4 +1,4 @@
-package com.example.potato_4cut_v2
+package com.potato.fourcut
 
 import io.flutter.embedding.android.FlutterActivity
 
