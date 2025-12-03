@@ -1,5 +1,7 @@
 import 'package:dio/dio.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:potato_4cut_v2/core/network/dio.dart';
+import 'package:potato_4cut_v2/core/storage/token_storage.dart';
 import 'package:potato_4cut_v2/features/login/data/models/login_request_dto.dart';
 import 'package:potato_4cut_v2/features/login/data/models/login_response_dto.dart';
 
@@ -13,6 +15,8 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   final Dio _dio;
 
   AuthRemoteDataSourceImpl({Dio? dio}) : _dio = dio ?? AppDio.getInstance();
+
+  final token = TokenStorage().getAccessToken();
 
   @override
   Future<LoginResponseDto> login(LoginRequestDto request) async {
@@ -54,7 +58,8 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
           requestOptions: response.requestOptions,
           response: response,
           type: DioExceptionType.badResponse,
-          error: 'Token refresh failed with status code: ${response.statusCode}',
+          error:
+              'Token refresh failed with status code: ${response.statusCode}',
         );
       }
     } on DioException {
@@ -67,7 +72,10 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   @override
   Future<void> logout() async {
     try {
-      final response = await _dio.post('/api/v1/auth/logout');
+      final response = await _dio.post(
+        '/api/v1/auth/logout',
+        options: Options(headers: {'Authrization': 'Bearer ${await token}'}),
+      );
 
       if (response.statusCode != 200 && response.statusCode != 204) {
         throw DioException(

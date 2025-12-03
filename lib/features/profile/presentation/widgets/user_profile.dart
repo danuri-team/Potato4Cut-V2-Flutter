@@ -1,22 +1,49 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-// import 'package:flutter_svg/svg.dart';
-// import 'package:flutter_svg_provider/flutter_svg_provider.dart';
+import 'package:potato_4cut_v2/core/enum/auth_provider_type.dart';
 import 'package:potato_4cut_v2/core/theme/app_color.dart';
+import 'package:potato_4cut_v2/core/theme/app_text_style.dart';
+import 'package:potato_4cut_v2/features/profile/domain/entities/get_my_info_entity.dart';
+import 'package:potato_4cut_v2/features/profile/presentation/provider/profile_view_model.dart';
 
-class UserProfile extends StatelessWidget {
+class UserProfile extends ConsumerStatefulWidget {
   const UserProfile({super.key});
+
+  @override
+  ConsumerState<UserProfile> createState() => _UserProfileState();
+}
+
+class _UserProfileState extends ConsumerState<UserProfile> {
+  GetMyInfoEntity? myInfo;
+
+  @override
+  void initState() {
+    super.initState();
+    getMyInfo();
+  }
+
+  Future<void> getMyInfo() async {
+    final profileViewModel = ref.read(profileViewModelProvider);
+    myInfo = await profileViewModel.getMyInfo();
+    setState(() {});
+  }
 
   @override
   Widget build(BuildContext context) {
     return Row(
-      // crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         Container(
           width: 60.r,
           height: 60.r,
           decoration: ShapeDecoration(
+            image: (myInfo == null || myInfo?.data.profileImageUrl == null)
+                ? null
+                : DecorationImage(
+                  fit: BoxFit.cover,
+                    image: NetworkImage(myInfo!.data.profileImageUrl!),
+                  ),
             shape: OvalBorder(
               side: BorderSide(width: 1, color: AppColor.line1),
             ),
@@ -27,7 +54,7 @@ class UserProfile extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              '닉네임',
+              (myInfo == null) ? '' : myInfo!.data.nickname,
               style: TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.w500,
@@ -37,13 +64,22 @@ class UserProfile extends StatelessWidget {
             SizedBox(height: 4.h),
             Row(
               children: [
-                SvgPicture.asset(
-                  'assets/images/google_auth_logo.svg',
-                  width: 10.w,
-                  height: 10.h,
-                ),
+                (myInfo == null)
+                    ? SizedBox.shrink()
+                    : SvgPicture.asset(
+                        myInfo?.data.provider == AuthProviderType.GOOGLE
+                            ? 'assets/images/google_auth_logo.svg'
+                            : 'assets/images/apple_auth_logo.svg',
+                        width: 10.w,
+                        height: 10.h,
+                      ),
                 SizedBox(width: 4.w),
-                Text('example@gmail.com'),
+                Text(
+                  (myInfo == null) ? '' : myInfo!.data.email,
+                  style: AppTextStyle.caption1.copyWith(
+                    color: const Color(0xFF777777),
+                  ),
+                ),
               ],
             ),
           ],
