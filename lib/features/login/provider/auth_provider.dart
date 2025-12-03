@@ -38,10 +38,7 @@ final logoutUseCaseProvider = Provider((ref) {
   return LogoutUseCase(repository);
 });
 
-final tokenStorageProvider = Provider<TokenStorage>((ref) {
-  final storage = FlutterSecureStorage();
-  return TokenStorage(storage);
-},);
+final tokenStorageProvider = Provider<TokenStorage>((ref) => TokenStorage());
 
 final authUseCasesProvider = Provider<AuthUseCases>((ref) {
   final loginUseCase = ref.watch(loginUseCaseProvider);
@@ -65,8 +62,13 @@ class AuthNotifier extends StateNotifier<AuthState> {
   final Ref _ref;
   final TokenStorage _storage;
 
-  AuthNotifier(this._useCases, this._fcmService, this._googleSignIn, this._ref, this._storage)
-    : super(const AuthState());
+  AuthNotifier(
+    this._useCases,
+    this._fcmService,
+    this._googleSignIn,
+    this._ref,
+    this._storage,
+  ) : super(const AuthState());
 
   Future<void> loginWithApple() async {
     state = state.copyWith(
@@ -145,7 +147,10 @@ class AuthNotifier extends StateNotifier<AuthState> {
         deviceToken,
       );
 
-      await _storage.setAccessAndRefreshToken(result.accessToken, result.refreshToken);
+      await _storage.setAccessAndRefreshToken(
+        result.accessToken,
+        result.refreshToken,
+      );
 
       state = state.copyWith(
         status: AuthStatus.authenticated,
@@ -183,9 +188,14 @@ class AuthNotifier extends StateNotifier<AuthState> {
     }
 
     try {
-      final result = await _useCases.refreshTokenUseCase.refreshToken(state.refreshToken!);
+      final result = await _useCases.refreshTokenUseCase.refreshToken(
+        state.refreshToken!,
+      );
 
-      await _storage.setAccessAndRefreshToken(result.accessToken, result.refreshToken);
+      await _storage.setAccessAndRefreshToken(
+        result.accessToken,
+        result.refreshToken,
+      );
 
       state = state.copyWith(
         status: AuthStatus.authenticated,

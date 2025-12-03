@@ -1,9 +1,9 @@
 import 'dart:convert';
 import 'dart:io';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http_parser/http_parser.dart';
 import 'package:dio/dio.dart';
 import 'package:potato_4cut_v2/core/network/dio.dart';
+import 'package:potato_4cut_v2/core/storage/token_storage.dart';
 import 'package:potato_4cut_v2/features/take_photo/data/data_sources/photo_data_source.dart';
 import 'package:potato_4cut_v2/features/take_photo/data/models/save_photos_response_model.dart';
 
@@ -12,13 +12,12 @@ class PhotoDataSourceImpl implements PhotoDataSource {
 
   PhotoDataSourceImpl(Dio? dio) : _dio = dio ?? AppDio.getInstance();
 
-  final storage = FlutterSecureStorage();
+  final token = TokenStorage().getAccessToken();
 
   
 
   @override
   Future<SavePhotosResponseModel> savePhotos(List<File> images) async {
-    final token = await storage.read(key: 'TOKEN');
     final List<MultipartFile> uploadFiles = [];
 
     for (File image in images) {
@@ -36,7 +35,7 @@ class PhotoDataSourceImpl implements PhotoDataSource {
     final response = await _dio.post(
       "/api/v1/photos/cuts",
       data: formData,
-      options: Options(headers: {"Authorization": "Bearer $token"}),
+      options: Options(headers: {"Authorization": "Bearer ${await token}"}),
     );
 
     return SavePhotosResponseModel.fromJson(response.data);
@@ -44,7 +43,6 @@ class PhotoDataSourceImpl implements PhotoDataSource {
 
   @override
   Future save4CutPhotos(File composedImage, List<String> photoCutIds) async {
-    final token = await storage.read(key: 'TOKEN');
     final MultipartFile composedImageField = await MultipartFile.fromFile(
       composedImage.path,
       filename: composedImage.uri.pathSegments.last,
@@ -62,16 +60,15 @@ class PhotoDataSourceImpl implements PhotoDataSource {
     await _dio.post(
       '/api/v1/photos',
       data: formData,
-      options: Options(headers: {"Authorization": "Bearer $token"}),
+      options: Options(headers: {"Authorization": "Bearer ${await token}"}),
     );
   }
 
   @override
   Future importSpecificPhoto(String id) async {
-    final token = await storage.read(key: 'TOKEN');
     final response = await _dio.get(
       '/api/v1/photos/$id',
-      options: Options(headers: {'Authorization': 'Bearer $token'}),
+      options: Options(headers: {'Authorization': 'Bearer ${await token}'}),
     );
 
     return response;
@@ -79,10 +76,9 @@ class PhotoDataSourceImpl implements PhotoDataSource {
 
   @override
   Future<void> deletePhoto(String id) async {
-    final token = await storage.read(key: 'TOKEN');
     await _dio.delete(
       '/api/v1/photos/$id',
-      options: Options(headers: {'Authorization': 'Bearer $token'}),
+      options: Options(headers: {'Authorization': 'Bearer ${await token}'}),
     );
   }
 }
