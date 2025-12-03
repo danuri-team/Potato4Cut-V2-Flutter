@@ -1,6 +1,8 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:potato_4cut_v2/core/services/fcm_service.dart';
+import 'package:potato_4cut_v2/core/storage/token_storage.dart';
 import 'package:potato_4cut_v2/features/login/data/datasources/auth_remote_datasource.dart';
 import 'package:potato_4cut_v2/features/login/data/repositories/auth_repository_impl.dart';
 import 'package:potato_4cut_v2/features/login/domain/repositories/auth_repository.dart';
@@ -36,6 +38,11 @@ final logoutUseCaseProvider = Provider((ref) {
   return LogoutUseCase(repository);
 });
 
+final tokenStorageProvider = Provider<TokenStorage>((ref) {
+  final storage = FlutterSecureStorage();
+  return TokenStorage(storage);
+},);
+
 final authUseCasesProvider = Provider<AuthUseCases>((ref) {
   final loginUseCase = ref.watch(loginUseCaseProvider);
   final refreshTokenUseCase = ref.watch(refreshTokenUseCaseProvider);
@@ -47,16 +54,18 @@ final authProvider = StateNotifierProvider<AuthNotifier, AuthState>((ref) {
   final useCases = ref.watch(authUseCasesProvider);
   final fcmService = ref.watch(fcmServiceProvider);
   final googleSignIn = ref.watch(googleSignInProvider);
-  return AuthNotifier(useCases, fcmService, googleSignIn, ref);
+  final storage = ref.watch(tokenStorageProvider);
+  return AuthNotifier(useCases, fcmService, googleSignIn, ref, storage);
 });
 
 class AuthNotifier extends StateNotifier<AuthState> {
   final AuthUseCases _useCases;
   final FcmService _fcmService;
   final GoogleSignIn _googleSignIn;
-  final Ref ref;
+  final Ref _ref;
+  final TokenStorage _storage;
 
-  AuthNotifier(this._useCases, this._fcmService, this._googleSignIn, this.ref)
+  AuthNotifier(this._useCases, this._fcmService, this._googleSignIn, this._ref, this._storage)
     : super(const AuthState());
 
   Future<void> loginWithApple() async {
@@ -136,6 +145,8 @@ class AuthNotifier extends StateNotifier<AuthState> {
         deviceToken,
       );
 
+      await _storage.setAccessAndRefreshToken(result.accessToken, result.refreshToken);
+
       state = state.copyWith(
         status: AuthStatus.authenticated,
         user: result.user,
@@ -147,7 +158,7 @@ class AuthNotifier extends StateNotifier<AuthState> {
         newUser: result.newUser,
       );
 
-      ref.read(storageProvider.notifier).login();
+      await _ref.read(storageProvider.notifier).login();
     } catch (e) {
       state = state.copyWith(
         status: AuthStatus.unauthenticated,
@@ -174,6 +185,8 @@ class AuthNotifier extends StateNotifier<AuthState> {
     try {
       final result = await _useCases.refreshTokenUseCase.refreshToken(state.refreshToken!);
 
+      await _storage.setAccessAndRefreshToken(result.accessToken, result.refreshToken);
+
       state = state.copyWith(
         status: AuthStatus.authenticated,
         user: result.user,
@@ -198,6 +211,7 @@ class AuthNotifier extends StateNotifier<AuthState> {
     state = state.copyWith(isLoading: true);
 
     try {
+      await _googleSignIn.signOut();
       await _useCases.logoutUseCase.logout();
 
       state = const AuthState(
