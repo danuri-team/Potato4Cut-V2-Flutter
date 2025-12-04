@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:potato_4cut_v2/features/login/data/datasources/auth_remote_datasource.dart';
 import 'package:potato_4cut_v2/features/login/data/models/login_request_dto.dart';
 import 'package:potato_4cut_v2/features/login/domain/entities/auth_result_entity.dart';
@@ -34,6 +36,12 @@ class AuthRepositoryImpl implements AuthRepository {
     } catch (e) {
       rethrow;
     }
+  }
+
+  @override
+  Future profileUpdate(String nickname, String? bio, String profilePresetId, File? profileImage) async{
+    final response = _remoteDataSource.profileUpdate(nickname, bio, profilePresetId, profileImage);
+    return response;
   }
 
   @override

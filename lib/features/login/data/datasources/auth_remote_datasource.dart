@@ -1,10 +1,19 @@
+import 'dart:io';
+
 import 'package:dio/dio.dart';
 import 'package:potato_4cut_v2/core/storage/token_storage.dart';
 import 'package:potato_4cut_v2/features/login/data/models/login_request_dto.dart';
 import 'package:potato_4cut_v2/features/login/data/models/login_response_dto.dart';
+import 'package:http_parser/http_parser.dart';
 
 abstract class AuthRemoteDataSource {
   Future<LoginResponseDto> login(LoginRequestDto request);
+  Future profileUpdate(
+    String nickname,
+    String? bio,
+    String profilePresetId,
+    File? profileImage,
+  );
   Future<LoginResponseDto> refreshToken(String refreshToken);
   Future<void> logout();
 }
@@ -39,6 +48,53 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
     } catch (e) {
       throw Exception('Unexpected error during login: $e');
     }
+  }
+
+  @override
+  Future profileUpdate(
+    String nickname,
+    String? bio,
+    String profilePresetId,
+    File? profileImage,
+  ) async {
+    final formNickname = MultipartFile.fromString(
+      nickname,
+      contentType: MediaType("application", 'json'),
+    );
+
+    final formProfilePresetId = MultipartFile.fromString(
+      profilePresetId,
+      contentType: MediaType("application", 'json'),
+    );
+
+    final formData = FormData.fromMap({
+      'nickname': formNickname,
+      'profilePresetId': formProfilePresetId,
+    });
+
+    if (bio != null) {
+      final formBio = MultipartFile.fromString(
+        bio,
+        contentType: MediaType("application", 'json'),
+      );
+      formData.files.add(MapEntry('bio', formBio));
+    }
+
+    if(profileImage != null){
+      final fromProfileImage = await MultipartFile.fromFile(
+      profileImage.path,
+      contentType: MediaType("image", "jpeg"),
+    );
+      formData.files.add(MapEntry('profileImage', fromProfileImage));
+    }
+
+    final response = await _dio.put(
+      '/api/v1/users/me',
+      data: formData,
+      options: Options(headers: {'Authorization': 'Bearer $token'}),
+    );
+
+    return response;
   }
 
   @override

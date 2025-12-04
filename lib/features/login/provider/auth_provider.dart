@@ -1,5 +1,6 @@
+import 'dart:io';
+
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:potato_4cut_v2/core/network/dio.dart';
 import 'package:potato_4cut_v2/core/services/fcm_service.dart';
@@ -10,6 +11,7 @@ import 'package:potato_4cut_v2/features/login/domain/repositories/auth_repositor
 import 'package:potato_4cut_v2/features/login/domain/use_cases/auth_use_cases.dart';
 import 'package:potato_4cut_v2/features/login/domain/use_cases/login_use_case.dart';
 import 'package:potato_4cut_v2/features/login/domain/use_cases/logout_use_case.dart';
+import 'package:potato_4cut_v2/features/login/domain/use_cases/profile_update_use_case.dart';
 import 'package:potato_4cut_v2/features/login/domain/use_cases/refresh_token_use_case.dart';
 import 'package:potato_4cut_v2/features/login/provider/auth_state.dart';
 import 'package:potato_4cut_v2/features/login/provider/stoarage_provider.dart';
@@ -25,28 +27,20 @@ final authRepositoryProvider = Provider<AuthRepository>((ref) {
   return AuthRepositoryImpl(remoteDataSource: remoteDataSource);
 });
 
-final loginUseCaseProvider = Provider<LoginUseCase>((ref) {
-  final repository = ref.watch(authRepositoryProvider);
-  return LoginUseCase(repository);
-});
-
-final refreshTokenUseCaseProvider = Provider<RefreshTokenUseCase>((ref) {
-  final repository = ref.watch(authRepositoryProvider);
-  return RefreshTokenUseCase(repository);
-});
-
-final logoutUseCaseProvider = Provider((ref) {
-  final repository = ref.watch(authRepositoryProvider);
-  return LogoutUseCase(repository);
-});
-
 final tokenStorageProvider = Provider<TokenStorage>((ref) => TokenStorage());
 
 final authUseCasesProvider = Provider<AuthUseCases>((ref) {
-  final loginUseCase = ref.watch(loginUseCaseProvider);
-  final refreshTokenUseCase = ref.watch(refreshTokenUseCaseProvider);
-  final logoutUseCase = ref.watch(logoutUseCaseProvider);
-  return AuthUseCases(loginUseCase, refreshTokenUseCase, logoutUseCase);
+  final repository = ref.watch(authRepositoryProvider);
+  final loginUseCase = LoginUseCase(repository);
+  final profileUpdateUseCase = ProfileUpdateUseCase(repository);
+  final refreshTokenUseCase = RefreshTokenUseCase(repository);
+  final logoutUseCase = LogoutUseCase(repository);
+  return AuthUseCases(
+    loginUseCase,
+    refreshTokenUseCase,
+    logoutUseCase,
+    profileUpdateUseCase,
+  );
 });
 
 final authProvider = StateNotifierProvider<AuthNotifier, AuthState>((ref) {
@@ -178,6 +172,22 @@ class AuthNotifier extends StateNotifier<AuthState> {
       );
       rethrow;
     }
+  }
+
+  Future profileUpdate({
+    required String nickname,
+    String? bio,
+    required String profilePresetId,
+    File? profileImage,
+  }) async {
+    final response = await _useCases.profileUpdateUseCase.profileUpdate(
+      nickname,
+      bio,
+      profilePresetId,
+      profileImage,
+    );
+
+    return response;
   }
 
   Future<void> refreshToken() async {
