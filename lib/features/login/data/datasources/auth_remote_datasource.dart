@@ -1,27 +1,29 @@
 import 'dart:io';
 
 import 'package:dio/dio.dart';
+import 'package:potato_4cut_v2/core/network/dio.dart';
 import 'package:potato_4cut_v2/core/storage/token_storage.dart';
 import 'package:potato_4cut_v2/features/login/data/models/login_request_dto.dart';
 import 'package:potato_4cut_v2/features/login/data/models/login_response_dto.dart';
 import 'package:http_parser/http_parser.dart';
+import 'package:potato_4cut_v2/features/profile/data/models/get_my_info_response_model.dart';
 
 abstract class AuthRemoteDataSource {
   Future<LoginResponseDto> login(LoginRequestDto request);
-  Future profileUpdate(
+  Future<MyInfoDataModel> profileUpdate(
     String nickname,
     String? bio,
     String profilePresetId,
     File? profileImage,
   );
-  Future<LoginResponseDto> refreshToken(String refreshToken);
+  Future<TokenDto> refreshToken(String refreshToken);
   Future<void> logout();
 }
 
 class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   final Dio _dio;
 
-  AuthRemoteDataSourceImpl({required Dio dio}) : _dio = dio;
+  AuthRemoteDataSourceImpl(Dio? dio) : _dio = dio ?? AppDio.getInstance();
 
   final token = TokenStorage().getAccessToken();
 
@@ -51,7 +53,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   }
 
   @override
-  Future profileUpdate(
+  Future<MyInfoDataModel> profileUpdate(
     String nickname,
     String? bio,
     String profilePresetId,
@@ -59,12 +61,12 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   ) async {
     final formNickname = MultipartFile.fromString(
       nickname,
-      contentType: MediaType("application", 'json'),
+      contentType: MediaType("application", "json"),
     );
 
     final formProfilePresetId = MultipartFile.fromString(
       profilePresetId,
-      contentType: MediaType("application", 'json'),
+      contentType: MediaType("application", "json"),
     );
 
     final formData = FormData.fromMap({
@@ -75,7 +77,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
     if (bio != null) {
       final formBio = MultipartFile.fromString(
         bio,
-        contentType: MediaType("application", 'json'),
+        contentType: MediaType("application", "json"),
       );
       formData.files.add(MapEntry('bio', formBio));
     }
@@ -83,6 +85,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
     if(profileImage != null){
       final fromProfileImage = await MultipartFile.fromFile(
       profileImage.path,
+      filename: profileImage.uri.pathSegments.last,
       contentType: MediaType("image", "jpeg"),
     );
       formData.files.add(MapEntry('profileImage', fromProfileImage));
@@ -91,22 +94,22 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
     final response = await _dio.put(
       '/api/v1/users/me',
       data: formData,
-      options: Options(headers: {'Authorization': 'Bearer $token'}),
+      options: Options(headers: {'Authorization': 'Bearer ${await token}'}),
     );
 
-    return response;
+    return MyInfoDataModel.fromJson(response.data);
   }
 
   @override
-  Future<LoginResponseDto> refreshToken(String refreshToken) async {
+  Future<TokenDto> refreshToken(String refreshToken) async {
     try {
       final response = await _dio.post(
         '/api/v1/auth/refresh',
-        data: {'refreshToken': refreshToken},
+        data: {"refreshToken": refreshToken},
       );
 
       if (response.statusCode == 200 || response.statusCode == 201) {
-        return LoginResponseDto.fromJson(response.data);
+        return TokenDto.fromJson(response.data);
       } else {
         throw DioException(
           requestOptions: response.requestOptions,

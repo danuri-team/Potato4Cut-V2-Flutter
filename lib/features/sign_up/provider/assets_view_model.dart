@@ -1,5 +1,4 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:potato_4cut_v2/core/network/dio.dart';
 import 'package:potato_4cut_v2/features/sign_up/data/data_sources/assets_data_source.dart';
 import 'package:potato_4cut_v2/features/sign_up/data/data_sources/assets_data_source_impl.dart';
 import 'package:potato_4cut_v2/features/sign_up/data/repositories/assets_repository_impl.dart';
@@ -8,10 +7,7 @@ import 'package:potato_4cut_v2/features/sign_up/domain/repositories/assets_repos
 import 'package:potato_4cut_v2/features/sign_up/domain/use_cases/get_profile_preset.dart';
 
 final _assetsDataSourceProvider = Provider<AssetsDataSource>(
-  (ref) {
-    final dio = ref.watch(dioProvider);
-    return AssetsDataSourceImpl(dio: dio);
-  },
+  (ref) => AssetsDataSourceImpl(null),
 );
 
 final _assetsRepositoryProvider = Provider<AssetsRepository>((ref) {

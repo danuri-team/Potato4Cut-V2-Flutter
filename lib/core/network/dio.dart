@@ -1,24 +1,23 @@
 import 'package:dio/dio.dart';
 import 'package:dio/io.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:potato_4cut_v2/core/storage/token_storage.dart';
-import 'package:potato_4cut_v2/features/login/provider/auth_provider.dart';
+import 'package:potato_4cut_v2/features/login/data/datasources/auth_remote_datasource.dart';
 
-final dioProvider = Provider<Dio>((ref) {
-  return _AppDio(ref);
-});
+abstract class AppDio {
+  AppDio._internal();
+
+  static Dio? _instance;
+
+  static Dio getInstance() => _instance ?? _AppDio();
+}
 
 class _AppDio with DioMixin implements Dio {
-  final Ref _ref;
-
-  _AppDio(this._ref) {
+  _AppDio() {
     httpClientAdapter = IOHttpClientAdapter();
     options = BaseOptions(
       baseUrl: dotenv.env['apiBaseUrl']!,
-      headers: {
-        'Content-Type': 'application/json',
-      },
+      headers: {'Content-Type': 'application/json'},
       sendTimeout: const Duration(seconds: 30),
       connectTimeout: const Duration(seconds: 30),
       receiveTimeout: const Duration(seconds: 30),
@@ -32,13 +31,22 @@ class _AppDio with DioMixin implements Dio {
         },
         onError: (error, handler) async {
           if (error.response?.statusCode == 403) {
-              await _ref.read(authProvider.notifier).refreshToken();
-              final accessToken = await TokenStorage().getAccessToken();
-              final option = error.requestOptions;
-              option.headers.addAll({'Authorization': 'Bearer $accessToken'});
-              
-              final response = await fetch(error.requestOptions);
-              return handler.resolve(response);
+            final tokenStorage = TokenStorage();
+            final refreshToken = await tokenStorage.getRefreshToken();
+            if (refreshToken != null) {
+              final response = await AuthRemoteDataSourceImpl(
+                null,
+              ).refreshToken(refreshToken);
+              tokenStorage.setAccessAndRefreshToken(
+                response.accessToken,
+                response.refreshToken,
+              );
+
+              final options = error.requestOptions;
+              options.headers.addAll({'Authorization': 'Bearer ${response.accessToken}'});
+              final api = await fetch(options);
+              return handler.resolve(api);
+            }
           }
           return handler.reject(error);
         },

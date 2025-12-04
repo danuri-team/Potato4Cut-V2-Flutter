@@ -3,7 +3,9 @@ import 'dart:io';
 import 'package:potato_4cut_v2/features/login/data/datasources/auth_remote_datasource.dart';
 import 'package:potato_4cut_v2/features/login/data/models/login_request_dto.dart';
 import 'package:potato_4cut_v2/features/login/domain/entities/auth_result_entity.dart';
+import 'package:potato_4cut_v2/features/login/domain/entities/login_result_entity.dart';
 import 'package:potato_4cut_v2/features/login/domain/repositories/auth_repository.dart';
+import 'package:potato_4cut_v2/features/profile/domain/entities/get_my_info_entity.dart';
 
 class AuthRepositoryImpl implements AuthRepository {
   final AuthRemoteDataSource _remoteDataSource;
@@ -39,21 +41,19 @@ class AuthRepositoryImpl implements AuthRepository {
   }
 
   @override
-  Future profileUpdate(String nickname, String? bio, String profilePresetId, File? profileImage) async{
-    final response = _remoteDataSource.profileUpdate(nickname, bio, profilePresetId, profileImage);
-    return response;
+  Future<MyInfoDataEntity> profileUpdate(String nickname, String? bio, String profilePresetId, File? profileImage) async{
+    final response = await _remoteDataSource.profileUpdate(nickname, bio, profilePresetId, profileImage);
+    return response.toEntity();
   }
 
   @override
-  Future<AuthResultEntity> refreshToken(String refreshToken) async {
+  Future<TokenEntity> refreshToken(String refreshToken) async {
     try {
       final response = await _remoteDataSource.refreshToken(refreshToken);
 
-      return AuthResultEntity(
-        accessToken: response.token.accessToken,
-        refreshToken: response.token.refreshToken,
-        user: response.toEntity(),
-        newUser: response.newUser,
+      return TokenEntity(
+        accessToken: response.accessToken,
+        refreshToken: response.refreshToken,
       );
     } catch (e) {
       rethrow;

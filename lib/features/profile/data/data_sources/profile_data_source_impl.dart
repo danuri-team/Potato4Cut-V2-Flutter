@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:potato_4cut_v2/core/network/dio.dart';
 import 'package:potato_4cut_v2/core/storage/token_storage.dart';
 import 'package:potato_4cut_v2/features/profile/data/data_sources/profile_data_source.dart';
 import 'package:potato_4cut_v2/features/profile/data/models/get_my_info_response_model.dart';
@@ -6,7 +7,7 @@ import 'package:potato_4cut_v2/features/profile/data/models/get_my_info_response
 class ProfileDataSourceImpl implements ProfileDataSource {
   final Dio _dio;
 
-  ProfileDataSourceImpl({required Dio dio}) : _dio = dio;
+  ProfileDataSourceImpl(Dio? dio) : _dio = dio ?? AppDio.getInstance();
 
   final token = TokenStorage().getAccessToken();
 

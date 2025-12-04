@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:http_parser/http_parser.dart';
 import 'package:dio/dio.dart';
+import 'package:potato_4cut_v2/core/network/dio.dart';
 import 'package:potato_4cut_v2/core/storage/token_storage.dart';
 import 'package:potato_4cut_v2/features/take_photo/data/data_sources/photo_data_source.dart';
 import 'package:potato_4cut_v2/features/take_photo/data/models/save_photos_response_model.dart';
@@ -9,7 +10,7 @@ import 'package:potato_4cut_v2/features/take_photo/data/models/save_photos_respo
 class PhotoDataSourceImpl implements PhotoDataSource {
   final Dio _dio;
 
-  PhotoDataSourceImpl({required Dio dio}) : _dio = dio;
+  PhotoDataSourceImpl(Dio? dio) : _dio = dio ?? AppDio.getInstance();
 
   final token = TokenStorage().getAccessToken();
 

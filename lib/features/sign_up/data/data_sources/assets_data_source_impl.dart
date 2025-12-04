@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:potato_4cut_v2/core/network/dio.dart';
 import 'package:potato_4cut_v2/core/storage/token_storage.dart';
 import 'package:potato_4cut_v2/features/sign_up/data/data_sources/assets_data_source.dart';
 import 'package:potato_4cut_v2/features/sign_up/data/models/profile_preset_response_model.dart';
@@ -6,7 +7,7 @@ import 'package:potato_4cut_v2/features/sign_up/data/models/profile_preset_respo
 class AssetsDataSourceImpl implements AssetsDataSource {
   final Dio _dio;
 
-  AssetsDataSourceImpl({required Dio dio}) : _dio = dio;
+  AssetsDataSourceImpl(Dio? dio) : _dio = dio ?? AppDio.getInstance();
 
   final token = TokenStorage().getAccessToken();
   
