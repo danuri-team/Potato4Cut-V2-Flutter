@@ -7,11 +7,25 @@ import 'package:potato_4cut_v2/core/ui/custom_back_button.dart';
 import 'package:potato_4cut_v2/core/ui/default_layout.dart';
 import 'package:potato_4cut_v2/core/ui/submit_button.dart';
 import 'package:potato_4cut_v2/core/util/throttle.dart';
+import 'package:potato_4cut_v2/features/login/provider/auth_provider.dart';
 import 'package:potato_4cut_v2/features/sign_up/presentation/widgets/profile_presets.dart';
 import 'package:potato_4cut_v2/features/sign_up/provider/sign_up_field_provider.dart';
 
 class SignUpStep2Page extends ConsumerWidget {
   const SignUpStep2Page({super.key});
+
+  submit(WidgetRef ref, BuildContext context) {
+    final signUpField = ref.read(signUpFieldProvider);
+    Throttle.run(() async{
+      await ref
+          .read(authProvider.notifier)
+          .profileUpdate(
+            nickname: signUpField.nickname!,
+            profilePresetId: signUpField.profilePresetId!,
+          );
+      AppNavigation.goSignUpStep3(context);
+    });
+  }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -32,8 +46,7 @@ class SignUpStep2Page extends ConsumerWidget {
             const ProfilePresets(),
             const Spacer(),
             SubmitButton(
-              onTap: () =>
-                  Throttle.run(() => AppNavigation.goSignUpStep3(context)),
+              onTap: () => submit(ref, context),
               width: 343.w,
               text: '확인',
               isActivate: signUpField.profilePresetId != null,

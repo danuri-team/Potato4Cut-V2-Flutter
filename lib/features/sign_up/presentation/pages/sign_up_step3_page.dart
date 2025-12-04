@@ -8,21 +8,13 @@ import 'package:potato_4cut_v2/core/ui/custom_back_button.dart';
 import 'package:potato_4cut_v2/core/ui/default_layout.dart';
 import 'package:potato_4cut_v2/core/ui/submit_button.dart';
 import 'package:potato_4cut_v2/core/util/throttle.dart';
-import 'package:potato_4cut_v2/features/login/provider/auth_provider.dart';
 import 'package:potato_4cut_v2/features/sign_up/provider/sign_up_field_provider.dart';
 
 class SignUpStep3Page extends ConsumerWidget {
   const SignUpStep3Page({super.key});
 
   void submit(WidgetRef ref, BuildContext context) {
-    final signUpField = ref.read(signUpFieldProvider);
     Throttle.run(() {
-    ref
-        .read(authProvider.notifier)
-        .profileUpdate(
-          nickname: signUpField.nickname!,
-          profilePresetId: signUpField.profilePresetId!,
-        );
       AppNavigation.goHome(context);
     });
     ref.read(signUpFieldProvider.notifier).resetField();
