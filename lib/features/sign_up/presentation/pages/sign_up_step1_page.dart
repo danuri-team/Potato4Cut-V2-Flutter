@@ -23,31 +23,38 @@ class SignUpStep1Page extends ConsumerWidget {
     }
 
     return DefaultLayout(
+      resizeToAvoidBottomInset: false,
       appBar: Padding(
         padding: EdgeInsets.only(left: 3.w),
-        child:  CustomBackButton(onTap: () => goBack(ref)),
+        child: CustomBackButton(onTap: () => goBack(ref)),
       ),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 16.w),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              SizedBox(height: 48.h),
-              Text('닉네임을 입력해주세요', style: AppTextStyle.heading1),
-              SizedBox(height: 20.h),
-              const SignUpTextFormField(),
-              SizedBox(height: 478.h),
-              SubmitButton(
-                onTap: () =>
-                    Throttle.run(() => AppNavigation.goSignUpStep2(context)),
-                width: 343.w,
-                text: '확인',
-                isActivate: (signUpField.nickname != null),
+      body: Column(
+        children: [
+          Expanded(
+            child: SingleChildScrollView(
+              child: Padding(
+                padding: EdgeInsets.symmetric(horizontal: 16.w),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    SizedBox(height: 48.h),
+                    Text('닉네임을 입력해주세요', style: AppTextStyle.heading1),
+                    SizedBox(height: 20.h),
+                    const SignUpTextFormField(),
+                  ],
+                ),
               ),
-            ],
+            ),
           ),
-        ),
+          SubmitButton(
+            onTap: () =>
+                Throttle.run(() => AppNavigation.goSignUpStep2(context)),
+            width: 343.w,
+            text: '확인',
+            isActivate: (signUpField.nickname != null),
+          ),
+          SizedBox(height: 16.h),
+        ],
       ),
     );
   }

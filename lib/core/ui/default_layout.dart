@@ -15,11 +15,13 @@ class DefaultLayout extends StatefulWidget {
     this.appBar,
     required this.body,
     this.bottomNavigationBar,
+    this.resizeToAvoidBottomInset = true,
   });
 
   final Widget? appBar;
   final Widget body;
   final BottomNavigationBar? bottomNavigationBar;
+  final bool resizeToAvoidBottomInset;
 
   @override
   State<DefaultLayout> createState() => _DefaultLayoutState();
@@ -52,6 +54,7 @@ class _DefaultLayoutState extends State<DefaultLayout> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: widget.resizeToAvoidBottomInset,
       appBar: widget.appBar == null
           ? null
           : PreferredSize(
