@@ -8,13 +8,14 @@ import 'package:potato_4cut_v2/features/login/data/datasources/auth_remote_datas
 import 'package:potato_4cut_v2/features/login/data/repositories/auth_repository_impl.dart';
 import 'package:potato_4cut_v2/features/login/domain/repositories/auth_repository.dart';
 import 'package:potato_4cut_v2/features/login/domain/use_cases/auth_use_cases.dart';
+import 'package:potato_4cut_v2/features/login/domain/use_cases/get_my_info_use_case.dart';
 import 'package:potato_4cut_v2/features/login/domain/use_cases/login_use_case.dart';
 import 'package:potato_4cut_v2/features/login/domain/use_cases/logout_use_case.dart';
 import 'package:potato_4cut_v2/features/login/domain/use_cases/profile_update_use_case.dart';
 import 'package:potato_4cut_v2/features/login/domain/use_cases/refresh_token_use_case.dart';
 import 'package:potato_4cut_v2/features/login/provider/auth_state.dart';
 import 'package:potato_4cut_v2/features/login/provider/stoarage_provider.dart';
-import 'package:potato_4cut_v2/features/profile/domain/entities/get_my_info_entity.dart';
+import 'package:potato_4cut_v2/features/login/domain/entities/get_my_info_entity.dart';
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 
 final authRemoteDataSourceProvider = Provider<AuthRemoteDataSource>((ref) => AuthRemoteDataSourceImpl(null));
@@ -30,13 +31,15 @@ final authUseCasesProvider = Provider<AuthUseCases>((ref) {
   final repository = ref.watch(authRepositoryProvider);
   final loginUseCase = LoginUseCase(repository);
   final profileUpdateUseCase = ProfileUpdateUseCase(repository);
+  final getMyInfoUsecase = GetMyInfoUseCase(repository);
   final refreshTokenUseCase = RefreshTokenUseCase(repository);
   final logoutUseCase = LogoutUseCase(repository);
   return AuthUseCases(
     loginUseCase,
+    profileUpdateUseCase,
+    getMyInfoUsecase,
     refreshTokenUseCase,
     logoutUseCase,
-    profileUpdateUseCase,
   );
 });
 
@@ -184,6 +187,11 @@ class AuthNotifier extends StateNotifier<AuthState> {
       profileImage,
     );
 
+    return response;
+  }
+
+  Future<GetMyInfoEntity> getMyInfo() async{
+    final response = await _useCases.getMyInfoUseCase.getMyInfo();
     return response;
   }
 

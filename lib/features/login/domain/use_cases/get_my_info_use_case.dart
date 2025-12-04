@@ -1,0 +1,13 @@
+import 'package:potato_4cut_v2/features/login/domain/repositories/auth_repository.dart';
+import 'package:potato_4cut_v2/features/login/domain/entities/get_my_info_entity.dart';
+
+class GetMyInfoUseCase {
+  final AuthRepository _repository;
+
+  const GetMyInfoUseCase(this._repository);
+
+  Future<GetMyInfoEntity> getMyInfo() async{
+    final response = await _repository.getMyInfo();
+    return response;
+  }
+}

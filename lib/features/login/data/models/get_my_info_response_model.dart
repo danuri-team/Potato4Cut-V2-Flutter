@@ -1,7 +1,7 @@
 import 'package:json_annotation/json_annotation.dart';
 import 'package:potato_4cut_v2/core/enum/auth_provider_type.dart';
 import 'package:potato_4cut_v2/core/enum/user_type.dart';
-import 'package:potato_4cut_v2/features/profile/domain/entities/get_my_info_entity.dart';
+import 'package:potato_4cut_v2/features/login/domain/entities/get_my_info_entity.dart';
 
 part 'get_my_info_response_model.g.dart';
 

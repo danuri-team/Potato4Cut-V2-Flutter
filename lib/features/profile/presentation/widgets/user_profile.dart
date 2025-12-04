@@ -5,8 +5,8 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:potato_4cut_v2/core/enum/auth_provider_type.dart';
 import 'package:potato_4cut_v2/core/theme/app_color.dart';
 import 'package:potato_4cut_v2/core/theme/app_text_style.dart';
-import 'package:potato_4cut_v2/features/profile/domain/entities/get_my_info_entity.dart';
-import 'package:potato_4cut_v2/features/profile/presentation/provider/profile_view_model.dart';
+import 'package:potato_4cut_v2/features/login/domain/entities/get_my_info_entity.dart';
+import 'package:potato_4cut_v2/features/login/provider/auth_provider.dart';
 
 class UserProfile extends ConsumerStatefulWidget {
   const UserProfile({super.key});
@@ -25,8 +25,7 @@ class _UserProfileState extends ConsumerState<UserProfile> {
   }
 
   Future<void> getMyInfo() async {
-    final profileViewModel = ref.read(profileViewModelProvider);
-    myInfo = await profileViewModel.getMyInfo();
+    myInfo = await ref.read(authProvider.notifier).getMyInfo();
     setState(() {});
   }
 

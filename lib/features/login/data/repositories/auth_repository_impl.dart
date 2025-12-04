@@ -5,7 +5,7 @@ import 'package:potato_4cut_v2/features/login/data/models/login_request_dto.dart
 import 'package:potato_4cut_v2/features/login/domain/entities/auth_result_entity.dart';
 import 'package:potato_4cut_v2/features/login/domain/entities/login_result_entity.dart';
 import 'package:potato_4cut_v2/features/login/domain/repositories/auth_repository.dart';
-import 'package:potato_4cut_v2/features/profile/domain/entities/get_my_info_entity.dart';
+import 'package:potato_4cut_v2/features/login/domain/entities/get_my_info_entity.dart';
 
 class AuthRepositoryImpl implements AuthRepository {
   final AuthRemoteDataSource _remoteDataSource;
@@ -43,6 +43,12 @@ class AuthRepositoryImpl implements AuthRepository {
   @override
   Future<MyInfoDataEntity> profileUpdate(String nickname, String? bio, String profilePresetId, File? profileImage) async{
     final response = await _remoteDataSource.profileUpdate(nickname, bio, profilePresetId, profileImage);
+    return response.toEntity();
+  }
+
+  @override
+  Future<GetMyInfoEntity> getMyInfo() async{
+    final response = await _remoteDataSource.getMyInfo();
     return response.toEntity();
   }
 

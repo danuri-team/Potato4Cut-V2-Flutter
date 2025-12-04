@@ -6,7 +6,7 @@ import 'package:potato_4cut_v2/core/storage/token_storage.dart';
 import 'package:potato_4cut_v2/features/login/data/models/login_request_dto.dart';
 import 'package:potato_4cut_v2/features/login/data/models/login_response_dto.dart';
 import 'package:http_parser/http_parser.dart';
-import 'package:potato_4cut_v2/features/profile/data/models/get_my_info_response_model.dart';
+import 'package:potato_4cut_v2/features/login/data/models/get_my_info_response_model.dart';
 
 abstract class AuthRemoteDataSource {
   Future<LoginResponseDto> login(LoginRequestDto request);
@@ -16,6 +16,7 @@ abstract class AuthRemoteDataSource {
     String profilePresetId,
     File? profileImage,
   );
+  Future<GetMyInfoResponseModel> getMyInfo();
   Future<TokenDto> refreshToken(String refreshToken);
   Future<void> logout();
 }
@@ -101,6 +102,16 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
     );
 
     return MyInfoDataModel.fromJson(response.data);
+  }
+
+  @override
+  Future<GetMyInfoResponseModel> getMyInfo() async {
+
+    final response = await _dio.get(
+      '/api/v1/users/me',
+      options: Options(headers: {'Authorization': 'Bearer ${await token}'}),
+    );
+    return GetMyInfoResponseModel.fromJson(response.data);
   }
 
   @override

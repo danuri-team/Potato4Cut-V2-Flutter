@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import 'package:potato_4cut_v2/features/login/domain/repositories/auth_repository.dart';
-import 'package:potato_4cut_v2/features/profile/domain/entities/get_my_info_entity.dart';
+import 'package:potato_4cut_v2/features/login/domain/entities/get_my_info_entity.dart';
 
 class ProfileUpdateUseCase {
   final AuthRepository _repository;

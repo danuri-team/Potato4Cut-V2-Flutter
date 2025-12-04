@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:potato_4cut_v2/features/login/domain/entities/auth_result_entity.dart';
 import 'package:potato_4cut_v2/features/login/domain/entities/login_result_entity.dart';
-import 'package:potato_4cut_v2/features/profile/domain/entities/get_my_info_entity.dart';
+import 'package:potato_4cut_v2/features/login/domain/entities/get_my_info_entity.dart';
 
 abstract class AuthRepository {
   Future<AuthResultEntity> login({
@@ -17,6 +17,8 @@ abstract class AuthRepository {
     String profilePresetId,
     File? profileImage,
   );
+
+  Future<GetMyInfoEntity> getMyInfo();
 
   Future<TokenEntity> refreshToken(String refreshToken);
 
