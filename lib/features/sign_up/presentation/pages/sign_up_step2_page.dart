@@ -30,17 +30,15 @@ class SignUpStep2Page extends ConsumerWidget {
             Text('원하는 감자를 선택해주세요!', style: AppTextStyle.heading1),
             SizedBox(height: 20.h),
             const ProfilePresets(),
-            if (signUpField.profilePresetId != null) ...[
-              const Spacer(),
-              SubmitButton(
-                onTap: () =>
-                    Throttle.run(() => AppNavigation.goSignUpStep3(context)),
-                width: 343.w,
-                text: '확인',
-                isActivate: true,
-              ),
-              SizedBox(height: 16.h),
-            ],
+            const Spacer(),
+            SubmitButton(
+              onTap: () =>
+                  Throttle.run(() => AppNavigation.goSignUpStep3(context)),
+              width: 343.w,
+              text: '확인',
+              isActivate: signUpField.profilePresetId != null,
+            ),
+            SizedBox(height: 16.h),
           ],
         ),
       ),
