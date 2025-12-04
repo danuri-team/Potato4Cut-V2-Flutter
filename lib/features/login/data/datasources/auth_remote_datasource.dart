@@ -59,35 +59,38 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
     String profilePresetId,
     File? profileImage,
   ) async {
+    final dataMap = {};
+
     final formNickname = MultipartFile.fromString(
       nickname,
       contentType: MediaType("application", "json"),
     );
-
-    final formProfilePresetId = MultipartFile.fromString(
-      profilePresetId,
-      contentType: MediaType("application", "json"),
-    );
-
-    final formData = FormData.fromMap({
-      'nickname': formNickname,
-      'profilePresetId': formProfilePresetId,
-    });
+    dataMap['nickname'] = formNickname;
 
     if (bio != null) {
       final formBio = MultipartFile.fromString(
         bio,
         contentType: MediaType("application", "json"),
       );
-      formData.files.add(MapEntry('bio', formBio));
+      dataMap['bio'] = formBio;
     }
 
-    if(profileImage != null){
-      final fromProfileImage = await MultipartFile.fromFile(
-      profileImage.path,
-      filename: profileImage.uri.pathSegments.last,
-      contentType: MediaType("image", "jpeg"),
+    final formProfilePresetId = MultipartFile.fromString(
+      profilePresetId,
+      contentType: MediaType("application", "json"),
     );
+    dataMap['profilePresetId'] = formProfilePresetId;
+
+    final formData = FormData.fromMap({
+      'data': dataMap,
+    });
+
+    if (profileImage != null) {
+      final fromProfileImage = await MultipartFile.fromFile(
+        profileImage.path,
+        filename: profileImage.uri.pathSegments.last,
+        contentType: MediaType("image", "jpeg"),
+      );
       formData.files.add(MapEntry('profileImage', fromProfileImage));
     }
 
