@@ -2,7 +2,6 @@ import 'dart:io';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:potato_4cut_v2/core/network/dio.dart';
 import 'package:potato_4cut_v2/core/services/fcm_service.dart';
 import 'package:potato_4cut_v2/core/storage/token_storage.dart';
 import 'package:potato_4cut_v2/features/login/data/datasources/auth_remote_datasource.dart';
@@ -15,12 +14,10 @@ import 'package:potato_4cut_v2/features/login/domain/use_cases/profile_update_us
 import 'package:potato_4cut_v2/features/login/domain/use_cases/refresh_token_use_case.dart';
 import 'package:potato_4cut_v2/features/login/provider/auth_state.dart';
 import 'package:potato_4cut_v2/features/login/provider/stoarage_provider.dart';
+import 'package:potato_4cut_v2/features/profile/domain/entities/get_my_info_entity.dart';
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 
-final authRemoteDataSourceProvider = Provider<AuthRemoteDataSource>((ref) {
-  final dio = ref.watch(dioProvider);
-  return AuthRemoteDataSourceImpl(dio: dio);
-});
+final authRemoteDataSourceProvider = Provider<AuthRemoteDataSource>((ref) => AuthRemoteDataSourceImpl(null));
 
 final authRepositoryProvider = Provider<AuthRepository>((ref) {
   final remoteDataSource = ref.watch(authRemoteDataSourceProvider);
@@ -174,7 +171,7 @@ class AuthNotifier extends StateNotifier<AuthState> {
     }
   }
 
-  Future profileUpdate({
+  Future<MyInfoDataEntity> profileUpdate({
     required String nickname,
     String? bio,
     required String profilePresetId,
@@ -203,7 +200,6 @@ class AuthNotifier extends StateNotifier<AuthState> {
       final result = await _useCases.refreshTokenUseCase.refreshToken(
         state.refreshToken!,
       );
-
       await _storage.setAccessAndRefreshToken(
         result.accessToken,
         result.refreshToken,
@@ -211,11 +207,9 @@ class AuthNotifier extends StateNotifier<AuthState> {
 
       state = state.copyWith(
         status: AuthStatus.authenticated,
-        user: result.user,
         accessToken: result.accessToken,
         refreshToken: result.refreshToken,
         errorMessage: null,
-        newUser: result.newUser,
       );
     } catch (e) {
       state = state.copyWith(
