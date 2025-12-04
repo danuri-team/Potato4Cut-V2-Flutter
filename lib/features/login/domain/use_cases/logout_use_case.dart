@@ -1,7 +1,7 @@
-import 'package:potato_4cut_v2/features/login/domain/repositories/auth_repository.dart';
+import 'package:potato_4cut_v2/features/login/domain/repositories/users_repository.dart';
 
 class LogoutUseCase {
-  final AuthRepository repository;
+  final UsersRepository repository;
 
   const LogoutUseCase(this.repository);
 

@@ -1,11 +1,11 @@
 import 'dart:io';
 
-import 'package:potato_4cut_v2/features/login/domain/entities/auth_result_entity.dart';
-import 'package:potato_4cut_v2/features/login/domain/entities/login_result_entity.dart';
+import 'package:potato_4cut_v2/features/login/domain/entities/login_response_entity.dart';
 import 'package:potato_4cut_v2/features/login/domain/entities/get_my_info_entity.dart';
+import 'package:potato_4cut_v2/features/login/domain/entities/token_entity.dart';
 
-abstract class AuthRepository {
-  Future<AuthResultEntity> login({
+abstract class UsersRepository {
+  Future<LoginResponseEntity> login({
     required String provider,
     required String token,
     required String deviceToken,

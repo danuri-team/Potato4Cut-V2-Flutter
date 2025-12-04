@@ -6,7 +6,7 @@ import 'package:potato_4cut_v2/core/enum/auth_provider_type.dart';
 import 'package:potato_4cut_v2/core/theme/app_color.dart';
 import 'package:potato_4cut_v2/core/theme/app_text_style.dart';
 import 'package:potato_4cut_v2/features/login/domain/entities/get_my_info_entity.dart';
-import 'package:potato_4cut_v2/features/login/provider/auth_provider.dart';
+import 'package:potato_4cut_v2/features/login/provider/users_view_model.dart';
 
 class UserProfile extends ConsumerStatefulWidget {
   const UserProfile({super.key});
@@ -25,7 +25,7 @@ class _UserProfileState extends ConsumerState<UserProfile> {
   }
 
   Future<void> getMyInfo() async {
-    myInfo = await ref.read(authProvider.notifier).getMyInfo();
+    myInfo = await ref.read(usersProvider.notifier).getMyInfo();
     setState(() {});
   }
 

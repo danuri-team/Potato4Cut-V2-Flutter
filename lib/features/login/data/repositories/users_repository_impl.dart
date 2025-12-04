@@ -1,27 +1,25 @@
 import 'dart:io';
 
-import 'package:potato_4cut_v2/features/login/data/datasources/auth_remote_datasource.dart';
-import 'package:potato_4cut_v2/features/login/data/models/login_request_dto.dart';
-import 'package:potato_4cut_v2/features/login/domain/entities/auth_result_entity.dart';
-import 'package:potato_4cut_v2/features/login/domain/entities/login_result_entity.dart';
-import 'package:potato_4cut_v2/features/login/domain/repositories/auth_repository.dart';
+import 'package:potato_4cut_v2/features/login/data/data_sources/users_data_source.dart';
+import 'package:potato_4cut_v2/features/login/data/models/login_request_model.dart';
+import 'package:potato_4cut_v2/features/login/domain/entities/login_response_entity.dart';
+import 'package:potato_4cut_v2/features/login/domain/entities/token_entity.dart';
+import 'package:potato_4cut_v2/features/login/domain/repositories/users_repository.dart';
 import 'package:potato_4cut_v2/features/login/domain/entities/get_my_info_entity.dart';
 
-class AuthRepositoryImpl implements AuthRepository {
-  final AuthRemoteDataSource _remoteDataSource;
+class UsersRepositoryImpl implements UsersRepository {
+  final UsersDataSource _remoteDataSource;
 
-  AuthRepositoryImpl({
-    required AuthRemoteDataSource remoteDataSource,
-  }) : _remoteDataSource = remoteDataSource;
+  UsersRepositoryImpl(this._remoteDataSource);
 
   @override
-  Future<AuthResultEntity> login({
+  Future<LoginResponseEntity> login({
     required String provider,
     required String token,
     required String deviceToken,
   }) async {
     try {
-      final request = LoginRequestDto(
+      final request = LoginRequestModel(
         provider: provider,
         oauthToken: token,
         deviceToken: deviceToken,
@@ -29,12 +27,7 @@ class AuthRepositoryImpl implements AuthRepository {
 
       final response = await _remoteDataSource.login(request);
 
-      return AuthResultEntity(
-        accessToken: response.token.accessToken,
-        refreshToken: response.token.refreshToken,
-        user: response.toEntity(),
-        newUser: response.newUser,
-      );
+      return response.toEntity();
     } catch (e) {
       rethrow;
     }
@@ -58,8 +51,8 @@ class AuthRepositoryImpl implements AuthRepository {
       final response = await _remoteDataSource.refreshToken(refreshToken);
 
       return TokenEntity(
-        accessToken: response.accessToken,
-        refreshToken: response.refreshToken,
+        response.accessToken,
+        response.refreshToken,
       );
     } catch (e) {
       rethrow;

@@ -5,7 +5,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:potato_4cut_v2/core/router/router_helper.dart';
 import 'package:potato_4cut_v2/core/theme/app_color.dart';
 import 'package:potato_4cut_v2/core/theme/app_text_style.dart';
-import 'package:potato_4cut_v2/features/login/provider/auth_provider.dart';
+import 'package:potato_4cut_v2/features/login/provider/users_view_model.dart';
 import 'package:potato_4cut_v2/features/login/provider/auth_state.dart';
 
 class GoogleAuthBar extends ConsumerWidget {
@@ -17,8 +17,8 @@ class GoogleAuthBar extends ConsumerWidget {
     AuthState authState,
   ) async {
     try {
-      await ref.read(authProvider.notifier).loginWithGoogle();
-      final status = ref.read(authProvider).status;
+      await ref.read(usersProvider.notifier).loginWithGoogle();
+      final status = ref.read(usersProvider).status;
       if (status == AuthStatus.authenticated) {
         if (authState.newUser == true) {
           AppNavigation.goSignUpStep1(context);
@@ -40,7 +40,7 @@ class GoogleAuthBar extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final authState = ref.watch(authProvider);
+    final authState = ref.watch(usersProvider);
     final isLoading = authState.isLoadingFor('GOOGLE');
 
     return GestureDetector(

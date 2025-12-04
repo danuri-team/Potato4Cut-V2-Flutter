@@ -4,10 +4,11 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:potato_4cut_v2/core/services/fcm_service.dart';
 import 'package:potato_4cut_v2/core/storage/token_storage.dart';
-import 'package:potato_4cut_v2/features/login/data/datasources/auth_remote_datasource.dart';
-import 'package:potato_4cut_v2/features/login/data/repositories/auth_repository_impl.dart';
-import 'package:potato_4cut_v2/features/login/domain/repositories/auth_repository.dart';
-import 'package:potato_4cut_v2/features/login/domain/use_cases/auth_use_cases.dart';
+import 'package:potato_4cut_v2/features/login/data/data_sources/users_data_source.dart';
+import 'package:potato_4cut_v2/features/login/data/data_sources/users_data_source_impl.dart';
+import 'package:potato_4cut_v2/features/login/data/repositories/users_repository_impl.dart';
+import 'package:potato_4cut_v2/features/login/domain/repositories/users_repository.dart';
+import 'package:potato_4cut_v2/features/login/domain/use_cases/users_use_cases.dart';
 import 'package:potato_4cut_v2/features/login/domain/use_cases/get_my_info_use_case.dart';
 import 'package:potato_4cut_v2/features/login/domain/use_cases/login_use_case.dart';
 import 'package:potato_4cut_v2/features/login/domain/use_cases/logout_use_case.dart';
@@ -18,23 +19,23 @@ import 'package:potato_4cut_v2/features/login/provider/stoarage_provider.dart';
 import 'package:potato_4cut_v2/features/login/domain/entities/get_my_info_entity.dart';
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 
-final authRemoteDataSourceProvider = Provider<AuthRemoteDataSource>((ref) => AuthRemoteDataSourceImpl(null));
+final usersDataSourceProvider = Provider<UsersDataSource>((ref) => UsersDataSourceImpl(null));
 
-final authRepositoryProvider = Provider<AuthRepository>((ref) {
-  final remoteDataSource = ref.watch(authRemoteDataSourceProvider);
-  return AuthRepositoryImpl(remoteDataSource: remoteDataSource);
+final usersRepositoryProvider = Provider<UsersRepository>((ref) {
+  final dataSource = ref.watch(usersDataSourceProvider);
+  return UsersRepositoryImpl(dataSource);
 });
 
 final tokenStorageProvider = Provider<TokenStorage>((ref) => TokenStorage());
 
-final authUseCasesProvider = Provider<AuthUseCases>((ref) {
-  final repository = ref.watch(authRepositoryProvider);
+final usersUseCasesProvider = Provider<UsersUseCases>((ref) {
+  final repository = ref.watch(usersRepositoryProvider);
   final loginUseCase = LoginUseCase(repository);
   final profileUpdateUseCase = ProfileUpdateUseCase(repository);
   final getMyInfoUsecase = GetMyInfoUseCase(repository);
   final refreshTokenUseCase = RefreshTokenUseCase(repository);
   final logoutUseCase = LogoutUseCase(repository);
-  return AuthUseCases(
+  return UsersUseCases(
     loginUseCase,
     profileUpdateUseCase,
     getMyInfoUsecase,
@@ -43,22 +44,22 @@ final authUseCasesProvider = Provider<AuthUseCases>((ref) {
   );
 });
 
-final authProvider = StateNotifierProvider<AuthNotifier, AuthState>((ref) {
-  final useCases = ref.watch(authUseCasesProvider);
+final usersProvider = StateNotifierProvider<UsersViewModelNotifier, AuthState>((ref) {
+  final useCases = ref.watch(usersUseCasesProvider);
   final fcmService = ref.watch(fcmServiceProvider);
   final googleSignIn = ref.watch(googleSignInProvider);
   final storage = ref.watch(tokenStorageProvider);
-  return AuthNotifier(useCases, fcmService, googleSignIn, ref, storage);
+  return UsersViewModelNotifier(useCases, fcmService, googleSignIn, ref, storage);
 });
 
-class AuthNotifier extends StateNotifier<AuthState> {
-  final AuthUseCases _useCases;
+class UsersViewModelNotifier extends StateNotifier<AuthState> {
+  final UsersUseCases _useCases;
   final FcmService _fcmService;
   final GoogleSignIn _googleSignIn;
   final Ref _ref;
   final TokenStorage _storage;
 
-  AuthNotifier(
+  UsersViewModelNotifier(
     this._useCases,
     this._fcmService,
     this._googleSignIn,
@@ -144,15 +145,15 @@ class AuthNotifier extends StateNotifier<AuthState> {
       );
 
       await _storage.setAccessAndRefreshToken(
-        result.accessToken,
-        result.refreshToken,
+        result.token.accessToken,
+        result.token.refreshToken,
       );
 
       state = state.copyWith(
         status: AuthStatus.authenticated,
-        user: result.user,
-        accessToken: result.accessToken,
-        refreshToken: result.refreshToken,
+        // user: result.,
+        accessToken: result.token.accessToken,
+        refreshToken: result.token.refreshToken,
         isLoading: false,
         loadingProvider: null,
         errorMessage: null,

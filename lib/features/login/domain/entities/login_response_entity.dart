@@ -1,4 +1,6 @@
-class LoginResultEntity {
+import 'package:potato_4cut_v2/features/login/domain/entities/token_entity.dart';
+
+class LoginResponseEntity {
   final String userId;
   final String nickname;
   final String email;
@@ -7,7 +9,7 @@ class LoginResultEntity {
   final TokenEntity token;
   final bool newUser;
 
-  LoginResultEntity({
+  LoginResponseEntity({
     required this.userId,
     required this.nickname,
     required this.email,
@@ -16,11 +18,4 @@ class LoginResultEntity {
     required this.token,
     required this.newUser,
   });
-}
-
-class TokenEntity {
-  final String accessToken;
-  final String refreshToken;
-
-  const TokenEntity({required this.accessToken, required this.refreshToken});
 }

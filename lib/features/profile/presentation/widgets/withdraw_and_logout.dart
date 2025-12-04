@@ -4,7 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:potato_4cut_v2/core/router/router_helper.dart';
 import 'package:potato_4cut_v2/core/theme/app_color.dart';
 import 'package:potato_4cut_v2/core/util/throttle.dart';
-import 'package:potato_4cut_v2/features/login/provider/auth_provider.dart';
+import 'package:potato_4cut_v2/features/login/provider/users_view_model.dart';
 import 'package:potato_4cut_v2/features/login/provider/stoarage_provider.dart';
 
 class WithdrawAndLogout extends ConsumerWidget {
@@ -12,7 +12,7 @@ class WithdrawAndLogout extends ConsumerWidget {
 
   Future<void> logout(WidgetRef ref, BuildContext context) async {
     Future.wait([
-      ref.read(authProvider.notifier).logout(),
+      ref.read(usersProvider.notifier).logout(),
       ref.read(storageProvider.notifier).logout(),
     ]);
     AppNavigation.goLogin(context);

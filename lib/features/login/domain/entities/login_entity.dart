@@ -1,11 +1,15 @@
-class LoginEntity {
-  final String provider;
-  final String oauthToken;
-  final String deviceToken;
+import 'package:potato_4cut_v2/features/login/domain/entities/login_response_entity.dart';
 
-  const LoginEntity({
-    required this.provider,
-    required this.oauthToken,
-    required this.deviceToken,
+class LoginResponse {
+  final String accessToken;
+  final String refreshToken;
+  final LoginResponseEntity user;
+  final bool newUser;
+
+  const LoginResponse({
+    required this.accessToken,
+    required this.refreshToken,
+    required this.user,
+    required this.newUser,
   });
 }

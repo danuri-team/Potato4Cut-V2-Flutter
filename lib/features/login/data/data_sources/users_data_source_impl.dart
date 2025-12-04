@@ -3,33 +3,22 @@ import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:potato_4cut_v2/core/network/dio.dart';
 import 'package:potato_4cut_v2/core/storage/token_storage.dart';
-import 'package:potato_4cut_v2/features/login/data/models/login_request_dto.dart';
-import 'package:potato_4cut_v2/features/login/data/models/login_response_dto.dart';
+import 'package:potato_4cut_v2/features/login/data/data_sources/users_data_source.dart';
+import 'package:potato_4cut_v2/features/login/data/models/login_request_model.dart';
+import 'package:potato_4cut_v2/features/login/data/models/login_response_model.dart';
 import 'package:http_parser/http_parser.dart';
 import 'package:potato_4cut_v2/features/login/data/models/get_my_info_response_model.dart';
+import 'package:potato_4cut_v2/features/login/data/models/token_response_model.dart';
 
-abstract class AuthRemoteDataSource {
-  Future<LoginResponseDto> login(LoginRequestDto request);
-  Future<MyInfoDataModel> profileUpdate(
-    String nickname,
-    String? bio,
-    String profilePresetId,
-    File? profileImage,
-  );
-  Future<GetMyInfoResponseModel> getMyInfo();
-  Future<TokenDto> refreshToken(String refreshToken);
-  Future<void> logout();
-}
-
-class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
+class UsersDataSourceImpl implements UsersDataSource {
   final Dio _dio;
 
-  AuthRemoteDataSourceImpl(Dio? dio) : _dio = dio ?? AppDio.getInstance();
+  UsersDataSourceImpl(Dio? dio) : _dio = dio ?? AppDio.getInstance();
 
   final token = TokenStorage().getAccessToken();
 
   @override
-  Future<LoginResponseDto> login(LoginRequestDto request) async {
+  Future<LoginResponseModel> login(LoginRequestModel request) async {
     try {
       final response = await _dio.post(
         '/api/v1/auth/login',
@@ -37,7 +26,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
       );
 
       if (response.statusCode == 200 || response.statusCode == 201) {
-        return LoginResponseDto.fromJson(response.data);
+        return LoginResponseModel.fromJson(response.data);
       } else {
         throw DioException(
           requestOptions: response.requestOptions,
@@ -115,7 +104,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   }
 
   @override
-  Future<TokenDto> refreshToken(String refreshToken) async {
+  Future<TokenModel> refreshToken(String refreshToken) async {
     try {
       final response = await _dio.post(
         '/api/v1/auth/refresh',
@@ -123,7 +112,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
       );
 
       if (response.statusCode == 200 || response.statusCode == 201) {
-        return TokenDto.fromJson(response.data);
+        return TokenModel.fromJson(response.data);
       } else {
         throw DioException(
           requestOptions: response.requestOptions,

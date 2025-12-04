@@ -1,4 +1,4 @@
-import 'package:potato_4cut_v2/features/login/domain/entities/login_result_entity.dart';
+import 'package:potato_4cut_v2/features/login/domain/entities/login_response_entity.dart';
 
 enum AuthStatus {
   initial,
@@ -8,7 +8,7 @@ enum AuthStatus {
 
 class AuthState {
   final AuthStatus status;
-  final LoginResultEntity? user;
+  final LoginResponseEntity? user;
   final String? accessToken;
   final String? refreshToken;
   final String? errorMessage;
@@ -29,7 +29,7 @@ class AuthState {
 
   AuthState copyWith({
     AuthStatus? status,
-    LoginResultEntity? user,
+    LoginResponseEntity? user,
     String? accessToken,
     String? refreshToken,
     String? errorMessage,
