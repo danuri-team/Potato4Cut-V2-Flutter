@@ -15,7 +15,7 @@ class UsersDataSourceImpl implements UsersDataSource {
 
   UsersDataSourceImpl(Dio? dio) : _dio = dio ?? AppDio.getInstance();
 
-  final token = TokenStorage().getAccessToken();
+  final tokenStorage = TokenStorage();
 
   @override
   Future<LoginResponseModel> login(LoginRequestModel request) async {
@@ -84,6 +84,8 @@ class UsersDataSourceImpl implements UsersDataSource {
       formData.files.add(MapEntry('profileImage', fromProfileImage));
     }
 
+    final token = tokenStorage.getAccessToken();
+
     final response = await _dio.put(
       '/api/v1/users/me',
       data: formData,
@@ -95,6 +97,7 @@ class UsersDataSourceImpl implements UsersDataSource {
 
   @override
   Future<GetMyInfoResponseModel> getMyInfo() async {
+    final token = tokenStorage.getAccessToken();
 
     final response = await _dio.get(
       '/api/v1/users/me',
@@ -131,6 +134,8 @@ class UsersDataSourceImpl implements UsersDataSource {
 
   @override
   Future<void> logout() async {
+    final token = tokenStorage.getAccessToken();
+
     try {
       final response = await _dio.post(
         '/api/v1/auth/logout',
