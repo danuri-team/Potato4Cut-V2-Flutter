@@ -1,4 +1,6 @@
 import 'package:json_annotation/json_annotation.dart';
+import 'package:potato_4cut_v2/core/enum/auth_provider_type.dart';
+import 'package:potato_4cut_v2/core/enum/user_type.dart';
 import 'package:potato_4cut_v2/features/login/data/models/token_response_model.dart';
 import 'package:potato_4cut_v2/features/login/domain/entities/login_response_entity.dart';
 import 'package:potato_4cut_v2/features/login/domain/entities/token_entity.dart';
@@ -8,15 +10,17 @@ part 'login_response_model.g.dart';
 @JsonSerializable()
 class LoginResponseModel {
   final String userId;
+  final AuthProviderType provider;
   final String nickname;
   final String email;
-  final String? profileImageUrl;
-  final String role;
+  String? profileImageUrl;
+  final UserType role;
   final TokenModel token;
   final bool newUser;
 
-  const LoginResponseModel({
+  LoginResponseModel({
     required this.userId,
+    required this.provider,
     required this.nickname,
     required this.email,
     this.profileImageUrl,
@@ -37,8 +41,10 @@ class LoginResponseModel {
     );
     return LoginResponseEntity(
       userId: userId,
+      provider: provider,
       nickname: nickname,
       email: email,
+      profileImageUrl: profileImageUrl,
       role: role,
       token: token,
       newUser: newUser,

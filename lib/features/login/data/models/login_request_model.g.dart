@@ -8,14 +8,20 @@ part of 'login_request_model.dart';
 
 LoginRequestModel _$LoginRequestModelFromJson(Map<String, dynamic> json) =>
     LoginRequestModel(
-      provider: json['provider'] as String,
+      provider: $enumDecode(_$AuthProviderTypeEnumMap, json['provider']),
       oauthToken: json['oauthToken'] as String,
       deviceToken: json['deviceToken'] as String,
     );
 
 Map<String, dynamic> _$LoginRequestModelToJson(LoginRequestModel instance) =>
     <String, dynamic>{
-      'provider': instance.provider,
+      'provider': _$AuthProviderTypeEnumMap[instance.provider]!,
       'oauthToken': instance.oauthToken,
       'deviceToken': instance.deviceToken,
     };
+
+const _$AuthProviderTypeEnumMap = {
+  AuthProviderType.GOOGLE: 'GOOGLE',
+  AuthProviderType.APPLE: 'APPLE',
+  AuthProviderType.NONE: 'NONE',
+};

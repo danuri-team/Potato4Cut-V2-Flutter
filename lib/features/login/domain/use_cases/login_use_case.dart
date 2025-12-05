@@ -1,3 +1,4 @@
+import 'package:potato_4cut_v2/core/enum/auth_provider_type.dart';
 import 'package:potato_4cut_v2/features/login/domain/entities/login_response_entity.dart';
 import 'package:potato_4cut_v2/features/login/domain/repositories/users_repository.dart';
 
@@ -7,7 +8,7 @@ class LoginUseCase {
   const LoginUseCase(this.repository);
 
   Future<LoginResponseEntity> login(
-    String provider,
+    AuthProviderType provider,
     String token,
     String deviceToken,
   ) async {

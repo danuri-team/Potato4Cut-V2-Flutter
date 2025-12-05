@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:potato_4cut_v2/core/enum/auth_provider_type.dart';
 import 'package:potato_4cut_v2/features/login/data/data_sources/users_data_source.dart';
 import 'package:potato_4cut_v2/features/login/data/models/login_request_model.dart';
 import 'package:potato_4cut_v2/features/login/domain/entities/login_response_entity.dart';
@@ -14,7 +15,7 @@ class UsersRepositoryImpl implements UsersRepository {
 
   @override
   Future<LoginResponseEntity> login({
-    required String provider,
+    required AuthProviderType provider,
     required String token,
     required String deviceToken,
   }) async {

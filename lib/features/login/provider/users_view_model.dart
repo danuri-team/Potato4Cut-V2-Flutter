@@ -1,7 +1,9 @@
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:potato_4cut_v2/core/enum/auth_provider_type.dart';
 import 'package:potato_4cut_v2/core/services/fcm_service.dart';
 import 'package:potato_4cut_v2/core/storage/token_storage.dart';
 import 'package:potato_4cut_v2/features/login/data/data_sources/users_data_source.dart';
@@ -70,7 +72,7 @@ class UsersViewModelNotifier extends StateNotifier<AuthState> {
   Future<void> loginWithApple() async {
     state = state.copyWith(
       isLoading: true,
-      loadingProvider: 'APPLE',
+      loadingProvider: AuthProviderType.APPLE,
       errorMessage: null,
     );
 
@@ -87,7 +89,7 @@ class UsersViewModelNotifier extends StateNotifier<AuthState> {
         throw Exception('Apple Sign In failed: No identity token');
       }
 
-      await _login(provider: 'APPLE', token: token);
+      await _login(provider: AuthProviderType.APPLE, token: token);
     } catch (e) {
       state = state.copyWith(
         status: AuthStatus.unauthenticated,
@@ -102,7 +104,7 @@ class UsersViewModelNotifier extends StateNotifier<AuthState> {
   Future<void> loginWithGoogle() async {
     state = state.copyWith(
       isLoading: true,
-      loadingProvider: 'GOOGLE',
+      loadingProvider: AuthProviderType.GOOGLE,
       errorMessage: null,
     );
 
@@ -122,7 +124,7 @@ class UsersViewModelNotifier extends StateNotifier<AuthState> {
         throw Exception('Google Sign In failed: No accessToken token');
       }
 
-      await _login(provider: 'GOOGLE', token: token);
+      await _login(provider: AuthProviderType.GOOGLE, token: token);
     } catch (e) {
       state = state.copyWith(
         status: AuthStatus.unauthenticated,
@@ -134,7 +136,7 @@ class UsersViewModelNotifier extends StateNotifier<AuthState> {
     }
   }
 
-  Future<void> _login({required String provider, required String token}) async {
+  Future<void> _login({required AuthProviderType provider, required String token}) async {
     try {
       final deviceToken = await _fcmService.getToken();
 
@@ -144,6 +146,8 @@ class UsersViewModelNotifier extends StateNotifier<AuthState> {
         deviceToken,
       );
 
+      log('result ${result.token.accessToken}');
+
       await _storage.setAccessAndRefreshToken(
         result.token.accessToken,
         result.token.refreshToken,
@@ -151,7 +155,6 @@ class UsersViewModelNotifier extends StateNotifier<AuthState> {
 
       state = state.copyWith(
         status: AuthStatus.authenticated,
-        // user: result.,
         accessToken: result.token.accessToken,
         refreshToken: result.token.refreshToken,
         isLoading: false,
