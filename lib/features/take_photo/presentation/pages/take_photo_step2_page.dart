@@ -1,8 +1,10 @@
 import 'dart:async';
 import 'dart:io';
+import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:image/image.dart' as img;
 import 'package:potato_4cut_v2/core/enum/take_photo_flow_type.dart';
 import 'package:potato_4cut_v2/features/take_photo/presentation/view_model/photo_view_model.dart';
 import 'package:potato_4cut_v2/features/take_photo/provider/camera_controller_provider.dart';
@@ -61,9 +63,9 @@ class _TakePhotoStep2PageState extends ConsumerState<TakePhotoStep2Page> {
             .read(cameraControllerProvider.notifier)
             .takePicture();
 
-        ref
-            .read(photoProvider.notifier)
-            .takePhoto(photoIndex, File(xFile.path));
+        final photoFile = await _flipImageHorizontally(xFile);
+
+        ref.read(photoProvider.notifier).takePhoto(photoIndex, photoFile);
 
         ref.read(countdownProvider.notifier).resetCountdown();
         completer.complete();
@@ -71,6 +73,22 @@ class _TakePhotoStep2PageState extends ConsumerState<TakePhotoStep2Page> {
     });
 
     await completer.future;
+  }
+
+  Future<File> _flipImageHorizontally(XFile imageFile) async {
+    final bytes = await imageFile.readAsBytes();
+    final image = img.decodeImage(bytes);
+
+    if (image == null) {
+      return File(imageFile.path);
+    }
+
+    final flippedImage = img.flipHorizontal(image);
+
+    final originalFile = File(imageFile.path);
+    await originalFile.writeAsBytes(img.encodeJpg(flippedImage));
+
+    return originalFile;
   }
 
   Future<void> takeFourContinuousPhotos(WidgetRef ref) async {
