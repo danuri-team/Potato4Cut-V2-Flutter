@@ -30,8 +30,8 @@ class SignUpFieldNotifier extends StateNotifier<SignUpField> {
     String? profilePresetId,
   }) {
     state = state.copyWith(
-      nickname: nickname,
-      profilePresetId: profilePresetId,
+      nickname: nickname ?? state.nickname,
+      profilePresetId: profilePresetId ?? state.profilePresetId,
     );
   }
 

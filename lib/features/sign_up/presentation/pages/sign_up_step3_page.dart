@@ -15,9 +15,9 @@ class SignUpStep3Page extends ConsumerWidget {
 
   void submit(WidgetRef ref, BuildContext context) {
     Throttle.run(() {
-      ref.read(signUpFieldProvider.notifier).resetField();
       AppNavigation.goHome(context);
     });
+    ref.read(signUpFieldProvider.notifier).resetField();
   }
 
   @override

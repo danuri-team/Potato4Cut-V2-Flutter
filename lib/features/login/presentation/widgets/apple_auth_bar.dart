@@ -2,10 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:potato_4cut_v2/core/enum/auth_provider_type.dart';
 import 'package:potato_4cut_v2/core/router/router_helper.dart';
 import 'package:potato_4cut_v2/core/theme/app_color.dart';
 import 'package:potato_4cut_v2/core/theme/app_text_style.dart';
-import 'package:potato_4cut_v2/features/login/provider/auth_provider.dart';
+import 'package:potato_4cut_v2/features/login/provider/users_view_model.dart';
 import 'package:potato_4cut_v2/features/login/provider/auth_state.dart';
 
 class AppleAuthBar extends ConsumerWidget {
@@ -17,9 +18,9 @@ class AppleAuthBar extends ConsumerWidget {
     AuthState authState,
   ) async {
     try {
-      await ref.read(authProvider.notifier).loginWithApple();
+      await ref.read(usersProvider.notifier).loginWithApple();
 
-      final status = ref.read(authProvider).status;
+      final status = ref.read(usersProvider).status;
       if (status == AuthStatus.authenticated) {
         if (authState.newUser == true) {
           AppNavigation.goSignUpStep1(context);
@@ -41,8 +42,8 @@ class AppleAuthBar extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final authState = ref.watch(authProvider);
-    final isLoading = authState.isLoadingFor('APPLE');
+    final authState = ref.watch(usersProvider);
+    final isLoading = authState.isLoadingFor(AuthProviderType.APPLE);
 
     return GestureDetector(
       onTap: authState.isLoading

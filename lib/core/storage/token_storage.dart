@@ -8,8 +8,8 @@ class TokenStorage {
 
   Future<void> setAccessAndRefreshToken(String accessToken, String refreshToken) async{
     Future.wait([
-    _storage.write(key: _accessTokenKey, value: accessToken),
-    _storage.write(key: _refreshTokenKey, value: refreshToken),
+      setAccessToken(accessToken),
+      setRefreshToken(refreshToken),
     ]);
   }
 

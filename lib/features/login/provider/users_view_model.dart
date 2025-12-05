@@ -1,70 +1,67 @@
+import 'dart:developer';
+import 'dart:io';
+
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:potato_4cut_v2/core/network/dio.dart';
+import 'package:potato_4cut_v2/core/enum/auth_provider_type.dart';
 import 'package:potato_4cut_v2/core/services/fcm_service.dart';
 import 'package:potato_4cut_v2/core/storage/token_storage.dart';
-import 'package:potato_4cut_v2/features/login/data/datasources/auth_remote_datasource.dart';
-import 'package:potato_4cut_v2/features/login/data/repositories/auth_repository_impl.dart';
-import 'package:potato_4cut_v2/features/login/domain/repositories/auth_repository.dart';
-import 'package:potato_4cut_v2/features/login/domain/use_cases/auth_use_cases.dart';
+import 'package:potato_4cut_v2/features/login/data/data_sources/users_data_source.dart';
+import 'package:potato_4cut_v2/features/login/data/data_sources/users_data_source_impl.dart';
+import 'package:potato_4cut_v2/features/login/data/repositories/users_repository_impl.dart';
+import 'package:potato_4cut_v2/features/login/domain/repositories/users_repository.dart';
+import 'package:potato_4cut_v2/features/login/domain/use_cases/users_use_cases.dart';
+import 'package:potato_4cut_v2/features/login/domain/use_cases/get_my_info_use_case.dart';
 import 'package:potato_4cut_v2/features/login/domain/use_cases/login_use_case.dart';
 import 'package:potato_4cut_v2/features/login/domain/use_cases/logout_use_case.dart';
+import 'package:potato_4cut_v2/features/login/domain/use_cases/profile_update_use_case.dart';
 import 'package:potato_4cut_v2/features/login/domain/use_cases/refresh_token_use_case.dart';
 import 'package:potato_4cut_v2/features/login/provider/auth_state.dart';
 import 'package:potato_4cut_v2/features/login/provider/stoarage_provider.dart';
+import 'package:potato_4cut_v2/features/login/domain/entities/get_my_info_entity.dart';
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 
-final authRemoteDataSourceProvider = Provider<AuthRemoteDataSource>((ref) {
-  final dio = ref.watch(dioProvider);
-  return AuthRemoteDataSourceImpl(dio: dio);
-});
+final usersDataSourceProvider = Provider<UsersDataSource>((ref) => UsersDataSourceImpl(null));
 
-final authRepositoryProvider = Provider<AuthRepository>((ref) {
-  final remoteDataSource = ref.watch(authRemoteDataSourceProvider);
-  return AuthRepositoryImpl(remoteDataSource: remoteDataSource);
-});
-
-final loginUseCaseProvider = Provider<LoginUseCase>((ref) {
-  final repository = ref.watch(authRepositoryProvider);
-  return LoginUseCase(repository);
-});
-
-final refreshTokenUseCaseProvider = Provider<RefreshTokenUseCase>((ref) {
-  final repository = ref.watch(authRepositoryProvider);
-  return RefreshTokenUseCase(repository);
-});
-
-final logoutUseCaseProvider = Provider((ref) {
-  final repository = ref.watch(authRepositoryProvider);
-  return LogoutUseCase(repository);
+final usersRepositoryProvider = Provider<UsersRepository>((ref) {
+  final dataSource = ref.watch(usersDataSourceProvider);
+  return UsersRepositoryImpl(dataSource);
 });
 
 final tokenStorageProvider = Provider<TokenStorage>((ref) => TokenStorage());
 
-final authUseCasesProvider = Provider<AuthUseCases>((ref) {
-  final loginUseCase = ref.watch(loginUseCaseProvider);
-  final refreshTokenUseCase = ref.watch(refreshTokenUseCaseProvider);
-  final logoutUseCase = ref.watch(logoutUseCaseProvider);
-  return AuthUseCases(loginUseCase, refreshTokenUseCase, logoutUseCase);
+final usersUseCasesProvider = Provider<UsersUseCases>((ref) {
+  final repository = ref.watch(usersRepositoryProvider);
+  final loginUseCase = LoginUseCase(repository);
+  final profileUpdateUseCase = ProfileUpdateUseCase(repository);
+  final getMyInfoUsecase = GetMyInfoUseCase(repository);
+  final refreshTokenUseCase = RefreshTokenUseCase(repository);
+  final logoutUseCase = LogoutUseCase(repository);
+  return UsersUseCases(
+    loginUseCase,
+    profileUpdateUseCase,
+    getMyInfoUsecase,
+    refreshTokenUseCase,
+    logoutUseCase,
+  );
 });
 
-final authProvider = StateNotifierProvider<AuthNotifier, AuthState>((ref) {
-  final useCases = ref.watch(authUseCasesProvider);
+final usersProvider = StateNotifierProvider<UsersViewModelNotifier, AuthState>((ref) {
+  final useCases = ref.watch(usersUseCasesProvider);
   final fcmService = ref.watch(fcmServiceProvider);
   final googleSignIn = ref.watch(googleSignInProvider);
   final storage = ref.watch(tokenStorageProvider);
-  return AuthNotifier(useCases, fcmService, googleSignIn, ref, storage);
+  return UsersViewModelNotifier(useCases, fcmService, googleSignIn, ref, storage);
 });
 
-class AuthNotifier extends StateNotifier<AuthState> {
-  final AuthUseCases _useCases;
+class UsersViewModelNotifier extends StateNotifier<AuthState> {
+  final UsersUseCases _useCases;
   final FcmService _fcmService;
   final GoogleSignIn _googleSignIn;
   final Ref _ref;
   final TokenStorage _storage;
 
-  AuthNotifier(
+  UsersViewModelNotifier(
     this._useCases,
     this._fcmService,
     this._googleSignIn,
@@ -75,7 +72,7 @@ class AuthNotifier extends StateNotifier<AuthState> {
   Future<void> loginWithApple() async {
     state = state.copyWith(
       isLoading: true,
-      loadingProvider: 'APPLE',
+      loadingProvider: AuthProviderType.APPLE,
       errorMessage: null,
     );
 
@@ -92,7 +89,7 @@ class AuthNotifier extends StateNotifier<AuthState> {
         throw Exception('Apple Sign In failed: No identity token');
       }
 
-      await _login(provider: 'APPLE', token: token);
+      await _login(provider: AuthProviderType.APPLE, token: token);
     } catch (e) {
       state = state.copyWith(
         status: AuthStatus.unauthenticated,
@@ -107,7 +104,7 @@ class AuthNotifier extends StateNotifier<AuthState> {
   Future<void> loginWithGoogle() async {
     state = state.copyWith(
       isLoading: true,
-      loadingProvider: 'GOOGLE',
+      loadingProvider: AuthProviderType.GOOGLE,
       errorMessage: null,
     );
 
@@ -127,7 +124,7 @@ class AuthNotifier extends StateNotifier<AuthState> {
         throw Exception('Google Sign In failed: No accessToken token');
       }
 
-      await _login(provider: 'GOOGLE', token: token);
+      await _login(provider: AuthProviderType.GOOGLE, token: token);
     } catch (e) {
       state = state.copyWith(
         status: AuthStatus.unauthenticated,
@@ -139,7 +136,7 @@ class AuthNotifier extends StateNotifier<AuthState> {
     }
   }
 
-  Future<void> _login({required String provider, required String token}) async {
+  Future<void> _login({required AuthProviderType provider, required String token}) async {
     try {
       final deviceToken = await _fcmService.getToken();
 
@@ -149,16 +146,17 @@ class AuthNotifier extends StateNotifier<AuthState> {
         deviceToken,
       );
 
+      log('result ${result.token.accessToken}');
+
       await _storage.setAccessAndRefreshToken(
-        result.accessToken,
-        result.refreshToken,
+        result.token.accessToken,
+        result.token.refreshToken,
       );
 
       state = state.copyWith(
         status: AuthStatus.authenticated,
-        user: result.user,
-        accessToken: result.accessToken,
-        refreshToken: result.refreshToken,
+        accessToken: result.token.accessToken,
+        refreshToken: result.token.refreshToken,
         isLoading: false,
         loadingProvider: null,
         errorMessage: null,
@@ -180,6 +178,27 @@ class AuthNotifier extends StateNotifier<AuthState> {
     }
   }
 
+  Future<MyInfoDataEntity> profileUpdate({
+    required String nickname,
+    String? bio,
+    required String profilePresetId,
+    File? profileImage,
+  }) async {
+    final response = await _useCases.profileUpdateUseCase.profileUpdate(
+      nickname,
+      bio,
+      profilePresetId,
+      profileImage,
+    );
+
+    return response;
+  }
+
+  Future<GetMyInfoEntity> getMyInfo() async{
+    final response = await _useCases.getMyInfoUseCase.getMyInfo();
+    return response;
+  }
+
   Future<void> refreshToken() async {
     if (state.refreshToken == null) {
       state = state.copyWith(
@@ -193,7 +212,6 @@ class AuthNotifier extends StateNotifier<AuthState> {
       final result = await _useCases.refreshTokenUseCase.refreshToken(
         state.refreshToken!,
       );
-
       await _storage.setAccessAndRefreshToken(
         result.accessToken,
         result.refreshToken,
@@ -201,11 +219,9 @@ class AuthNotifier extends StateNotifier<AuthState> {
 
       state = state.copyWith(
         status: AuthStatus.authenticated,
-        user: result.user,
         accessToken: result.accessToken,
         refreshToken: result.refreshToken,
         errorMessage: null,
-        newUser: result.newUser,
       );
     } catch (e) {
       state = state.copyWith(

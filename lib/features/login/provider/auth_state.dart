@@ -1,4 +1,5 @@
-import 'package:potato_4cut_v2/features/login/domain/entities/login_result_entity.dart';
+import 'package:potato_4cut_v2/core/enum/auth_provider_type.dart';
+import 'package:potato_4cut_v2/features/login/domain/entities/login_response_entity.dart';
 
 enum AuthStatus {
   initial,
@@ -8,17 +9,15 @@ enum AuthStatus {
 
 class AuthState {
   final AuthStatus status;
-  final LoginResultEntity? user;
   final String? accessToken;
   final String? refreshToken;
   final String? errorMessage;
   final bool isLoading;
-  final String? loadingProvider;
+  final AuthProviderType? loadingProvider;
   final bool newUser;
 
   const AuthState({
     this.status = AuthStatus.initial,
-    this.user,
     this.accessToken,
     this.refreshToken,
     this.errorMessage,
@@ -29,17 +28,16 @@ class AuthState {
 
   AuthState copyWith({
     AuthStatus? status,
-    LoginResultEntity? user,
+    LoginResponseEntity? user,
     String? accessToken,
     String? refreshToken,
     String? errorMessage,
     bool? isLoading,
-    String? loadingProvider,
+    AuthProviderType? loadingProvider,
     bool? newUser,
   }) {
     return AuthState(
       status: status ?? this.status,
-      user: user ?? this.user,
       accessToken: accessToken ?? this.accessToken,
       refreshToken: refreshToken ?? this.refreshToken,
       errorMessage: errorMessage,
@@ -51,7 +49,7 @@ class AuthState {
 
   bool get isAuthenticated => status == AuthStatus.authenticated;
 
-  bool isLoadingFor(String provider) => isLoading && loadingProvider == provider;
+  bool isLoadingFor(AuthProviderType provider) => isLoading && loadingProvider == provider;
 
   @override
   bool operator ==(Object other) {
@@ -59,7 +57,6 @@ class AuthState {
 
     return other is AuthState &&
         other.status == status &&
-        other.user == user &&
         other.accessToken == accessToken &&
         other.refreshToken == refreshToken &&
         other.errorMessage == errorMessage &&
@@ -71,7 +68,6 @@ class AuthState {
   @override
   int get hashCode {
     return status.hashCode ^
-        user.hashCode ^
         accessToken.hashCode ^
         refreshToken.hashCode ^
         errorMessage.hashCode ^
@@ -82,6 +78,6 @@ class AuthState {
 
   @override
   String toString() {
-    return 'AuthState(status: $status, user: $user, isLoading: $isLoading, error: $errorMessage)';
+    return 'AuthState(status: $status, isLoading: $isLoading, error: $errorMessage)';
   }
 }

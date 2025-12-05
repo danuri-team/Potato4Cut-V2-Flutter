@@ -1,7 +1,6 @@
 import 'dart:io';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:potato_4cut_v2/core/network/dio.dart';
 import 'package:potato_4cut_v2/features/take_photo/data/data_sources/photo_data_source_impl.dart';
 import 'package:potato_4cut_v2/features/take_photo/data/repositories/photo_repository_impl.dart';
 import 'package:potato_4cut_v2/features/take_photo/domain/entities/save_photos_entity.dart';
@@ -11,10 +10,7 @@ import 'package:potato_4cut_v2/features/take_photo/domain/usecases/photo_use_cas
 import 'package:potato_4cut_v2/features/take_photo/domain/usecases/save_4cut_photos_use_case.dart';
 import 'package:potato_4cut_v2/features/take_photo/domain/usecases/save_photos_use_case.dart';
 
-final photoDataSourceProvider = Provider((ref) {
-  final dio = ref.watch(dioProvider);
-  return PhotoDataSourceImpl(dio: dio);
-});
+final photoDataSourceProvider = Provider((ref) => PhotoDataSourceImpl(null));
 
 final photoRepositoryProvider = Provider((ref) {
   final dataSource = ref.watch(photoDataSourceProvider);
