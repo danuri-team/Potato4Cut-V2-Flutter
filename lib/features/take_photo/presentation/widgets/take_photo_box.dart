@@ -96,12 +96,25 @@ class TakePhotoBoxState extends ConsumerState<TakePhotoBox> {
 
       case TakePhotoFlowType.Confirming:
         final isRetaking = index == currentPageIndex && countdown != null;
-        return isRetaking
-            ? _cameraPreview(cameraController, countdown > 0 ? countdown : null)
-            : _photoPreview(
-                photoItem,
-                showConfirmedmark: photoItem.isConfirmed,
-              );
+        if (isRetaking) {
+          return _cameraPreview(cameraController, countdown > 0 ? countdown : null);
+        }
+        return GestureDetector(
+          onTap: () {
+            final photoNotifier = ref.read(photoProvider.notifier);
+            photoNotifier.toggleConfirmPhoto(index);
+
+            if (photoNotifier.allPhotosConfirmed) {
+              ref
+                  .read(takePhotoFlowProvider.notifier)
+                  .update((state) => TakePhotoFlowType.AfterConfirmation);
+            }
+          },
+          child: _photoPreview(
+            photoItem,
+            showConfirmedmark: photoItem.isConfirmed,
+          ),
+        );
 
       case TakePhotoFlowType.AfterConfirmation:
         return _photoPreview(photoItem, showConfirmedmark: true);
