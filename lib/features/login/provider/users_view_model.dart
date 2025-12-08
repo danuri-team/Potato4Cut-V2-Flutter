@@ -1,4 +1,3 @@
-import 'dart:developer';
 import 'dart:io';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -145,8 +144,6 @@ class UsersViewModelNotifier extends StateNotifier<AuthState> {
         token,
         deviceToken,
       );
-
-      log('result ${result.token.accessToken}');
 
       await _storage.setAccessAndRefreshToken(
         result.token.accessToken,
