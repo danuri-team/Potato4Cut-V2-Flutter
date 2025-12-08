@@ -35,6 +35,13 @@ class PhotoStateNotifier extends StateNotifier<List<PhotoItem>> {
     ];
   }
 
+  void toggleConfirmPhoto(int index) {
+    state = [
+      for (int i = 0; i < state.length; i++)
+        if (i == index) state[i].copyWith(isConfirmed: !state[i].isConfirmed) else state[i],
+    ];
+  }
+
   void reset() {
     state = List.generate(4, (_) => PhotoItem());
   }
