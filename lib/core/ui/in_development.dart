@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:potato_4cut_v2/core/router/router_helper.dart';
 import 'package:potato_4cut_v2/core/theme/app_color.dart';
 import 'package:potato_4cut_v2/core/theme/app_text_style.dart';
 
@@ -10,17 +11,27 @@ class InDevelopment extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Dialog(
-      child: SingleChildScrollView(
-        child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 24.h),
+      
+      insetPadding: EdgeInsets.symmetric(horizontal: 28.h),
+      backgroundColor: AppColor.background1,
+      child: Padding(
+        padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 24.h),
+        child: SingleChildScrollView(
           child: Column(
             children: [
+              Align(
+                alignment: Alignment.centerLeft,
+                child: GestureDetector(
+                  onTap: () => AppNavigation.pop(context),
+                  child: SvgPicture.asset('assets/images/x.svg'),
+                ),
+              ),
               SvgPicture.asset('assets/images/in_development_potato.svg'),
               SizedBox(height: 20.h),
-              Text('지금 열심히 개발하고 있어요!', style: AppTextStyle.heading2),
+              Text('조금만 기다려주세요', style: AppTextStyle.heading2),
               SizedBox(height: 6.h),
               Text(
-                '기대해 주세요, 곧 만나보실 수 있어요',
+                '열심히 준비하고 있어요. 곧 보여드릴게요',
                 style: AppTextStyle.headLine2.copyWith(
                   fontWeight: FontWeight.w500,
                   color: AppColor.label3,
