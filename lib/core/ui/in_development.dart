@@ -10,35 +10,31 @@ class InDevelopment extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Dialog(
-      
-      insetPadding: EdgeInsets.symmetric(horizontal: 28.h),
+    return AlertDialog(
+      insetPadding: EdgeInsets.symmetric(horizontal: 20.w),
       backgroundColor: AppColor.background1,
-      child: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 24.h),
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
-              Align(
-                alignment: Alignment.centerLeft,
-                child: GestureDetector(
-                  onTap: () => AppNavigation.pop(context),
-                  child: SvgPicture.asset('assets/images/x.svg'),
-                ),
+      title: Align(
+        alignment: Alignment.centerLeft,
+        child: GestureDetector(
+          onTap: () => AppNavigation.pop(context),
+          child: SvgPicture.asset('assets/images/x.svg'),
+        ),
+      ),
+      content: SingleChildScrollView(
+        child: Column(
+          children: [
+            SvgPicture.asset('assets/images/in_development_potato.svg'),
+            SizedBox(height: 20.h),
+            Text('조금만 기다려주세요', style: AppTextStyle.heading2),
+            SizedBox(height: 6.h),
+            Text(
+              '열심히 준비하고 있어요. 곧 보여드릴게요',
+              style: AppTextStyle.headLine2.copyWith(
+                fontWeight: FontWeight.w500,
+                color: AppColor.label3,
               ),
-              SvgPicture.asset('assets/images/in_development_potato.svg'),
-              SizedBox(height: 20.h),
-              Text('조금만 기다려주세요', style: AppTextStyle.heading2),
-              SizedBox(height: 6.h),
-              Text(
-                '열심히 준비하고 있어요. 곧 보여드릴게요',
-                style: AppTextStyle.headLine2.copyWith(
-                  fontWeight: FontWeight.w500,
-                  color: AppColor.label3,
-                ),
-              ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );
