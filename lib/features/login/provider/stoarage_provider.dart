@@ -16,7 +16,7 @@ class StoarageNotifier extends StateNotifier<FlutterSecureStorage> {
   final storageKey = 'authStatus';
 
   Future<void> checkAuthAndNavigate(BuildContext context) async {
-    final authStatusString = await state.read(key: 'authStatus');
+    final authStatusString = await state.read(key: storageKey);
 
     if(!context.mounted) return;
 
