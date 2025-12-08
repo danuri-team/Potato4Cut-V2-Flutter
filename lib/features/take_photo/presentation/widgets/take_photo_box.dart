@@ -20,7 +20,7 @@ class TakePhotoBox extends ConsumerStatefulWidget {
 }
 
 class TakePhotoBoxState extends ConsumerState<TakePhotoBox> {
-  final pageController = PageController(viewportFraction: 0.85);
+  final pageController = PageController(viewportFraction: 0.9);
 
   @override
   void initState() {
@@ -38,52 +38,46 @@ class TakePhotoBoxState extends ConsumerState<TakePhotoBox> {
   }
 
   Widget _cameraPreview(CameraController controller, int? countdown) {
-    return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 12.w),
-      child: CameraPreview(
-        controller,
-        child: countdown != null && countdown > 0
-            ? Center(
-                child: Text(
-                  '$countdown',
-                  style: AppTextStyle.heading1.copyWith(
-                    fontWeight: FontWeight.w700,
-                    color: AppColor.static1,
-                  ),
+    return CameraPreview(
+      controller,
+      child: countdown != null && countdown > 0
+          ? Center(
+              child: Text(
+                '$countdown',
+                style: AppTextStyle.heading1.copyWith(
+                  fontWeight: FontWeight.w700,
+                  color: AppColor.static1,
                 ),
-              )
-            : const SizedBox.shrink(),
-      ),
+              ),
+            )
+          : const SizedBox.shrink(),
     );
   }
 
   Widget _photoPreview(PhotoItem photoItem, {bool showConfirmedmark = false}) {
-    return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 12.w),
-      child: Container(
-        decoration: BoxDecoration(
-          image: DecorationImage(
-            image: FileImage(photoItem.file!),
-            fit: BoxFit.cover,
-          ),
+    return Container(
+      decoration: BoxDecoration(
+        image: DecorationImage(
+          image: FileImage(photoItem.file!),
+          fit: BoxFit.cover,
         ),
-        child: showConfirmedmark
-            ? Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  SvgPicture.asset('assets/images/white_check.svg'),
-                  SizedBox(height: 10.h),
-                  Text(
-                    '확정',
-                    style: AppTextStyle.heading1.copyWith(
-                      fontWeight: FontWeight.w500,
-                      color: AppColor.static1,
-                    ),
-                  ),
-                ],
-              )
-            : const SizedBox.shrink(),
       ),
+      child: showConfirmedmark
+          ? Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                SvgPicture.asset('assets/images/white_check.svg'),
+                SizedBox(height: 10.h),
+                Text(
+                  '확정',
+                  style: AppTextStyle.heading1.copyWith(
+                    fontWeight: FontWeight.w500,
+                    color: AppColor.static1,
+                  ),
+                ),
+              ],
+            )
+          : const SizedBox.shrink(),
     );
   }
 
@@ -119,25 +113,35 @@ class TakePhotoBoxState extends ConsumerState<TakePhotoBox> {
     final photos = ref.watch(photoProvider);
     final takePhotoFlow = ref.watch(takePhotoFlowProvider);
     final cameraController = ref.watch(cameraControllerProvider);
+    final countdown = ref.watch(countdownProvider);
 
     return SizedBox(
       width: double.infinity,
       height: 414.h,
       child: PageView.builder(
         controller: pageController,
+        physics: countdown != null
+            ? const NeverScrollableScrollPhysics()
+            : const PageScrollPhysics(),
         itemCount: takePhotoFlow == TakePhotoFlowType.TakePhoto
             ? 1
             : photos.length,
         itemBuilder: (context, index) {
           if (cameraController == null) {
-            return Container(color: AppColor.static2);
+            return Padding(
+              padding: EdgeInsets.symmetric(horizontal: 12.w),
+              child: Container(color: AppColor.static2),
+            );
           }
 
-          return _photoBox(
-            index,
-            photos[index],
-            takePhotoFlow,
-            cameraController,
+          return Padding(
+            padding: EdgeInsets.symmetric(horizontal: 12.w),
+            child: _photoBox(
+              index,
+              photos[index],
+              takePhotoFlow,
+              cameraController,
+            ),
           );
         },
       ),
