@@ -1,3 +1,4 @@
+import 'package:clarity_flutter/clarity_flutter.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -14,7 +15,11 @@ void main() async {
   await ScreenUtil.ensureScreenSize();
   await Hive.initFlutter();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-  runApp(const App());
+  final config = ClarityConfig(
+    projectId: dotenv.env['clarityProjectId']!,
+    logLevel: LogLevel.Error,
+  );
+  runApp(ClarityWidget(app: const App(), clarityConfig: config));
 }
 
 class App extends StatelessWidget {
