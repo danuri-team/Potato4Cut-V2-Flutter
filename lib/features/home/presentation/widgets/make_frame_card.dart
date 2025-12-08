@@ -28,7 +28,7 @@ class _MakeFrameBoxState extends State<MakeFrameCard> {
         height: 174.h,
         decoration: ShapeDecoration(
           color: isTapped ? Color(0xFFFBEACC) : Color(0xCDF2F2F2),
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
         ),
         child: Stack(
           children: [

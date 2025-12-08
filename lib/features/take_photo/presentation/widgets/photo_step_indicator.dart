@@ -8,12 +8,13 @@ class PhotoStepIndicator extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    ref.watch(photoProvider);
+    final photos = ref.watch(photoProvider);
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 5.33.w, vertical: 2.67.h),
       width: 32.w,
       height: 32.h,
       child: GridView.builder(
+        itemCount: photos.length,
         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 2,
           crossAxisSpacing: 2.66.w,

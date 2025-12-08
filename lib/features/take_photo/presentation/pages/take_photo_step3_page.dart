@@ -30,17 +30,21 @@ class TakePhotoStep3Page extends ConsumerWidget {
 
   Future<void> save4CutPhotos(File photo, WidgetRef ref) async {
     final cutIds = ref.watch(cutIdsProvider);
-
-    await ref
-        .read(photoViewModel.notifier)
-        .save4cutPhotos(File(photo.path), cutIds);
-
     final hasAccess = await Gal.hasAccess();
     if (!hasAccess) {
       await Gal.requestAccess();
     }
-    await Gal.putImage(photo.path);
 
+    Throttle.run(() async {
+      await ref
+          .read(photoViewModel.notifier)
+          .save4cutPhotos(File(photo.path), cutIds);
+
+      await Gal.putImage(photo.path);
+    });
+  }
+
+  void goHome(WidgetRef ref, BuildContext context) {
     ref.read(photoProvider.notifier).reset();
     ref.read(currentPageIndexProvider.notifier).update((state) => 0);
     ref.read(cutIdsProvider.notifier).update((state) => []);
@@ -48,6 +52,7 @@ class TakePhotoStep3Page extends ConsumerWidget {
     ref
         .read(takePhotoFlowProvider.notifier)
         .update((state) => TakePhotoFlowType.TakePhoto);
+    Throttle.run(() => AppNavigation.goHome(context));
   }
 
   @override
@@ -60,11 +65,11 @@ class TakePhotoStep3Page extends ConsumerWidget {
           SizedBox(height: 6.h),
           const CurrentProgressIndicator(),
           SizedBox(height: 24.h),
-          Text('완성된 사진,\n친구들에게 바로 공유해보세요!', style: AppTextStyle.heading1),
+          Text('잘 나온 사진을 바로 공유해요', style: AppTextStyle.heading1),
           SizedBox(height: 16.h),
           FinishedPhoto(repaintBoundaryKey: repaintBoundaryKey),
           GestureDetector(
-            onTap: () => Throttle.run(() => AppNavigation.goHome(context),),
+            onTap: () => goHome(ref, context),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -90,14 +95,10 @@ class TakePhotoStep3Page extends ConsumerWidget {
               const ShareButton(),
               SizedBox(width: 12.w),
               SubmitButton(
-                onTap: finishedPhoto == null
-                    ? () {}
-                    : () => Throttle.run(
-                        () => save4CutPhotos(finishedPhoto, ref),
-                      ),
+                onTap: () =>save4CutPhotos(finishedPhoto!, ref),
                 width: 166.w,
                 text: '저장하기',
-                isActivate: true,
+                isActivate: finishedPhoto == null,
                 prefixSvg: SvgPicture.asset(
                   'assets/images/upload.svg',
                   color: AppColor.static1,

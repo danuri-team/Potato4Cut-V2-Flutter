@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:io';
-import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -63,7 +62,7 @@ class _TakePhotoStep2PageState extends ConsumerState<TakePhotoStep2Page> {
             .read(cameraControllerProvider.notifier)
             .takePicture();
 
-        final photoFile = await _flipImageHorizontally(xFile);
+        final photoFile = await _flipImageHorizontally(File(xFile.path));
 
         ref.read(photoProvider.notifier).takePhoto(photoIndex, photoFile);
 
@@ -75,20 +74,19 @@ class _TakePhotoStep2PageState extends ConsumerState<TakePhotoStep2Page> {
     await completer.future;
   }
 
-  Future<File> _flipImageHorizontally(XFile imageFile) async {
+  Future<File> _flipImageHorizontally(File imageFile) async {
     final bytes = await imageFile.readAsBytes();
     final image = img.decodeImage(bytes);
 
     if (image == null) {
-      return File(imageFile.path);
+      return imageFile;
     }
 
     final flippedImage = img.flipHorizontal(image);
 
-    final originalFile = File(imageFile.path);
-    await originalFile.writeAsBytes(img.encodeJpg(flippedImage));
+    await imageFile.writeAsBytes(img.encodeJpg(flippedImage));
 
-    return originalFile;
+    return imageFile;
   }
 
   Future<void> takeFourContinuousPhotos(WidgetRef ref) async {
@@ -198,9 +196,7 @@ class _TakePhotoStep2PageState extends ConsumerState<TakePhotoStep2Page> {
 
         ref.read(cutIdsProvider.notifier).update((state) => cutIds);
 
-        if (mounted) {
           AppNavigation.gotakePhotoStep3(context);
-        }
       }),
       width: 343.w,
       text: '다음으로',
@@ -227,8 +223,8 @@ class _TakePhotoStep2PageState extends ConsumerState<TakePhotoStep2Page> {
 
     return Text(
       flow == TakePhotoFlowType.TakePhoto
-          ? '4컷 사진 촬영 시작해볼까요?'
-          : '마음에 드는 사진을 골라주세요!',
+          ? '준비되면 사진을 찍어요'
+          : '마음에 들 때까지 다시 찍어도 돼요',
       style: AppTextStyle.heading1,
     );
   }

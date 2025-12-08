@@ -42,7 +42,7 @@ class TakePhotoStep1Page extends ConsumerWidget {
             SizedBox(height: 14.h),
             Align(
               alignment: Alignment.centerLeft,
-              child: Text('현재 적용된 프레임입니다', style: AppTextStyle.heading1),
+              child: Text('원하는 프레임을 찾아보세요', style: AppTextStyle.heading1),
             ),
             SizedBox(height: 46.h),
             const Potato4cutFrame(),
@@ -54,7 +54,7 @@ class TakePhotoStep1Page extends ConsumerWidget {
                 });
               },
               width: 343.w,
-              text: '확인',
+              text: '다음으로',
               isActivate: true,
             ),
           ],

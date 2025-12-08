@@ -17,6 +17,7 @@ class CameraControllerNotifier extends StateNotifier<CameraController?> {
         cameras.length > 1 ? cameras[1] : cameras[0],
         ResolutionPreset.max,
         enableAudio: true,
+        
       );
 
       await controller.initialize();
