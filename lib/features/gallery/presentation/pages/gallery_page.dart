@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:potato_4cut_v2/core/ui/default_layout.dart';
 import 'package:potato_4cut_v2/core/ui/filter.dart';
 import 'package:potato_4cut_v2/features/gallery/presentation/widgets/gallery_frame_list.dart';
@@ -22,7 +23,7 @@ class GalleryPage extends StatelessWidget {
             ),
           ),
           const Spacer(),
-          const Filter(),
+          // const Filter(),
         ],
       ),
       body: const GalleryFrameList(),
