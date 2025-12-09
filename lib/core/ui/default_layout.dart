@@ -33,7 +33,7 @@ class DefaultLayout extends StatelessWidget {
                 ),
               ),
             ),
-      body: body,
+      body: SafeArea(child: body),
       bottomNavigationBar: bottomNavigationBar,
     );
   }
