@@ -10,6 +10,7 @@ import 'package:potato_4cut_v2/features/take_photo/provider/camera_controller_pr
 import 'package:potato_4cut_v2/features/take_photo/provider/countdown_provider.dart';
 import 'package:potato_4cut_v2/features/take_photo/provider/current_page_index_provider.dart';
 import 'package:potato_4cut_v2/features/take_photo/provider/cut_ids_provider.dart';
+import 'package:potato_4cut_v2/features/take_photo/provider/finished_photo_provider.dart';
 import 'package:potato_4cut_v2/features/take_photo/provider/take_photo_flow_provider.dart';
 import 'package:potato_4cut_v2/core/router/router_helper.dart';
 import 'package:potato_4cut_v2/core/theme/app_text_style.dart';
@@ -40,7 +41,11 @@ class _TakePhotoStep2PageState extends ConsumerState<TakePhotoStep2Page> {
     _initCamera(ref);
   }
 
-  void _resetPhotoFlow(WidgetRef ref) {
+  void _resetState(WidgetRef ref) {
+    ref.read(photoProvider.notifier).reset();
+    ref.read(currentPageIndexProvider.notifier).update((state) => 0);
+    ref.read(cutIdsProvider.notifier).update((state) => []);
+    ref.read(finishedPhotoProvider.notifier).resetState();
     ref
         .read(takePhotoFlowProvider.notifier)
         .update((state) => TakePhotoFlowType.TakePhoto);
@@ -196,7 +201,7 @@ class _TakePhotoStep2PageState extends ConsumerState<TakePhotoStep2Page> {
 
         ref.read(cutIdsProvider.notifier).update((state) => cutIds);
 
-          AppNavigation.gotakePhotoStep3(context);
+        AppNavigation.gotakePhotoStep3(context);
       }),
       width: 343.w,
       text: '다음으로',
@@ -231,38 +236,43 @@ class _TakePhotoStep2PageState extends ConsumerState<TakePhotoStep2Page> {
 
   @override
   Widget build(BuildContext context) {
-    return DefaultLayout(
-      appBar: CustomBackButton(onTap: () => _resetPhotoFlow(ref)),
-      body: Column(
-        children: [
-          SizedBox(height: 6.h),
-          const CurrentProgressIndicator(),
-          SizedBox(height: 42.h),
-          Padding(
-            padding: EdgeInsets.symmetric(horizontal: 16.w),
-            child: Align(alignment: Alignment.centerLeft, child: _title(ref)),
-          ),
-          SizedBox(height: 26.h),
-          const TakePhotoBox(),
-          SizedBox(height: 9.h),
-          Padding(
-            padding: EdgeInsets.symmetric(horizontal: 16.w),
-            child: SizedBox(
-              width: 343.w,
-              height: 44.h,
-              child: Row(
-                children: [
-                  const ImportExistingPhotos(),
-                  const Spacer(),
-                  const PhotoStepIndicator(),
-                ],
+    return PopScope(
+      onPopInvokedWithResult: (didPop, result) {
+        _resetState(ref);
+      },
+      child: DefaultLayout(
+        appBar: CustomBackButton(onTap: () => _resetState(ref)),
+        body: Column(
+          children: [
+            SizedBox(height: 6.h),
+            const CurrentProgressIndicator(),
+            SizedBox(height: 42.h),
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 16.w),
+              child: Align(alignment: Alignment.centerLeft, child: _title(ref)),
+            ),
+            SizedBox(height: 26.h),
+            const TakePhotoBox(),
+            SizedBox(height: 9.h),
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 16.w),
+              child: SizedBox(
+                width: 343.w,
+                height: 44.h,
+                child: Row(
+                  children: [
+                    const ImportExistingPhotos(),
+                    const Spacer(),
+                    const PhotoStepIndicator(),
+                  ],
+                ),
               ),
             ),
-          ),
-          const Spacer(),
-          _bottomButton(ref, context),
-          SizedBox(height: 16.h),
-        ],
+            const Spacer(),
+            _bottomButton(ref, context),
+            SizedBox(height: 16.h),
+          ],
+        ),
       ),
     );
   }
