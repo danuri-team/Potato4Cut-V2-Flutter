@@ -22,15 +22,15 @@ class SignUpStep1Page extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final signUpField = ref.watch(signUpFieldProvider);
 
-    return DefaultLayout(
-      resizeToAvoidBottomInset: false,
-      appBar: Padding(
-        padding: EdgeInsets.only(left: 3.w),
-        child: CustomBackButton(onTap: () => _resetState(ref)),
-      ),
-      body: PopScope(
-        onPopInvokedWithResult: (didPop, result) => _resetState(ref),
-        child: Column(
+    return PopScope(
+      onPopInvokedWithResult: (didPop, result) => _resetState(ref),
+      child: DefaultLayout(
+        resizeToAvoidBottomInset: false,
+        appBar: Padding(
+          padding: EdgeInsets.only(left: 3.w),
+          child: CustomBackButton(onTap: () => _resetState(ref)),
+        ),
+        body: Column(
           children: [
             Expanded(
               child: SingleChildScrollView(
