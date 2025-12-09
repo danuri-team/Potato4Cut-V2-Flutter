@@ -56,8 +56,8 @@ class _SettingCardListState extends State<SettingCardList> {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        card(text: '언어 설정', onTap: () {}),
-        SizedBox(height: 16.h),
+        // card(text: '언어 설정', onTap: () {}),
+        // SizedBox(height: 16.h),
         card(
           text: '개인정보 처리방침',
           onTap: () {
