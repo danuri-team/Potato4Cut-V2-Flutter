@@ -14,47 +14,50 @@ import 'package:potato_4cut_v2/features/sign_up/provider/sign_up_field_provider.
 class SignUpStep1Page extends ConsumerWidget {
   const SignUpStep1Page({super.key});
 
+    void _resetState(WidgetRef ref) {
+      ref.read(signUpFieldProvider.notifier).resetField();
+    }
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final signUpField = ref.watch(signUpFieldProvider);
-
-    void goBack(WidgetRef ref) {
-      ref.read(signUpFieldProvider.notifier).resetField();
-    }
 
     return DefaultLayout(
       resizeToAvoidBottomInset: false,
       appBar: Padding(
         padding: EdgeInsets.only(left: 3.w),
-        child: CustomBackButton(onTap: () => goBack(ref)),
+        child: CustomBackButton(onTap: () => _resetState(ref)),
       ),
-      body: Column(
-        children: [
-          Expanded(
-            child: SingleChildScrollView(
-              child: Padding(
-                padding: EdgeInsets.symmetric(horizontal: 16.w),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    SizedBox(height: 48.h),
-                    Text('닉네임을 입력해주세요', style: AppTextStyle.heading1),
-                    SizedBox(height: 20.h),
-                    const SignUpTextFormField(),
-                  ],
+      body: PopScope(
+        onPopInvokedWithResult: (didPop, result) => _resetState(ref),
+        child: Column(
+          children: [
+            Expanded(
+              child: SingleChildScrollView(
+                child: Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 16.w),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      SizedBox(height: 48.h),
+                      Text('닉네임을 입력해주세요', style: AppTextStyle.heading1),
+                      SizedBox(height: 20.h),
+                      const SignUpTextFormField(),
+                    ],
+                  ),
                 ),
               ),
             ),
-          ),
-          SubmitButton(
-            onTap: () =>
-                Throttle.run(() => AppNavigation.goSignUpStep2(context)),
-            width: 343.w,
-            text: '확인',
-            isActivate: (signUpField.nickname != null),
-          ),
-          SizedBox(height: 16.h),
-        ],
+            SubmitButton(
+              onTap: () =>
+                  Throttle.run(() => AppNavigation.goSignUpStep2(context)),
+              width: 343.w,
+              text: '확인',
+              isActivate: (signUpField.nickname != null),
+            ),
+            SizedBox(height: 16.h),
+          ],
+        ),
       ),
     );
   }
