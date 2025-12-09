@@ -6,6 +6,9 @@ abstract class RoutePath{
 
   static const String splash = '/splash';
   static const String login = '/login';
+  static const String signUpStep1 = '/sign-up-step1';
+  static const String signUpStep2 = '/sign-up-step2';
+  static const String signUpStep3 = '/sign-up-step3';
   static const String home = '/home';
   static const String takePhotoStep1 = '/take-photo-step1';
   static const String takePhotoStep2 = '/take-photo-step2';
@@ -30,14 +33,19 @@ abstract class AppNavigation{
 
   //login
   static void goLogin(BuildContext context) => context.go(RoutePath.login);
+
+  //sign-up
+  static void goSignUpStep1(BuildContext context) => context.push(RoutePath.signUpStep1);
+  static void goSignUpStep2(BuildContext context) => context.push(RoutePath.signUpStep2);
+  static void goSignUpStep3(BuildContext context) => context.push(RoutePath.signUpStep3);
   
   //home
   static void goHome(BuildContext context) => context.go(RoutePath.home);
 
   //take a photo
   static void gotakePhotoStep1(BuildContext context) => context.push(RoutePath.takePhotoStep1); 
-  static void goPhotoStep2(BuildContext context) => context.push(RoutePath.takePhotoStep2);
-  static void goPhotoStep3(BuildContext context) => context.push(RoutePath.takePhotoStep3);
+  static void gotakePhotoStep2(BuildContext context) => context.push(RoutePath.takePhotoStep2);
+  static void gotakePhotoStep3(BuildContext context) => context.push(RoutePath.takePhotoStep3);
 
   //make a frame
   static void goMakeFrameStep1(BuildContext context) => context.push(RoutePath.makeFrameStep1);
@@ -56,4 +64,6 @@ abstract class AppNavigation{
   static void goProfile(BuildContext context) => context.go(RoutePath.profile);
   static void goProfileManagement(BuildContext context) => context.go(RoutePath.profileManagement);
   static void goPurchaseAndProductionHistory(BuildContext context) => context.go(RoutePath.purchaseAndProductionHistory);
+
+  static void pop(BuildContext context) => context.pop(context);
 }

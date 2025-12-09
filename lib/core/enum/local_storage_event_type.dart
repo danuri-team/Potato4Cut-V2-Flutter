@@ -1,0 +1,1 @@
+enum LocalStorageEventType { SETTINGS }

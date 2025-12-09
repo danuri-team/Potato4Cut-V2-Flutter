@@ -4,7 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 class AppTextStyle {
   static final logoText = TextStyle(
     fontSize: 40.sp,
-    fontFamily: 'UhBeeSe_hyun',
+    fontFamily: 'ownglyph_pdh',
     fontWeight: FontWeight.w400,
   );
 

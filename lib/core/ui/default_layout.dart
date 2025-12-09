@@ -7,22 +7,32 @@ class DefaultLayout extends StatelessWidget {
     this.appBar,
     required this.body,
     this.bottomNavigationBar,
+    this.resizeToAvoidBottomInset = true,
   });
 
   final Widget? appBar;
   final Widget body;
   final BottomNavigationBar? bottomNavigationBar;
+  final bool resizeToAvoidBottomInset;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Container(
-          margin: EdgeInsets.only(top: 14.h),
-          height: 46.h,
-          child: appBar,
-        ),
-      ),
+      resizeToAvoidBottomInset: resizeToAvoidBottomInset,
+      appBar: appBar == null
+          ? null
+          : PreferredSize(
+              preferredSize: Size.fromHeight(60.h),
+              child: SafeArea(
+                child: Container(
+                  padding: EdgeInsets.symmetric(horizontal: 16.w),
+                  margin: EdgeInsets.only(top: 14.h),
+                  height: 46.h,
+                  alignment: Alignment.centerLeft,
+                  child: appBar,
+                ),
+              ),
+            ),
       body: SafeArea(child: body),
       bottomNavigationBar: bottomNavigationBar,
     );

@@ -5,11 +5,11 @@ import 'package:potato_4cut_v2/core/router/router_helper.dart';
 import 'package:potato_4cut_v2/core/theme/app_color.dart';
 import 'package:potato_4cut_v2/core/theme/app_text_style.dart';
 import 'package:potato_4cut_v2/core/ui/default_layout.dart';
+import 'package:potato_4cut_v2/core/ui/in_development.dart';
 
 class BottomNavBar extends StatelessWidget {
-  const BottomNavBar({super.key, this.appBar, required this.body});
+  const BottomNavBar({super.key, required this.body});
 
-  final Widget? appBar;
   final Widget body;
 
   int _currentIndex(BuildContext context) {
@@ -28,7 +28,12 @@ class BottomNavBar extends StatelessWidget {
         AppNavigation.goHome(context);
         break;
       case 1:
-        AppNavigation.goStore(context);
+        showDialog(
+          barrierDismissible: false,
+          context: context,
+          builder: (context) => InDevelopment(),
+        );
+        // AppNavigation.goStore(context);
         break;
       case 2:
         AppNavigation.goGallery(context);
@@ -42,16 +47,16 @@ class BottomNavBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return DefaultLayout(
-      appBar: appBar,
       body: body,
       bottomNavigationBar: BottomNavigationBar(
+        backgroundColor: AppColor.background1,
         currentIndex: _currentIndex(context),
         onTap: (index) => _onItemTapped(index, context),
         showSelectedLabels: true,
         selectedLabelStyle: AppTextStyle.caption2.copyWith(
           fontWeight: FontWeight.w500,
         ),
-        selectedItemColor: AppColor.static2,
+        selectedItemColor: const Color(0xFFE8A025),
         unselectedItemColor: AppColor.interaction2,
         type: BottomNavigationBarType.fixed,
         items: [
