@@ -69,7 +69,16 @@ class _SettingCardListState extends State<SettingCardList> {
           },
         ),
         SizedBox(height: 16.h),
-        card(text: '이용 약관', onTap: () {}),
+        card(
+          text: '이용 약관',
+          onTap: () {
+            launchUrl(
+              Uri.parse(
+                'https://working-mailman-871.notion.site/2245f20bda6f8021b6f1da1e2b214d4d?source=copy_link',
+              ),
+            );
+          },
+        ),
         SizedBox(height: 16.h),
         card(
           text: '버전 정보',
