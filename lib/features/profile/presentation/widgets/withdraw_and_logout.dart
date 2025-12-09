@@ -12,11 +12,25 @@ class WithdrawAndLogout extends ConsumerWidget {
   const WithdrawAndLogout({super.key});
 
   Future<void> logout(WidgetRef ref, BuildContext context) async {
-    Future.wait([
-      ref.read(usersProvider.notifier).logout(),
-      ref.read(storageProvider.notifier).logout(),
-    ]);
-    AppNavigation.goLogin(context);
+    Throttle.run(() {
+      Future.wait([
+        ref.read(usersProvider.notifier).logout(),
+        ref.read(storageProvider.notifier).logout(),
+      ]);
+      AppNavigation.goLogin(context);
+    });
+  }
+
+  Future<void> withdraw(WidgetRef ref, BuildContext context) async {
+    Throttle.run(() async {
+      await ref.read(storageProvider.notifier).logout();
+      launchUrl(
+        Uri.parse(
+          'https://docs.google.com/forms/d/e/1FAIpQLSfPIZTFkRChyt6ZqziaruC_DybLJRYEMasiNlycwJFeVgF9AA/viewform',
+        ),
+      );
+      AppNavigation.goLogin(context);
+    });
   }
 
   @override
@@ -27,16 +41,7 @@ class WithdrawAndLogout extends ConsumerWidget {
       child: Row(
         children: [
           GestureDetector(
-            onTap: () {
-              Throttle.run(() {
-                launchUrl(
-                  Uri.parse(
-                    'https://docs.google.com/forms/d/e/1FAIpQLSfPIZTFkRChyt6ZqziaruC_DybLJRYEMasiNlycwJFeVgF9AA/viewform',
-                  ),
-                );
-                AppNavigation.goLogin(context);
-              });
-            },
+            onTap: () => withdraw(ref, context),
             child: Text(
               '회원 탈퇴',
               style: TextStyle(
@@ -55,7 +60,7 @@ class WithdrawAndLogout extends ConsumerWidget {
             endIndent: 3.h,
           ),
           GestureDetector(
-            onTap: () => Throttle.run(() => logout(ref, context)),
+            onTap: () => logout(ref, context),
             child: Text(
               '로그아웃',
               style: TextStyle(
