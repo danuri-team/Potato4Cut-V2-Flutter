@@ -6,6 +6,7 @@ import 'package:potato_4cut_v2/core/theme/app_color.dart';
 import 'package:potato_4cut_v2/core/util/throttle.dart';
 import 'package:potato_4cut_v2/features/login/provider/users_view_model.dart';
 import 'package:potato_4cut_v2/features/login/provider/stoarage_provider.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class WithdrawAndLogout extends ConsumerWidget {
   const WithdrawAndLogout({super.key});
@@ -26,7 +27,16 @@ class WithdrawAndLogout extends ConsumerWidget {
       child: Row(
         children: [
           GestureDetector(
-            onTap: () {},
+            onTap: () {
+              Throttle.run(() {
+                launchUrl(
+                  Uri.parse(
+                    'https://docs.google.com/forms/d/e/1FAIpQLSfPIZTFkRChyt6ZqziaruC_DybLJRYEMasiNlycwJFeVgF9AA/viewform',
+                  ),
+                );
+                AppNavigation.goLogin(context);
+              });
+            },
             child: Text(
               '회원 탈퇴',
               style: TextStyle(
