@@ -14,6 +14,22 @@
       },
       "oauth_client": [
         {
+          "client_id": "548875410267-cukr3gbd8mtbv8r7vr2pds0nb09koivp.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.potato.fourcut",
+            "certificate_hash": "ff7d3d686fea0b04c24571b810c874803cecdf8f"
+          }
+        },
+        {
+          "client_id": "548875410267-r3eh2bt7uksdedgprnbq03h734djmmrf.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.potato.fourcut",
+            "certificate_hash": "2af89888688f10b2faa379d33daafc75362debc3"
+          }
+        },
+        {
           "client_id": "548875410267-ko7a605h8019i05rboo363cnqs08iibs.apps.googleusercontent.com",
           "client_type": 3
         }
