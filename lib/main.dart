@@ -5,12 +5,20 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:potato_4cut_v2/core/router/router.dart';
 import 'package:potato_4cut_v2/core/theme/app_color.dart';
+import 'package:sentry_flutter/sentry_flutter.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await ScreenUtil.ensureScreenSize();
   await dotenv.load(fileName: "assets/config/.env");
-  runApp(const App());
+  await SentryFlutter.init((options) {
+    options.sendDefaultPii = true;
+    options.tracesSampleRate = 1.0;
+    options.profilesSampleRate = 1.0;
+    options.replay.onErrorSampleRate = 1.0;
+    options.replay.sessionSampleRate = 1.0;
+    options.dsn = dotenv.env['SENTRY_DSN'];
+  }, appRunner: () => runApp(const App()));
 }
 
 class App extends StatelessWidget {
