@@ -143,7 +143,7 @@ class _HomePageState extends State<HomePage> {
       body: Center(
         child: Column(
           children: [
-            SizedBox(height: 20.h),
+            SizedBox(height: 31.h),
             const TakePhotoCard(),
             SizedBox(height: 20.h),
             const MakeFrameCard(),

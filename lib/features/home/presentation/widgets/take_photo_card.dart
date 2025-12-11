@@ -4,29 +4,21 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:potato_4cut_v2/core/router/router_helper.dart';
 import 'package:potato_4cut_v2/core/util/throttle.dart';
 
-class TakePhotoCard extends StatefulWidget {
+class TakePhotoCard extends StatelessWidget {
   const TakePhotoCard({super.key});
-
-  @override
-  State<TakePhotoCard> createState() => _TakePhotoBoxState();
-}
-
-class _TakePhotoBoxState extends State<TakePhotoCard> {
-  bool isTapped = false;
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTapDown: (details) => setState(() => isTapped = !isTapped),
-      onTapUp: (details) => setState(() => isTapped = !isTapped),
-      onTapCancel: () => setState(() => isTapped = false),
       onTap: () => Throttle.run(() => AppNavigation.gotakePhotoStep1(context)),
       child: Container(
         width: 343.w,
         height: 174.h,
         decoration: ShapeDecoration(
-          color: isTapped ? Color(0xFFFBEACC) : Color(0xCDF2F2F2),
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+          color: Color(0xFFFAECD3),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12),
+          ),
         ),
         child: Stack(
           children: [
@@ -62,18 +54,12 @@ class _TakePhotoBoxState extends State<TakePhotoCard> {
                 ],
               ),
             ),
-            Column(
-              children: [
-                const Spacer(),
-                Padding(
-                  padding: EdgeInsets.only(left: 173.4.w),
-                  child: isTapped
-                      ? SvgPicture.asset(
-                          'assets/images/tapped_take_photo_image.svg',
-                        )
-                      : SvgPicture.asset('assets/images/take_photo_image.svg'),
-                ),
-              ],
+            Align(
+              alignment: Alignment.bottomRight,
+              child: Padding(
+                padding: EdgeInsets.only(right: 10.56.w),
+                child: SvgPicture.asset('assets/images/take_photo_potato.svg'),
+              ),
             ),
           ],
         ),
