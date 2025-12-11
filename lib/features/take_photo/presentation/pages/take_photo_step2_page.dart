@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:io';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -30,6 +31,20 @@ class TakePhotoStep2Page extends ConsumerStatefulWidget {
 
   @override
   ConsumerState<TakePhotoStep2Page> createState() => _TakePhotoStep2PageState();
+}
+
+Future<String> _flipImageHorizontallyIsolate(String imagePath) async {
+  final imageFile = File(imagePath);
+  final bytes = await imageFile.readAsBytes();
+  final image = img.decodeImage(bytes);
+
+  if (image == null) {
+    return imagePath;
+  }
+  final flippedImage = img.flipHorizontal(image);
+  await imageFile.writeAsBytes(img.encodeJpg(flippedImage));
+
+  return imagePath;
 }
 
 class _TakePhotoStep2PageState extends ConsumerState<TakePhotoStep2Page> {
@@ -67,31 +82,30 @@ class _TakePhotoStep2PageState extends ConsumerState<TakePhotoStep2Page> {
             .read(cameraControllerProvider.notifier)
             .takePicture();
 
-        final photoFile = await _flipImageHorizontally(File(xFile.path));
-
-        ref.read(photoProvider.notifier).takePhoto(photoIndex, photoFile);
+        ref
+            .read(photoProvider.notifier)
+            .takePhoto(photoIndex, File(xFile.path));
 
         ref.read(countdownProvider.notifier).resetCountdown();
-        completer.complete();
+
+        if (photoIndex < 3) {
+          completer.complete();
+        }
+
+        compute(_flipImageHorizontallyIsolate, xFile.path).then((
+          flippedImagePath,
+        ) {
+          ref
+              .read(photoProvider.notifier)
+              .takePhoto(photoIndex, File(flippedImagePath));
+          if (photoIndex == 3) {
+            completer.complete();
+          }
+        });
       }
     });
 
     await completer.future;
-  }
-
-  Future<File> _flipImageHorizontally(File imageFile) async {
-    final bytes = await imageFile.readAsBytes();
-    final image = img.decodeImage(bytes);
-
-    if (image == null) {
-      return imageFile;
-    }
-
-    final flippedImage = img.flipHorizontal(image);
-
-    await imageFile.writeAsBytes(img.encodeJpg(flippedImage));
-
-    return imageFile;
   }
 
   Future<void> takeFourContinuousPhotos(WidgetRef ref) async {
