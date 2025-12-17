@@ -1,25 +1,21 @@
-import 'dart:io';
-
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:potato_4cut_v2/features/take_photo/data/data_sources/photo_data_source_impl.dart';
 import 'package:potato_4cut_v2/features/take_photo/data/repositories/photo_repository_impl.dart';
-import 'package:potato_4cut_v2/features/take_photo/domain/entities/save_photos_entity.dart';
+import 'package:potato_4cut_v2/features/take_photo/domain/entites/request/issue_4cut_upload_link_request_entity.dart';
+import 'package:potato_4cut_v2/features/take_photo/domain/entites/request/save_4cut_photos_request_entity.dart';
+import 'package:potato_4cut_v2/features/take_photo/domain/entites/response/fourcut_upload_link_response_entity.dart';
+import 'package:potato_4cut_v2/features/take_photo/domain/entites/response/save_4cut_photos_response_entity.dart';
 import 'package:potato_4cut_v2/features/take_photo/domain/usecases/delete_photo_use_case.dart';
 import 'package:potato_4cut_v2/features/take_photo/domain/usecases/import_specific_photo_use_case.dart';
+import 'package:potato_4cut_v2/features/take_photo/domain/usecases/issue_4cut_upload_link_use_case.dart';
 import 'package:potato_4cut_v2/features/take_photo/domain/usecases/photo_use_cases.dart';
 import 'package:potato_4cut_v2/features/take_photo/domain/usecases/save_4cut_photos_use_case.dart';
-import 'package:potato_4cut_v2/features/take_photo/domain/usecases/save_photos_use_case.dart';
 
 final photoDataSourceProvider = Provider((ref) => PhotoDataSourceImpl(null));
 
 final photoRepositoryProvider = Provider((ref) {
   final dataSource = ref.watch(photoDataSourceProvider);
   return PhotoRepositoryImpl(dataSource: dataSource);
-});
-
-final savePhotosProvider = Provider((ref) {
-  final repository = ref.watch(photoRepositoryProvider);
-  return SavePhotosUseCase(repository);
 });
 
 final save4cutPhotosProvider = Provider((ref) {
@@ -37,16 +33,21 @@ final deletePhotoProvider = Provider((ref) {
   return DeletePhotoUseCase(repository);
 });
 
+final issue4CutUploadLinkProvider = Provider((ref) {
+  final repository = ref.watch(photoRepositoryProvider);
+  return Issue4cutUploadLinkUseCase(repository);
+});
+
 final photoUseCaseProvider = Provider((ref) {
-  final savePhotos = ref.watch(savePhotosProvider);
   final save4cutPhotos = ref.watch(save4cutPhotosProvider);
   final importSpecificPhoto = ref.watch(importSpecificPhotoProvider);
   final deletePhoto = ref.watch(deletePhotoProvider);
+  final issue4cutUploadLink = ref.watch(issue4CutUploadLinkProvider);
   return PhotoUseCases(
-    savePhotos: savePhotos,
     save4cutPhotos: save4cutPhotos,
     importSpecificPhoto: importSpecificPhoto,
     deletePhoto: deletePhoto,
+    issue4cutUploadLink: issue4cutUploadLink,
   );
 });
 
@@ -59,16 +60,8 @@ final photoViewModel =
 class PhotoViewModelNotifier extends StateNotifier<PhotoUseCases> {
   PhotoViewModelNotifier(super.useCase);
 
-  Future<SavePhotosEntity> savePhotos(List<File> images) async {
-    final response = await state.savePhotos.savePhotos(images);
-    return response;
-  }
-
-  Future save4cutPhotos(File composedImage, List<String> photoCutIds) async {
-    final response = await state.save4cutPhotos.save4CutPhotos(
-      composedImage,
-      photoCutIds,
-    );
+  Future<Save4cutPhotosResponseEntity> save4cutPhotos(Save4cutPhotosRequestEntity request) async {
+    final response = await state.save4cutPhotos.save4CutPhotos(request);
     return response;
   }
 
@@ -78,5 +71,10 @@ class PhotoViewModelNotifier extends StateNotifier<PhotoUseCases> {
 
   Future<void> deletePhoto(String id) async {
     await state.deletePhoto.deletePhoto(id);
+  }
+
+  Future<FourcutUploadLinkResponseEntity> issue4cutUploadLink(Issue4cutUploadLinkRequestEntity request) async{
+    final response = await state.issue4cutUploadLink.issue4CutUploadLink(request);
+    return response;
   }
 }
