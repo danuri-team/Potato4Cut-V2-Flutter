@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:potato_4cut_v2/core/router/router_helper.dart';
+import 'package:potato_4cut_v2/core/storage/token_storage.dart';
 import 'package:potato_4cut_v2/features/login/provider/auth_state.dart';
 
 final storageProvider =
@@ -17,6 +18,12 @@ class StoarageNotifier extends StateNotifier<FlutterSecureStorage> {
 
   Future<void> checkAuthAndNavigate(BuildContext context) async {
     final authStatusString = await state.read(key: storageKey);
+    final tokenStorage = TokenStorage();
+    final tokenExpiration = await tokenStorage.checkTokenExpiration();
+
+    if(tokenExpiration){
+      AppNavigation.goLogin(context);
+    }
 
     if(!context.mounted) return;
 
