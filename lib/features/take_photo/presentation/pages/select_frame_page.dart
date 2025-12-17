@@ -11,7 +11,6 @@ import 'package:potato_4cut_v2/core/util/throttle.dart';
 import 'package:potato_4cut_v2/features/take_photo/presentation/widgets/potato4cut_frame.dart';
 import 'package:potato_4cut_v2/features/take_photo/presentation/widgets/select_frame.dart';
 import 'package:potato_4cut_v2/features/take_photo/provider/current_page_index_provider.dart';
-import 'package:potato_4cut_v2/features/take_photo/provider/cut_ids_provider.dart';
 import 'package:potato_4cut_v2/features/take_photo/provider/finished_photo_provider.dart';
 import 'package:potato_4cut_v2/features/take_photo/provider/photo_flow_provider.dart';
 import 'package:potato_4cut_v2/features/take_photo/provider/photo_provider.dart';
@@ -22,7 +21,6 @@ class SelectFramePage extends ConsumerWidget {
   resetState(WidgetRef ref) {
     ref.read(photoProvider.notifier).reset();
     ref.read(currentPageIndexProvider.notifier).update((state) => 0);
-    ref.read(cutIdsProvider.notifier).update((state) => []);
     ref.read(finishedPhotoProvider.notifier).resetState();
     ref
         .read(photoFlowProvider.notifier)
