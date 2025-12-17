@@ -1,7 +1,10 @@
-import 'dart:io';
-
 import 'package:potato_4cut_v2/features/take_photo/data/data_sources/photo_data_source.dart';
-import 'package:potato_4cut_v2/features/take_photo/domain/entities/save_photos_entity.dart';
+import 'package:potato_4cut_v2/features/take_photo/data/models/request/issue_4cut_upload_link_request_model.dart';
+import 'package:potato_4cut_v2/features/take_photo/data/models/request/save_4cut_photos_request_model.dart';
+import 'package:potato_4cut_v2/features/take_photo/domain/entites/request/issue_4cut_upload_link_request_entity.dart';
+import 'package:potato_4cut_v2/features/take_photo/domain/entites/request/save_4cut_photos_request_entity.dart';
+import 'package:potato_4cut_v2/features/take_photo/domain/entites/response/fourcut_upload_link_response_entity.dart';
+import 'package:potato_4cut_v2/features/take_photo/domain/entites/response/save_4cut_photos_response_entity.dart';
 import 'package:potato_4cut_v2/features/take_photo/domain/repositories/photo_repository.dart';
 
 class PhotoRepositoryImpl implements PhotoRepository{
@@ -10,15 +13,10 @@ class PhotoRepositoryImpl implements PhotoRepository{
   PhotoRepositoryImpl({required PhotoDataSource dataSource}) : _dataSource = dataSource;
 
   @override
-  Future<SavePhotosEntity> savePhotos(List<File> images) async{
-    final response = await _dataSource.savePhotos(images);
- final mapperResponse = response.toEntity();
- return mapperResponse;
-  }
-
-  @override
-  Future save4CutPhotos(File composedImage, List<String> photoCutIds) async{
-    await _dataSource.save4CutPhotos(composedImage, photoCutIds);
+  Future<Save4cutPhotosResponseEntity> save4CutPhotos(Save4cutPhotosRequestEntity request) async{
+    final requestModel = Save4cutPhotosRequestModel(request.frameId, request.objectKey);
+    final response = await _dataSource.save4CutPhotos(requestModel);
+    return response.toEntity();
   }
 
   @override
@@ -29,5 +27,12 @@ class PhotoRepositoryImpl implements PhotoRepository{
   @override
   Future<void> deletePhoto(String id) async{
     await _dataSource.deletePhoto(id);
+  }
+
+  @override
+  Future<FourcutUploadLinkResponseEntity> issue4CutUploadLink(Issue4cutUploadLinkRequestEntity request) async{
+    final requestModel = Issue4cutUploadLinkRequestModel(request.fileSize);
+    final response = await _dataSource.issue4CutUploadLink(requestModel);
+    return response.toEntity();
   }
 }

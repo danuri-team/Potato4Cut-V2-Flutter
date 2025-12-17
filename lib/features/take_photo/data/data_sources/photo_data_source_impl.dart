@@ -5,6 +5,7 @@ import 'package:potato_4cut_v2/features/take_photo/data/data_sources/photo_data_
 import 'package:potato_4cut_v2/features/take_photo/data/models/request/issue_4cut_upload_link_request_model.dart';
 import 'package:potato_4cut_v2/features/take_photo/data/models/request/save_4cut_photos_request_model.dart';
 import 'package:potato_4cut_v2/features/take_photo/data/models/response/fourcut_upload_link_response_model.dart';
+import 'package:potato_4cut_v2/features/take_photo/data/models/response/save_4cut_photos_response_model.dart';
 
 class PhotoDataSourceImpl implements PhotoDataSource {
   final Dio _dio;
@@ -14,12 +15,13 @@ class PhotoDataSourceImpl implements PhotoDataSource {
   final tokenStorage = TokenStorage();
 
   @override
-  Future save4CutPhotos(Save4cutPhotosRequestModel request) async {
-    await _dio.post(
+  Future<Save4cutPhotosResponseModel> save4CutPhotos(Save4cutPhotosRequestModel request) async {
+    final response = await _dio.post(
       '/api/v1/photos',
       data: request.toJson(),
       options: Options(headers: {"Authorization": "Bearer ${await tokenStorage.getAccessToken()}"}),
     );
+    return Save4cutPhotosResponseModel.fromJson(response.data);
   }
 
   @override
