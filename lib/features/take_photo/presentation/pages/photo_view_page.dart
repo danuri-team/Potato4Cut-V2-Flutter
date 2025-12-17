@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -9,10 +7,8 @@ import 'package:potato_4cut_v2/core/router/router_helper.dart';
 import 'package:potato_4cut_v2/core/ui/default_layout.dart';
 import 'package:potato_4cut_v2/core/ui/submit_button.dart';
 import 'package:potato_4cut_v2/core/util/throttle.dart';
-import 'package:potato_4cut_v2/features/take_photo/presentation/view_model/photo_view_model.dart';
 import 'package:potato_4cut_v2/features/take_photo/presentation/widgets/import_existing_photos.dart';
 import 'package:potato_4cut_v2/features/take_photo/provider/current_page_index_provider.dart';
-import 'package:potato_4cut_v2/features/take_photo/provider/cut_ids_provider.dart';
 import 'package:potato_4cut_v2/features/take_photo/provider/photo_flow_provider.dart';
 import 'package:potato_4cut_v2/core/theme/app_color.dart';
 import 'package:potato_4cut_v2/features/take_photo/provider/photo_provider.dart';
@@ -26,7 +22,6 @@ class PhotoViewPage extends ConsumerStatefulWidget {
 }
 
 class PhotoViewPageState extends ConsumerState<PhotoViewPage> {
-  bool _isLoading = false;
   final pageController = PageController();
 
   @override
@@ -204,55 +199,8 @@ class PhotoViewPageState extends ConsumerState<PhotoViewPage> {
   }
 
   Widget _nextButton(BuildContext context) {
-    if (_isLoading) {
-      return Container(
-        width: 343.w,
-        height: 48.h,
-        decoration: ShapeDecoration(
-          color: const Color(0xFFE8A025),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12),
-          ),
-        ),
-        child: Center(
-          child: SizedBox(
-            width: 20.w,
-            height: 20.h,
-            child: CircularProgressIndicator(
-              strokeWidth: 2,
-              valueColor: AlwaysStoppedAnimation<Color>(AppColor.static1),
-            ),
-          ),
-        ),
-      );
-    }
-
     return SubmitButton(
-      onTap: () => Throttle.run(() async {
-        setState(() {
-          _isLoading = true;
-        });
-
-        final photos = ref.watch(photoProvider);
-        final List<File> images = [];
-
-        for (var photo in photos) {
-          if (photo.file != null) {
-            images.add(photo.file!);
-          }
-        }
-
-        final result = await ref
-            .read(photoViewModel.notifier)
-            .savePhotos(images);
-
-        final List<String> cutIds = [];
-        for (var element in result.data) {
-          cutIds.add(element.cutId);
-        }
-
-        ref.read(cutIdsProvider.notifier).update((state) => cutIds);
-
+      onTap: () => Throttle.run((){
         AppNavigation.goFinishedPhoto(context);
       }),
       width: 343.w,
