@@ -13,18 +13,18 @@ import 'package:potato_4cut_v2/core/ui/default_layout.dart';
 import 'package:potato_4cut_v2/core/ui/submit_button.dart';
 import 'package:potato_4cut_v2/core/util/throttle.dart';
 import 'package:potato_4cut_v2/features/take_photo/presentation/view_model/photo_view_model.dart';
-import 'package:potato_4cut_v2/features/take_photo/presentation/widgets/current_progress_indicator.dart';
 import 'package:potato_4cut_v2/features/take_photo/presentation/widgets/finished_photo.dart';
 import 'package:potato_4cut_v2/features/take_photo/presentation/widgets/share_button.dart';
-import 'package:potato_4cut_v2/core/enum/take_photo_flow_type.dart';
+import 'package:potato_4cut_v2/core/enum/photo_flow_type.dart';
+import 'package:potato_4cut_v2/features/take_photo/provider/camera_controller_provider.dart';
 import 'package:potato_4cut_v2/features/take_photo/provider/cut_ids_provider.dart';
 import 'package:potato_4cut_v2/features/take_photo/provider/current_page_index_provider.dart';
 import 'package:potato_4cut_v2/features/take_photo/provider/finished_photo_provider.dart';
 import 'package:potato_4cut_v2/features/take_photo/provider/photo_provider.dart';
-import 'package:potato_4cut_v2/features/take_photo/provider/take_photo_flow_provider.dart';
+import 'package:potato_4cut_v2/features/take_photo/provider/photo_flow_provider.dart';
 
-class TakePhotoStep3Page extends ConsumerWidget {
-  TakePhotoStep3Page({super.key});
+class FinishedPhotoPage extends ConsumerWidget {
+  FinishedPhotoPage({super.key});
 
   final repaintBoundaryKey = GlobalKey();
 
@@ -45,13 +45,14 @@ class TakePhotoStep3Page extends ConsumerWidget {
   }
 
   void goHome(WidgetRef ref, BuildContext context) {
+    ref.read(cameraControllerProvider)?.dispose();
     ref.read(photoProvider.notifier).reset();
     ref.read(currentPageIndexProvider.notifier).update((state) => 0);
     ref.read(cutIdsProvider.notifier).update((state) => []);
     ref.read(finishedPhotoProvider.notifier).resetState();
     ref
-        .read(takePhotoFlowProvider.notifier)
-        .update((state) => TakePhotoFlowType.TakePhoto);
+        .read(photoFlowProvider.notifier)
+        .update((state) => PhotoFlowType.TakePhoto);
     Throttle.run(() => AppNavigation.goHome(context));
   }
 
@@ -59,11 +60,10 @@ class TakePhotoStep3Page extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final finishedPhoto = ref.watch(finishedPhotoProvider);
     return DefaultLayout(
-      appBar: const CustomBackButton(),
+      appBar: CustomBackButton(),
       body: Column(
         children: [
           SizedBox(height: 6.h),
-          const CurrentProgressIndicator(),
           SizedBox(height: 24.h),
           Text('잘 나온 사진을 바로 공유해요', style: AppTextStyle.heading1),
           SizedBox(height: 16.h),
@@ -95,10 +95,10 @@ class TakePhotoStep3Page extends ConsumerWidget {
               const ShareButton(),
               SizedBox(width: 12.w),
               SubmitButton(
-                onTap: () =>save4CutPhotos(finishedPhoto!, ref),
+                onTap: () => save4CutPhotos(finishedPhoto!, ref),
                 width: 166.w,
                 text: '저장하기',
-                isActivate: finishedPhoto == null,
+                isActivate: true,
                 prefixSvg: SvgPicture.asset(
                   'assets/images/upload.svg',
                   color: AppColor.static1,
