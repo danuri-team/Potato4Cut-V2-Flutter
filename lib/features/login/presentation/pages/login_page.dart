@@ -18,7 +18,7 @@ class LoginPage extends StatelessWidget {
             SizedBox(height: 255.h),
             SvgPicture.asset('assets/images/potato_4cut_logo.svg'),
             SizedBox(height: 12.h),
-            Text('감자네컷', style: AppTextStyle.logoText),
+            Text('감자네컷', style: AppTextStyle.ownglyph),
             const Spacer(),
             const AppleAuthBar(),
             SizedBox(height: 12.h),

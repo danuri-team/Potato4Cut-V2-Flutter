@@ -25,7 +25,7 @@ class SignUpStep3Page extends ConsumerWidget {
     return DefaultLayout(
       appBar: Padding(
         padding: EdgeInsets.only(left: 3.w),
-        child: const CustomBackButton(),
+        child: CustomBackButton(),
       ),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,

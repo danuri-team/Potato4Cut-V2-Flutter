@@ -10,7 +10,7 @@ class TakePhotoCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () => Throttle.run(() => AppNavigation.gotakePhotoStep1(context)),
+      onTap: () => Throttle.run(() => AppNavigation.goSelectFrame(context)),
       child: Container(
         width: 343.w,
         height: 174.h,

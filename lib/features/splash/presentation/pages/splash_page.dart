@@ -32,7 +32,7 @@ class SplashPage extends ConsumerWidget {
           children: [
             SvgPicture.asset('assets/images/potato_4cut_logo.svg'),
             SizedBox(height: 12.h),
-            Text('감자네컷', style: AppTextStyle.logoText),
+            Text('감자네컷', style: AppTextStyle.ownglyph),
           ],
         ),
       ),

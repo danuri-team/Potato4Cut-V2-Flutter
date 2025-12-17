@@ -133,9 +133,10 @@ class _HomePageState extends State<HomePage> {
       appBar: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text('감자네컷', style: AppTextStyle.logoText.copyWith(fontSize: 24.sp)),
+          Text('감자네컷', style: AppTextStyle.ownglyph.copyWith(fontSize: 24.sp)),
           GestureDetector(
-            onTap: () {},
+            onTap: () {
+            },
             child: SvgPicture.asset('assets/images/bell.svg'),
           ),
         ],
