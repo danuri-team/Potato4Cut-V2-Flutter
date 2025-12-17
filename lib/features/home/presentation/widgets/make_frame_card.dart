@@ -3,22 +3,12 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:potato_4cut_v2/core/ui/in_development.dart';
 
-class MakeFrameCard extends StatefulWidget {
+class MakeFrameCard extends StatelessWidget {
   const MakeFrameCard({super.key});
-
-  @override
-  State<MakeFrameCard> createState() => _MakeFrameBoxState();
-}
-
-class _MakeFrameBoxState extends State<MakeFrameCard> {
-  bool isTapped = false;
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTapDown: (details) => setState(() => isTapped = !isTapped),
-      onTapUp: (details) => setState(() => isTapped = !isTapped),
-      onTapCancel: () => setState(() => isTapped = false),
       onTap: () => showDialog(
         barrierDismissible: false,
         context: context,
@@ -28,7 +18,7 @@ class _MakeFrameBoxState extends State<MakeFrameCard> {
         width: 343.w,
         height: 174.h,
         decoration: ShapeDecoration(
-          color: isTapped ? Color(0xFFFBEACC) : Color(0xCDF2F2F2),
+          color: Color(0xFFFAECD3),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(12),
           ),
@@ -67,18 +57,12 @@ class _MakeFrameBoxState extends State<MakeFrameCard> {
                 ],
               ),
             ),
-            Column(
-              children: [
-                const Spacer(),
-                Padding(
-                  padding: EdgeInsets.only(left: 173.4.w),
-                  child: isTapped
-                      ? SvgPicture.asset(
-                          'assets/images/tapped_make_frame_image.svg',
-                        )
-                      : SvgPicture.asset('assets/images/make_frame_image.svg'),
-                ),
-              ],
+            Align(
+              alignment: Alignment.bottomRight,
+              child: Padding(
+                padding: EdgeInsets.only(right: 10.56.w),
+                child: SvgPicture.asset('assets/images/make_frame_potato.svg'),
+              ),
             ),
           ],
         ),

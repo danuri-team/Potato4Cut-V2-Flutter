@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class AppTextStyle {
-  static final logoText = TextStyle(
+  static final ownglyph = TextStyle(
     fontSize: 40.sp,
     fontFamily: 'ownglyph_pdh',
     fontWeight: FontWeight.w400,

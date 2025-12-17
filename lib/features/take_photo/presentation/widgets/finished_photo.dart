@@ -133,7 +133,7 @@ class _FinishedPhotoState extends ConsumerState<FinishedPhoto> {
                         SizedBox(width: 6.w),
                         Text(
                           '감자네컷',
-                          style: AppTextStyle.logoText.copyWith(
+                          style: AppTextStyle.ownglyph.copyWith(
                             fontSize: 16.sp,
                           ),
                         ),

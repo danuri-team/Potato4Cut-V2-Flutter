@@ -10,9 +10,10 @@ abstract class RoutePath{
   static const String signUpStep2 = '/sign-up-step2';
   static const String signUpStep3 = '/sign-up-step3';
   static const String home = '/home';
-  static const String takePhotoStep1 = '/take-photo-step1';
-  static const String takePhotoStep2 = '/take-photo-step2';
-  static const String takePhotoStep3 = '/take-photo-step3';
+  static const String selectFrame = '/select-frame';
+  static const String cameraView = '/camera-view';
+  static const String photoView = '/photo-view';
+  static const String finishedPhoto = '/finished-photo';
   static const String makeFrameStep1 = '/make-frame-step1';
   static const String makeFrameStep2 = '/make-frame-step2';
   static const String makeFrameStep3 = '/make-frame-step3';
@@ -43,9 +44,10 @@ abstract class AppNavigation{
   static void goHome(BuildContext context) => context.go(RoutePath.home);
 
   //take a photo
-  static void gotakePhotoStep1(BuildContext context) => context.push(RoutePath.takePhotoStep1); 
-  static void gotakePhotoStep2(BuildContext context) => context.push(RoutePath.takePhotoStep2);
-  static void gotakePhotoStep3(BuildContext context) => context.push(RoutePath.takePhotoStep3);
+  static void goSelectFrame(BuildContext context) => context.push(RoutePath.selectFrame);
+  static void goCameraView(BuildContext context) => context.push(RoutePath.cameraView);
+  static void goPhotoView(BuildContext context) => context.push(RoutePath.photoView);
+  static void goFinishedPhoto(BuildContext context) => context.push(RoutePath.finishedPhoto);
 
   //make a frame
   static void goMakeFrameStep1(BuildContext context) => context.push(RoutePath.makeFrameStep1);

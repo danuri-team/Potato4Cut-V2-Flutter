@@ -2,30 +2,35 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:potato_4cut_v2/core/enum/take_photo_flow_type.dart';
+import 'package:potato_4cut_v2/core/enum/photo_flow_type.dart';
+import 'package:potato_4cut_v2/core/util/throttle.dart';
 import 'package:potato_4cut_v2/features/take_photo/provider/current_page_index_provider.dart';
 import 'package:potato_4cut_v2/features/take_photo/provider/photo_provider.dart';
-import 'package:potato_4cut_v2/features/take_photo/provider/take_photo_flow_provider.dart';
+import 'package:potato_4cut_v2/features/take_photo/provider/photo_flow_provider.dart';
 import 'package:potato_4cut_v2/core/theme/app_text_style.dart';
 
 class ImportExistingPhotos extends ConsumerWidget {
   const ImportExistingPhotos({super.key});
 
-  importExistingPhotos(WidgetRef ref) {
+  Future<void> importExistingPhotos(WidgetRef ref) async {
     final currentPageIndex = ref.watch(currentPageIndexProvider);
-    ref.read(photoProvider.notifier).importExistingPhotos(currentPageIndex);
+    Throttle.run(() async {
+      await ref
+          .read(photoProvider.notifier)
+          .importExistingPhotos(currentPageIndex);
+    });
   }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final photos = ref.watch(photoProvider);
-    final takePhotoFlow = ref.watch(takePhotoFlowProvider);
+    final takePhotoFlow = ref.watch(photoFlowProvider);
     final currentPageIndex = ref.watch(currentPageIndexProvider);
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 10.w),
       child: GestureDetector(
         onTap:
-            takePhotoFlow != TakePhotoFlowType.TakePhoto &&
+            takePhotoFlow != PhotoFlowType.TakePhoto &&
                 !photos[currentPageIndex].isConfirmed
             ? () async {
                 await importExistingPhotos(ref);
@@ -37,7 +42,7 @@ class ImportExistingPhotos extends ConsumerWidget {
             SvgPicture.asset(
               'assets/images/upload.svg',
               color:
-                  takePhotoFlow == TakePhotoFlowType.TakePhoto ||
+                  takePhotoFlow == PhotoFlowType.TakePhoto ||
                       photos[currentPageIndex].isConfirmed
                   ? Color(0xFFC4C4C4)
                   : null,
@@ -47,7 +52,7 @@ class ImportExistingPhotos extends ConsumerWidget {
               '기존 사진 가져오기',
               style: AppTextStyle.headLine1.copyWith(
                 color:
-                    takePhotoFlow == TakePhotoFlowType.TakePhoto ||
+                    takePhotoFlow == PhotoFlowType.TakePhoto ||
                         photos[currentPageIndex].isConfirmed
                     ? Color(0xFFC4C4C4)
                     : const Color(0xFF474747),

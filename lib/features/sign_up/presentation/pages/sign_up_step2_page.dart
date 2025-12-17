@@ -33,7 +33,7 @@ class SignUpStep2Page extends ConsumerWidget {
     return DefaultLayout(
       appBar: Padding(
         padding: EdgeInsets.only(left: 3.w),
-        child: const CustomBackButton(),
+        child: CustomBackButton(),
       ),
       body: Padding(
         padding: EdgeInsets.symmetric(horizontal: 16.w),

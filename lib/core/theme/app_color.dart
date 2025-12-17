@@ -1,6 +1,15 @@
 import 'package:flutter/material.dart';
 
 class AppColor {
+  //Main
+  static const Color m50 = Color(0xFFFCF5E8);
+  static const Color m75 = Color(0xFFF5D9A6);
+  static const Color m100 = Color(0xFFF2C782);
+  static const Color m200 = Color(0xFFEDB04A);
+  static const Color m300 = Color(0xFFE8A126);
+  static const Color m400 = Color(0xFFA3701A);
+  static const Color m500 = Color(0xFF8F6117);
+
   //Primary
   static const Color primary1 = Color(0xFF0065FF); //Normal
   static const Color primary2 = Color(0xFF005DEA); //Strong
@@ -13,7 +22,7 @@ class AppColor {
   static const Color label4 = Color(0xE02E2F33); //Neutral
   static const Color label5 = Colors.black; //Strong
   static const Color label6 = Color(0xFF171719); //Normal
-  
+
   //Background
   static const Color background1 = Colors.white; //Normal
   static const Color background2 = Color(0xFFF7F7F8); //Alternative
@@ -28,46 +37,46 @@ class AppColor {
   static const Color line3 = Color(0x3870737C); //Normal
 
   //Status
-  static const Color status1 = Color(0xFF00BF40); 
-  static const Color status2 = Color(0xFFFF9200); 
-  static const Color status3 = Color(0xFFFF4242); 
+  static const Color status1 = Color(0xFF00BF40);
+  static const Color status2 = Color(0xFFFF9200);
+  static const Color status3 = Color(0xFFFF4242);
 
   //Accent - Background
-  static const Color accentBackground1 = Color(0xFFFF5D00); 
-  static const Color accentBackground2 = Color(0xFF58CE04); 
-  static const Color accentBackground3 = Color(0xFF00BCDD); 
-  static const Color accentBackground4 = Color(0xFF00AEFF); 
-  static const Color accentBackground5 = Color(0xFF6441F2); 
-  static const Color accentBackground6 = Color(0xFFCB59FF); 
-  static const Color accentBackground7 = Color(0xFFF553DA); 
+  static const Color accentBackground1 = Color(0xFFFF5D00);
+  static const Color accentBackground2 = Color(0xFF58CE04);
+  static const Color accentBackground3 = Color(0xFF00BCDD);
+  static const Color accentBackground4 = Color(0xFF00AEFF);
+  static const Color accentBackground5 = Color(0xFF6441F2);
+  static const Color accentBackground6 = Color(0xFFCB59FF);
+  static const Color accentBackground7 = Color(0xFFF553DA);
 
   //Accent - Foreground
-  static const Color accentForeground1 = Color(0xFFE52222); 
-  static const Color accentForeground2 = Color(0xFFF55A00); 
-  static const Color accentForeground3 = Color(0xFFD17600); 
-  static const Color accentForeground4 = Color(0xFF429E00); 
-  static const Color accentForeground5 = Color(0xFF009632); 
-  static const Color accentForeground6 = Color(0xFF0098B2); 
-  static const Color accentForeground7 = Color(0xFF008DCE); 
-  static const Color accentForeground8 = Color(0xFF005DEA); 
+  static const Color accentForeground1 = Color(0xFFE52222);
+  static const Color accentForeground2 = Color(0xFFF55A00);
+  static const Color accentForeground3 = Color(0xFFD17600);
+  static const Color accentForeground4 = Color(0xFF429E00);
+  static const Color accentForeground5 = Color(0xFF009632);
+  static const Color accentForeground6 = Color(0xFF0098B2);
+  static const Color accentForeground7 = Color(0xFF008DCE);
+  static const Color accentForeground8 = Color(0xFF005DEA);
   static const Color accentForeground9 = Color(0xFF5B37ED);
-  static const Color accentForeground10 = Color(0xFFAD36E3); 
-  static const Color accentForeground11 = Color(0xFFE846CD); 
+  static const Color accentForeground10 = Color(0xFFAD36E3);
+  static const Color accentForeground11 = Color(0xFFE846CD);
 
   //Inverse
   static const Color inverse1 = Color(0xFF3384FF);
-  static const Color inverse2 = Color(0xFF1B1C1E); 
-  static const Color inverse3 = Color(0xFFF7F7F8); 
+  static const Color inverse2 = Color(0xFF1B1C1E);
+  static const Color inverse3 = Color(0xFFF7F7F8);
 
   //Static
-  static const Color static1 = Colors.white; 
-  static const Color static2 = Colors.black; 
+  static const Color static1 = Colors.white;
+  static const Color static2 = Colors.black;
 
   //Fill
   static const Color fill1 = Color(0x0C70737C); //Alternative
   static const Color fill2 = Color(0x1470737C); //Normal
   static const Color fill3 = Color(0x2870737C); //Strong
-  
+
   //Material
   static const Color material = Color(0x84171719);
 }
