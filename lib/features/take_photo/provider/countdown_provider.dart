@@ -9,8 +9,8 @@ class CountdownNotifier extends StateNotifier<int?> {
 
   CountdownNotifier() : super(null);
 
-  void startCountdown() {
-    state = initialCountdown;
+  void startCountdown([int? customCountdown]) {
+    state = customCountdown ?? initialCountdown;
   }
 
   void decrementCountdown() {
