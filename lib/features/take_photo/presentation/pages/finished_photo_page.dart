@@ -12,16 +12,12 @@ import 'package:potato_4cut_v2/core/ui/custom_back_button.dart';
 import 'package:potato_4cut_v2/core/ui/default_layout.dart';
 import 'package:potato_4cut_v2/core/ui/submit_button.dart';
 import 'package:potato_4cut_v2/core/util/throttle.dart';
+import 'package:potato_4cut_v2/features/take_photo/domain/entites/request/save_4cut_photos_request_entity.dart';
 import 'package:potato_4cut_v2/features/take_photo/presentation/view_model/photo_view_model.dart';
 import 'package:potato_4cut_v2/features/take_photo/presentation/widgets/finished_photo.dart';
 import 'package:potato_4cut_v2/features/take_photo/presentation/widgets/share_button.dart';
-import 'package:potato_4cut_v2/core/enum/photo_flow_type.dart';
-import 'package:potato_4cut_v2/features/take_photo/provider/camera_controller_provider.dart';
-import 'package:potato_4cut_v2/features/take_photo/provider/cut_ids_provider.dart';
-import 'package:potato_4cut_v2/features/take_photo/provider/current_page_index_provider.dart';
 import 'package:potato_4cut_v2/features/take_photo/provider/finished_photo_provider.dart';
-import 'package:potato_4cut_v2/features/take_photo/provider/photo_provider.dart';
-import 'package:potato_4cut_v2/features/take_photo/provider/photo_flow_provider.dart';
+import 'package:potato_4cut_v2/features/take_photo/provider/object_key_provider.dart';
 
 class FinishedPhotoPage extends ConsumerWidget {
   FinishedPhotoPage({super.key});
@@ -29,31 +25,22 @@ class FinishedPhotoPage extends ConsumerWidget {
   final repaintBoundaryKey = GlobalKey();
 
   Future<void> save4CutPhotos(File photo, WidgetRef ref) async {
-    final cutIds = ref.watch(cutIdsProvider);
     final hasAccess = await Gal.hasAccess();
     if (!hasAccess) {
       await Gal.requestAccess();
     }
 
+    final objectKey = ref.watch(objectKeyProvider);
+
+    if (objectKey == null) return;
+
     Throttle.run(() async {
       await ref
           .read(photoViewModel.notifier)
-          .save4cutPhotos(File(photo.path), cutIds);
+          .save4cutPhotos(Save4cutPhotosRequestEntity('frameId', objectKey));
 
       await Gal.putImage(photo.path);
     });
-  }
-
-  void goHome(WidgetRef ref, BuildContext context) {
-    ref.read(cameraControllerProvider)?.dispose();
-    ref.read(photoProvider.notifier).reset();
-    ref.read(currentPageIndexProvider.notifier).update((state) => 0);
-    ref.read(cutIdsProvider.notifier).update((state) => []);
-    ref.read(finishedPhotoProvider.notifier).resetState();
-    ref
-        .read(photoFlowProvider.notifier)
-        .update((state) => PhotoFlowType.TakePhoto);
-    Throttle.run(() => AppNavigation.goHome(context));
   }
 
   @override
@@ -68,8 +55,9 @@ class FinishedPhotoPage extends ConsumerWidget {
           Text('잘 나온 사진을 바로 공유해요', style: AppTextStyle.heading1),
           SizedBox(height: 16.h),
           FinishedPhoto(repaintBoundaryKey: repaintBoundaryKey),
+          SizedBox(height: 25.h),
           GestureDetector(
-            onTap: () => goHome(ref, context),
+            onTap: () => Throttle.run(() => AppNavigation.goHome(context)),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [

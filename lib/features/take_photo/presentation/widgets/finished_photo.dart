@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -5,7 +6,10 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:potato_4cut_v2/core/theme/app_color.dart';
 import 'package:potato_4cut_v2/core/theme/app_text_style.dart';
+import 'package:potato_4cut_v2/features/take_photo/domain/entites/request/issue_4cut_upload_link_request_entity.dart';
+import 'package:potato_4cut_v2/features/take_photo/presentation/view_model/photo_view_model.dart';
 import 'package:potato_4cut_v2/features/take_photo/provider/finished_photo_provider.dart';
+import 'package:potato_4cut_v2/features/take_photo/provider/object_key_provider.dart';
 import 'package:potato_4cut_v2/features/take_photo/provider/photo_provider.dart';
 
 class FinishedPhoto extends ConsumerStatefulWidget {
@@ -29,12 +33,20 @@ class _FinishedPhotoState extends ConsumerState<FinishedPhoto> {
   void _schedulePhotoGeneration() {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       SchedulerBinding.instance.addPostFrameCallback((_) {
-        SchedulerBinding.instance.addPostFrameCallback((_) {
+        SchedulerBinding.instance.addPostFrameCallback((_) async {
           if (mounted && !isGenerated) {
             isGenerated = true;
-            ref
+            final fileSize = await ref
                 .read(finishedPhotoProvider.notifier)
                 .generateFinishedPhoto(widget.repaintBoundaryKey);
+            final response = await ref
+                .read(photoViewModel.notifier)
+                .issue4cutUploadLink(
+                  Issue4cutUploadLinkRequestEntity(fileSize.toString()),
+                );
+            ref
+                .read(objectKeyProvider.notifier)
+                .update((state) => response.data.key);
           }
         });
       });
@@ -46,34 +58,41 @@ class _FinishedPhotoState extends ConsumerState<FinishedPhoto> {
     final photos = ref.watch(photoProvider);
     return SizedBox(
       width: double.infinity,
-      height: 480.h,
+      height: 472.h,
       child: Stack(
         children: [
-          Column(
-            children: [
-              Flexible(
-                flex: 1,
-                child: Align(
-                  alignment: Alignment.topLeft,
-                  child: SvgPicture.asset('assets/images/finished_potato1.svg'),
+          Padding(
+            padding: EdgeInsets.only(top: 28.h, bottom: 13.h),
+            child: Column(
+              children: [
+                Flexible(
+                  flex: 1,
+                  child: Align(
+                    alignment: Alignment.topLeft,
+                    child: SvgPicture.asset(
+                      'assets/images/finished_potato1.svg',
+                    ),
+                  ),
                 ),
-              ),
-              Flexible(
-                flex: 1,
-                child: Align(
-                  alignment: Alignment.bottomRight,
-                  child: SvgPicture.asset('assets/images/finished_potato2.svg'),
+                Flexible(
+                  flex: 1,
+                  child: Align(
+                    alignment: Alignment.bottomRight,
+                    child: SvgPicture.asset(
+                      'assets/images/finished_potato2.svg',
+                    ),
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
           Center(
             child: RepaintBoundary(
               key: widget.repaintBoundaryKey,
               child: Container(
-                width: 242.w,
-                height: 412.h,
-                padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 12.h),
+                width: 286.w,
+                height: 472.h,
+                padding: EdgeInsets.symmetric(horizontal: 18.w, vertical: 18.h),
                 decoration: BoxDecoration(
                   color: AppColor.static1,
                   boxShadow: [
@@ -100,15 +119,17 @@ class _FinishedPhotoState extends ConsumerState<FinishedPhoto> {
                 child: Column(
                   children: [
                     SizedBox(
-                      width: 218.w,
-                      height: 326.h,
+                      width: 250.w,
+                      height: 376.h,
                       child: GridView.builder(
                         itemCount: 4,
+                        physics: NeverScrollableScrollPhysics(),
+                        padding: EdgeInsets.zero,
                         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                           crossAxisCount: 2,
                           crossAxisSpacing: 8.w,
                           mainAxisSpacing: 8.h,
-                          childAspectRatio: 105.w / 159.h,
+                          childAspectRatio: 121.w / 184.h,
                         ),
                         itemBuilder: (context, index) {
                           final photo = photos[index];
@@ -116,6 +137,7 @@ class _FinishedPhotoState extends ConsumerState<FinishedPhoto> {
                             decoration: BoxDecoration(
                               image: DecorationImage(
                                 image: FileImage(photo.file!),
+                                fit: BoxFit.cover,
                               ),
                             ),
                           );

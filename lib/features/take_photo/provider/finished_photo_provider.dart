@@ -15,7 +15,7 @@ final finishedPhotoProvider =
 class FinishedPhotoNotifier extends StateNotifier<File?> {
   FinishedPhotoNotifier() : super(null);
 
-  Future<void> generateFinishedPhoto(GlobalKey key) async {
+  Future<int> generateFinishedPhoto(GlobalKey key) async {
     final formatDate = DateFormat("yyyy.MM.dd.HH.mm").format(DateTime.now());
 
     final boundary =
@@ -27,6 +27,8 @@ class FinishedPhotoNotifier extends StateNotifier<File?> {
     final file1 = File('${dir.path}/$formatDate.png');
     final file2 = await file1.writeAsBytes(pngBytes);
     state = file2;
+    final fileSize = await file2.length();
+    return fileSize;
   }
 
   void resetState(){
