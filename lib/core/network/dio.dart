@@ -37,7 +37,7 @@ class _AppDio with DioMixin implements Dio {
               final response = await UsersDataSourceImpl(
                 null,
               ).refreshToken(refreshToken);
-              tokenStorage.setAccessAndRefreshToken(
+              await tokenStorage.setAccessAndRefreshToken(
                 response.accessToken,
                 response.refreshToken,
               );

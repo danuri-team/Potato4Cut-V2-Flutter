@@ -1,66 +1,24 @@
-import 'dart:convert';
-import 'dart:io';
-import 'package:http_parser/http_parser.dart';
 import 'package:dio/dio.dart';
 import 'package:potato_4cut_v2/core/network/dio.dart';
 import 'package:potato_4cut_v2/core/storage/token_storage.dart';
 import 'package:potato_4cut_v2/features/take_photo/data/data_sources/photo_data_source.dart';
-import 'package:potato_4cut_v2/features/take_photo/data/models/save_photos_response_model.dart';
+import 'package:potato_4cut_v2/features/take_photo/data/models/request/issue_4cut_upload_link_request_model.dart';
+import 'package:potato_4cut_v2/features/take_photo/data/models/request/save_4cut_photos_request_model.dart';
+import 'package:potato_4cut_v2/features/take_photo/data/models/response/fourcut_upload_link_response_model.dart';
 
 class PhotoDataSourceImpl implements PhotoDataSource {
   final Dio _dio;
 
   PhotoDataSourceImpl(Dio? dio) : _dio = dio ?? AppDio.getInstance();
 
-  final token = TokenStorage().getAccessToken();
-
-  
+  final tokenStorage = TokenStorage();
 
   @override
-  Future<SavePhotosResponseModel> savePhotos(List<File> images) async {
-    final List<MultipartFile> uploadFiles = [];
-
-    for (File image in images) {
-      uploadFiles.add(
-        await MultipartFile.fromFile(
-          image.path,
-          filename: image.uri.pathSegments.last,
-          contentType: MediaType("image", "jpeg"),
-        ),
-      );
-    }
-
-    final FormData formData = FormData.fromMap({"images": uploadFiles});
-
-    final response = await _dio.post(
-      "/api/v1/photos/cuts",
-      data: formData,
-      options: Options(headers: {"Authorization": "Bearer ${await token}"}),
-    );
-
-    return SavePhotosResponseModel.fromJson(response.data);
-  }
-
-  @override
-  Future save4CutPhotos(File composedImage, List<String> photoCutIds) async {
-    final MultipartFile composedImageField = await MultipartFile.fromFile(
-      composedImage.path,
-      filename: composedImage.uri.pathSegments.last,
-      contentType: MediaType("image", "jpeg"),
-    );
-    final photoCutIdsField = MultipartFile.fromString(
-      jsonEncode(photoCutIds),
-      contentType: MediaType("application", "json"),
-    );
-    final formData = FormData.fromMap({
-      'composedImage': composedImageField,
-      'photoCutIds': photoCutIdsField,
-    });
-
+  Future save4CutPhotos(Save4cutPhotosRequestModel request) async {
     await _dio.post(
       '/api/v1/photos',
-      data: formData,
-      options: Options(headers: {"Authorization": "Bearer ${await token}"}),
+      data: request.toJson(),
+      options: Options(headers: {"Authorization": "Bearer ${await tokenStorage.getAccessToken()}"}),
     );
   }
 
@@ -68,7 +26,7 @@ class PhotoDataSourceImpl implements PhotoDataSource {
   Future importSpecificPhoto(String id) async {
     final response = await _dio.get(
       '/api/v1/photos/$id',
-      options: Options(headers: {'Authorization': 'Bearer ${await token}'}),
+      options: Options(headers: {'Authorization': 'Bearer ${await tokenStorage.getAccessToken()}'}),
     );
 
     return response;
@@ -78,7 +36,19 @@ class PhotoDataSourceImpl implements PhotoDataSource {
   Future<void> deletePhoto(String id) async {
     await _dio.delete(
       '/api/v1/photos/$id',
-      options: Options(headers: {'Authorization': 'Bearer ${await token}'}),
+      options: Options(headers: {'Authorization': 'Bearer ${await tokenStorage.getAccessToken()}'}),
     );
+  }
+
+  @override
+  Future<FourcutUploadLinkResponseModel> issue4CutUploadLink(
+    Issue4cutUploadLinkRequestModel request,
+  ) async {
+    final response = await _dio.post(
+      '/api/v1/photos/presigned-url',
+      data: request.toJson(),
+      options: Options(headers: {'Authorization': 'Bearer ${await tokenStorage.getAccessToken()}'}),
+    );
+    return FourcutUploadLinkResponseModel.fromJson(response.data);
   }
 }
