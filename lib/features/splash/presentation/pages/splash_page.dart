@@ -7,7 +7,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:hive_ce_flutter/adapters.dart';
 import 'package:potato_4cut_v2/core/theme/app_text_style.dart';
 import 'package:potato_4cut_v2/core/ui/default_layout.dart';
-import 'package:potato_4cut_v2/features/login/provider/stoarage_provider.dart';
+import 'package:potato_4cut_v2/features/user/provider/stoarage_provider.dart';
 import 'package:potato_4cut_v2/firebase_options.dart';
 
 class SplashPage extends ConsumerWidget {

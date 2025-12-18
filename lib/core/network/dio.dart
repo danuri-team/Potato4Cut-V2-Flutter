@@ -2,7 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:dio/io.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:potato_4cut_v2/core/storage/token_storage.dart';
-import 'package:potato_4cut_v2/features/login/data/data_sources/users_data_source_impl.dart';
+import 'package:potato_4cut_v2/features/user/data/data_sources/users_data_source_impl.dart';
 
 abstract class AppDio {
   AppDio._internal();
