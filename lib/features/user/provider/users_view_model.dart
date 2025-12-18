@@ -8,7 +8,9 @@ import 'package:potato_4cut_v2/core/storage/token_storage.dart';
 import 'package:potato_4cut_v2/features/user/data/data_sources/users_data_source.dart';
 import 'package:potato_4cut_v2/features/user/data/data_sources/users_data_source_impl.dart';
 import 'package:potato_4cut_v2/features/user/data/repositories/users_repository_impl.dart';
+import 'package:potato_4cut_v2/features/user/domain/entities/profile_preset_response_entity.dart';
 import 'package:potato_4cut_v2/features/user/domain/repositories/users_repository.dart';
+import 'package:potato_4cut_v2/features/user/domain/use_cases/get_profile_preset_use_case.dart';
 import 'package:potato_4cut_v2/features/user/domain/use_cases/users_use_cases.dart';
 import 'package:potato_4cut_v2/features/user/domain/use_cases/get_my_info_use_case.dart';
 import 'package:potato_4cut_v2/features/user/domain/use_cases/login_use_case.dart';
@@ -17,7 +19,7 @@ import 'package:potato_4cut_v2/features/user/domain/use_cases/profile_update_use
 import 'package:potato_4cut_v2/features/user/domain/use_cases/refresh_token_use_case.dart';
 import 'package:potato_4cut_v2/features/user/provider/auth_state.dart';
 import 'package:potato_4cut_v2/features/user/provider/stoarage_provider.dart';
-import 'package:potato_4cut_v2/features/user/domain/entities/get_my_info_entity.dart';
+import 'package:potato_4cut_v2/features/user/domain/entities/get_my_info_response_entity.dart';
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 
 final usersDataSourceProvider = Provider<UsersDataSource>((ref) => UsersDataSourceImpl(null));
@@ -36,12 +38,14 @@ final usersUseCasesProvider = Provider<UsersUseCases>((ref) {
   final getMyInfoUsecase = GetMyInfoUseCase(repository);
   final refreshTokenUseCase = RefreshTokenUseCase(repository);
   final logoutUseCase = LogoutUseCase(repository);
+  final getProfilePresetUseCase = GetProfilePresetUseCase(repository);
   return UsersUseCases(
     loginUseCase,
     profileUpdateUseCase,
     getMyInfoUsecase,
     refreshTokenUseCase,
     logoutUseCase,
+    getProfilePresetUseCase,
   );
 });
 
@@ -191,7 +195,7 @@ class UsersViewModelNotifier extends StateNotifier<AuthState> {
     return response;
   }
 
-  Future<GetMyInfoEntity> getMyInfo() async{
+  Future<GetMyInfoResponseEntity> getMyInfo() async{
     final response = await _useCases.getMyInfoUseCase.getMyInfo();
     return response;
   }
@@ -247,6 +251,11 @@ class UsersViewModelNotifier extends StateNotifier<AuthState> {
       state = state.copyWith(isLoading: false, errorMessage: e.toString());
       rethrow;
     }
+  }
+
+  Future<ProfilePresetEntity> getProrilePreset() async {
+    final response = await _useCases.getProfilePreset.getProfilePreset();
+    return response;
   }
 
   void clearError() {

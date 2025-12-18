@@ -3,19 +3,20 @@ import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:potato_4cut_v2/core/network/dio.dart';
 import 'package:potato_4cut_v2/core/storage/token_storage.dart';
+import 'package:potato_4cut_v2/features/user/data/models/response/profile_preset_response_model.dart';
 import 'package:potato_4cut_v2/features/user/data/data_sources/users_data_source.dart';
-import 'package:potato_4cut_v2/features/user/data/models/login_request_model.dart';
-import 'package:potato_4cut_v2/features/user/data/models/login_response_model.dart';
+import 'package:potato_4cut_v2/features/user/data/models/request/login_request_model.dart';
+import 'package:potato_4cut_v2/features/user/data/models/response/login_response_model.dart';
 import 'package:http_parser/http_parser.dart';
-import 'package:potato_4cut_v2/features/user/data/models/get_my_info_response_model.dart';
-import 'package:potato_4cut_v2/features/user/data/models/token_response_model.dart';
+import 'package:potato_4cut_v2/features/user/data/models/response/get_my_info_response_model.dart';
+import 'package:potato_4cut_v2/features/user/data/models/request/token_response_model.dart';
 
 class UsersDataSourceImpl implements UsersDataSource {
   final Dio _dio;
 
   UsersDataSourceImpl(Dio? dio) : _dio = dio ?? AppDio.getInstance();
 
-  final tokenStorage = TokenStorage();
+  final _tokenStorage = TokenStorage();
 
   @override
   Future<LoginResponseModel> login(LoginRequestModel request) async {
@@ -84,7 +85,7 @@ class UsersDataSourceImpl implements UsersDataSource {
       formData.files.add(MapEntry('profileImage', fromProfileImage));
     }
 
-    final token = tokenStorage.getAccessToken();
+    final token = _tokenStorage.getAccessToken();
 
     final response = await _dio.put(
       '/api/v1/users/me',
@@ -97,7 +98,7 @@ class UsersDataSourceImpl implements UsersDataSource {
 
   @override
   Future<GetMyInfoResponseModel> getMyInfo() async {
-    final token = tokenStorage.getAccessToken();
+    final token = _tokenStorage.getAccessToken();
 
     final response = await _dio.get(
       '/api/v1/users/me',
@@ -134,7 +135,7 @@ class UsersDataSourceImpl implements UsersDataSource {
 
   @override
   Future<void> logout() async {
-    final token = tokenStorage.getAccessToken();
+    final token = _tokenStorage.getAccessToken();
 
     try {
       final response = await _dio.post(
@@ -155,5 +156,14 @@ class UsersDataSourceImpl implements UsersDataSource {
     } catch (e) {
       throw Exception('Unexpected error during logout: $e');
     }
+  }
+
+  @override
+  Future<ProfilePresetResponseModel> getProfilePreset() async {
+    final response = await _dio.get(
+      '/api/v1/assets/profile',
+      options: Options(headers: {'Authorization': 'Bearer ${await _tokenStorage.getAccessToken()}'}),
+    );
+    return ProfilePresetResponseModel.fromJson(response.data);
   }
 }

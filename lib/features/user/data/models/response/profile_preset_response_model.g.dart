@@ -1,23 +1,23 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'profile_preset_model.dart';
+part of 'profile_preset_response_model.dart';
 
 // **************************************************************************
 // JsonSerializableGenerator
 // **************************************************************************
 
-ProfilePresetModel _$ProfilePresetModelFromJson(Map<String, dynamic> json) =>
-    ProfilePresetModel(
-      success: json['success'] as bool,
-      data: (json['data'] as List<dynamic>)
-          .map(
-            (e) => ProfilePresetDataModel.fromJson(e as Map<String, dynamic>),
-          )
-          .toList(),
-    );
+ProfilePresetResponseModel _$ProfilePresetResponseModelFromJson(
+  Map<String, dynamic> json,
+) => ProfilePresetResponseModel(
+  success: json['success'] as bool,
+  data: (json['data'] as List<dynamic>)
+      .map((e) => ProfilePresetDataModel.fromJson(e as Map<String, dynamic>))
+      .toList(),
+);
 
-Map<String, dynamic> _$ProfilePresetModelToJson(ProfilePresetModel instance) =>
-    <String, dynamic>{'success': instance.success, 'data': instance.data};
+Map<String, dynamic> _$ProfilePresetResponseModelToJson(
+  ProfilePresetResponseModel instance,
+) => <String, dynamic>{'success': instance.success, 'data': instance.data};
 
 ProfilePresetDataModel _$ProfilePresetDataModelFromJson(
   Map<String, dynamic> json,

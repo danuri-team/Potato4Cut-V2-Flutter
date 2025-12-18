@@ -1,7 +1,7 @@
 import 'package:json_annotation/json_annotation.dart';
 import 'package:potato_4cut_v2/core/enum/auth_provider_type.dart';
 import 'package:potato_4cut_v2/core/enum/user_type.dart';
-import 'package:potato_4cut_v2/features/user/domain/entities/get_my_info_entity.dart';
+import 'package:potato_4cut_v2/features/user/domain/entities/get_my_info_response_entity.dart';
 
 part 'get_my_info_response_model.g.dart';
 
@@ -17,9 +17,9 @@ class GetMyInfoResponseModel {
 
   Map<String, dynamic> toJson() => _$GetMyInfoResponseModelToJson(this);
 
-  GetMyInfoEntity toEntity(){
+  GetMyInfoResponseEntity toEntity(){
     final data = this.data.toEntity();
-    return GetMyInfoEntity(success, data);
+    return GetMyInfoResponseEntity(success, data);
   }
 }
 

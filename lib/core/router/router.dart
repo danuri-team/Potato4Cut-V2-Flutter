@@ -7,7 +7,7 @@ import 'package:potato_4cut_v2/features/user/presentation/pages/login_page.dart'
 import 'package:potato_4cut_v2/features/user/presentation/pages/profile_page.dart';
 import 'package:potato_4cut_v2/features/library/presentation/pages/puchase_and_production_history_page.dart';
 import 'package:potato_4cut_v2/features/user/presentation/pages/sign_up_step1_page.dart';
-import 'package:potato_4cut_v2/features/assets/presentation/pages/sign_up_step2_page.dart';
+import 'package:potato_4cut_v2/features/user/presentation/pages/sign_up_step2_page.dart';
 import 'package:potato_4cut_v2/features/user/presentation/pages/sign_up_step3_page.dart';
 import 'package:potato_4cut_v2/features/splash/presentation/pages/splash_page.dart';
 import 'package:potato_4cut_v2/core/ui/bottom_nav_bar.dart';

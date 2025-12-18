@@ -8,7 +8,7 @@ import 'package:potato_4cut_v2/core/ui/default_layout.dart';
 import 'package:potato_4cut_v2/core/ui/submit_button.dart';
 import 'package:potato_4cut_v2/core/util/throttle.dart';
 import 'package:potato_4cut_v2/features/user/provider/users_view_model.dart';
-import 'package:potato_4cut_v2/features/assets/presentation/widgets/profile_presets.dart';
+import 'package:potato_4cut_v2/features/user/presentation/widgets/profile_presets.dart';
 import 'package:potato_4cut_v2/features/user/provider/sign_up_field_provider.dart';
 
 class SignUpStep2Page extends ConsumerWidget {

@@ -1,4 +1,5 @@
 import 'package:potato_4cut_v2/features/user/domain/use_cases/get_my_info_use_case.dart';
+import 'package:potato_4cut_v2/features/user/domain/use_cases/get_profile_preset_use_case.dart';
 import 'package:potato_4cut_v2/features/user/domain/use_cases/login_use_case.dart';
 import 'package:potato_4cut_v2/features/user/domain/use_cases/logout_use_case.dart';
 import 'package:potato_4cut_v2/features/user/domain/use_cases/profile_update_use_case.dart';
@@ -10,6 +11,7 @@ class UsersUseCases {
   final GetMyInfoUseCase getMyInfoUseCase;
   final RefreshTokenUseCase refreshTokenUseCase;
   final LogoutUseCase logoutUseCase;
+  final GetProfilePresetUseCase getProfilePreset;
 
   const UsersUseCases(
     this.loginUseCase,
@@ -17,5 +19,6 @@ class UsersUseCases {
     this.getMyInfoUseCase,
     this.refreshTokenUseCase,
     this.logoutUseCase,
+    this.getProfilePreset,
   );
 }

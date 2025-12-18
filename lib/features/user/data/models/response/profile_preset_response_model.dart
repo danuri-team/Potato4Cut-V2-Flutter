@@ -1,19 +1,19 @@
 import 'package:json_annotation/json_annotation.dart';
-import 'package:potato_4cut_v2/features/assets/domain/entities/profile_preset_entity.dart';
+import 'package:potato_4cut_v2/features/user/domain/entities/profile_preset_response_entity.dart';
 
-part 'profile_preset_model.g.dart';
+part 'profile_preset_response_model.g.dart';
 
 @JsonSerializable()
-class ProfilePresetModel {
+class ProfilePresetResponseModel {
   final bool success;
   final List<ProfilePresetDataModel> data;
 
-  const ProfilePresetModel({required this.success, required this.data});
+  const ProfilePresetResponseModel({required this.success, required this.data});
 
-  factory ProfilePresetModel.fromJson(Map<String, dynamic> json) =>
-      _$ProfilePresetModelFromJson(json);
+  factory ProfilePresetResponseModel.fromJson(Map<String, dynamic> json) =>
+      _$ProfilePresetResponseModelFromJson(json);
 
-  Map<String, dynamic> toJson() => _$ProfilePresetModelToJson(this);
+  Map<String, dynamic> toJson() => _$ProfilePresetResponseModelToJson(this);
 
   ProfilePresetEntity toEntity(){
     final List<ProfilePresetDataEntity> data  = [];
