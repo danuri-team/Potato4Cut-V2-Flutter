@@ -1,5 +1,5 @@
 import 'package:json_annotation/json_annotation.dart';
-import 'package:potato_4cut_v2/features/user/domain/entities/token_response_entity.dart';
+import 'package:potato_4cut_v2/features/user/domain/entities/response/token_response_entity.dart';
 
 part 'token_response_model.g.dart';
 

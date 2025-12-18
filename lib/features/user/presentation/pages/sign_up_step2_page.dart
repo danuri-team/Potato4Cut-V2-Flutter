@@ -7,6 +7,7 @@ import 'package:potato_4cut_v2/core/ui/custom_back_button.dart';
 import 'package:potato_4cut_v2/core/ui/default_layout.dart';
 import 'package:potato_4cut_v2/core/ui/submit_button.dart';
 import 'package:potato_4cut_v2/core/util/throttle.dart';
+import 'package:potato_4cut_v2/features/user/domain/entities/request/profile_update_request_entity.dart';
 import 'package:potato_4cut_v2/features/user/provider/users_view_model.dart';
 import 'package:potato_4cut_v2/features/user/presentation/widgets/profile_presets.dart';
 import 'package:potato_4cut_v2/features/user/provider/sign_up_field_provider.dart';
@@ -16,15 +17,21 @@ class SignUpStep2Page extends ConsumerWidget {
 
   submit(WidgetRef ref, BuildContext context) {
     final signUpField = ref.read(signUpFieldProvider);
-    Throttle.run(() async{
-      await ref
-          .read(usersProvider.notifier)
-          .profileUpdate(
-            nickname: signUpField.nickname!,
-            profilePresetId: signUpField.profilePresetId!,
-          );
-      AppNavigation.goSignUpStep3(context);
-    });
+    if (signUpField.nickname != null && signUpField.profilePresetId != null) {
+      Throttle.run(() async {
+        await ref
+            .read(usersProvider.notifier)
+            .profileUpdate(
+              ProfileUpdateRequestEntity(
+                signUpField.nickname!,
+                null,
+                signUpField.profilePresetId!,
+                'profileImageKey',
+              ),
+            );
+        AppNavigation.goSignUpStep3(context);
+      });
+    }
   }
 
   @override

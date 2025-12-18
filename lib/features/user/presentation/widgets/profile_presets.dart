@@ -4,7 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:potato_4cut_v2/core/theme/app_color.dart';
 import 'package:potato_4cut_v2/core/theme/app_text_style.dart';
-import 'package:potato_4cut_v2/features/user/domain/entities/profile_preset_response_entity.dart';
+import 'package:potato_4cut_v2/features/user/domain/entities/response/profile_preset_response_entity.dart';
 import 'package:potato_4cut_v2/features/user/provider/sign_up_field_provider.dart';
 import 'package:potato_4cut_v2/features/user/provider/users_view_model.dart';
 
@@ -16,7 +16,7 @@ class ProfilePresets extends ConsumerStatefulWidget {
 }
 
 class _ProfilePresetsState extends ConsumerState<ProfilePresets> {
-  ProfilePresetEntity? profilePreset;
+  ProfilePresetResponseEntity? profilePreset;
 
   void selectProfilePreset(
     WidgetRef ref,

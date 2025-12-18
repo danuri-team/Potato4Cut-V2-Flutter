@@ -1,10 +1,9 @@
-import 'dart:io';
-
 import 'package:potato_4cut_v2/core/enum/auth_provider_type.dart';
-import 'package:potato_4cut_v2/features/user/domain/entities/profile_preset_response_entity.dart';
-import 'package:potato_4cut_v2/features/user/domain/entities/login_response_entity.dart';
-import 'package:potato_4cut_v2/features/user/domain/entities/get_my_info_response_entity.dart';
-import 'package:potato_4cut_v2/features/user/domain/entities/token_response_entity.dart';
+import 'package:potato_4cut_v2/features/user/domain/entities/request/profile_update_request_entity.dart';
+import 'package:potato_4cut_v2/features/user/domain/entities/response/profile_preset_response_entity.dart';
+import 'package:potato_4cut_v2/features/user/domain/entities/response/login_response_entity.dart';
+import 'package:potato_4cut_v2/features/user/domain/entities/response/my_info_response_entity.dart';
+import 'package:potato_4cut_v2/features/user/domain/entities/response/token_response_entity.dart';
 
 abstract class UsersRepository {
   Future<LoginResponseEntity> login({
@@ -13,18 +12,13 @@ abstract class UsersRepository {
     required String deviceToken,
   });
 
-  Future<MyInfoDataEntity> profileUpdate(
-    String nickname,
-    String? bio,
-    String profilePresetId,
-    File? profileImage,
-  );
+  Future<MyInfoDataEntity> profileUpdate(ProfileUpdateRequestEntity request);
 
-  Future<GetMyInfoResponseEntity> getMyInfo();
+  Future<MyInfoResponseEntity> getMyInfo();
 
   Future<TokenResponseEntity> refreshToken(String refreshToken);
 
   Future<void> logout();
 
-  Future<ProfilePresetEntity> getProfilePreset();
+  Future<ProfilePresetResponseEntity> getProfilePreset();
 }

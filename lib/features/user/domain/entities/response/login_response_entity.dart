@@ -1,6 +1,6 @@
 import 'package:potato_4cut_v2/core/enum/auth_provider_type.dart';
 import 'package:potato_4cut_v2/core/enum/user_type.dart';
-import 'package:potato_4cut_v2/features/user/domain/entities/token_response_entity.dart';
+import 'package:potato_4cut_v2/features/user/domain/entities/response/token_response_entity.dart';
 
 class LoginResponseEntity {
   final String userId;

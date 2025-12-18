@@ -1,20 +1,19 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'get_my_info_response_model.dart';
+part of 'my_info_response_model.dart';
 
 // **************************************************************************
 // JsonSerializableGenerator
 // **************************************************************************
 
-GetMyInfoResponseModel _$GetMyInfoResponseModelFromJson(
-  Map<String, dynamic> json,
-) => GetMyInfoResponseModel(
-  json['success'] as bool,
-  MyInfoDataModel.fromJson(json['data'] as Map<String, dynamic>),
-);
+MyInfoResponseModel _$MyInfoResponseModelFromJson(Map<String, dynamic> json) =>
+    MyInfoResponseModel(
+      json['success'] as bool,
+      MyInfoDataModel.fromJson(json['data'] as Map<String, dynamic>),
+    );
 
-Map<String, dynamic> _$GetMyInfoResponseModelToJson(
-  GetMyInfoResponseModel instance,
+Map<String, dynamic> _$MyInfoResponseModelToJson(
+  MyInfoResponseModel instance,
 ) => <String, dynamic>{'success': instance.success, 'data': instance.data};
 
 MyInfoDataModel _$MyInfoDataModelFromJson(Map<String, dynamic> json) =>

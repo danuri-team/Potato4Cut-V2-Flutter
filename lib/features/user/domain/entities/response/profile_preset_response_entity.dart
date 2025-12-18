@@ -1,8 +1,8 @@
-class ProfilePresetEntity {
+class ProfilePresetResponseEntity {
   final bool success;
   final List<ProfilePresetDataEntity> data;
 
-  const ProfilePresetEntity({required this.success, required this.data});
+  const ProfilePresetResponseEntity({required this.success, required this.data});
 }
 
 class ProfilePresetDataEntity {

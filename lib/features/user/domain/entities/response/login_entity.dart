@@ -1,4 +1,4 @@
-import 'package:potato_4cut_v2/features/user/domain/entities/login_response_entity.dart';
+import 'package:potato_4cut_v2/features/user/domain/entities/response/login_response_entity.dart';
 
 class LoginResponse {
   final String accessToken;

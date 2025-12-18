@@ -1,25 +1,25 @@
 import 'package:json_annotation/json_annotation.dart';
 import 'package:potato_4cut_v2/core/enum/auth_provider_type.dart';
 import 'package:potato_4cut_v2/core/enum/user_type.dart';
-import 'package:potato_4cut_v2/features/user/domain/entities/get_my_info_response_entity.dart';
+import 'package:potato_4cut_v2/features/user/domain/entities/response/my_info_response_entity.dart';
 
-part 'get_my_info_response_model.g.dart';
+part 'my_info_response_model.g.dart';
 
 @JsonSerializable()
-class GetMyInfoResponseModel {
+class MyInfoResponseModel {
   final bool success;
   final MyInfoDataModel data;
 
-  const GetMyInfoResponseModel(this.success, this.data);
+  const MyInfoResponseModel(this.success, this.data);
 
-  factory GetMyInfoResponseModel.fromJson(Map<String, dynamic> json) =>
-      _$GetMyInfoResponseModelFromJson(json);
+  factory MyInfoResponseModel.fromJson(Map<String, dynamic> json) =>
+      _$MyInfoResponseModelFromJson(json);
 
-  Map<String, dynamic> toJson() => _$GetMyInfoResponseModelToJson(this);
+  Map<String, dynamic> toJson() => _$MyInfoResponseModelToJson(this);
 
-  GetMyInfoResponseEntity toEntity(){
+  MyInfoResponseEntity toEntity(){
     final data = this.data.toEntity();
-    return GetMyInfoResponseEntity(success, data);
+    return MyInfoResponseEntity(success, data);
   }
 }
 

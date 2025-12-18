@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:potato_4cut_v2/core/enum/auth_provider_type.dart';
@@ -8,7 +6,8 @@ import 'package:potato_4cut_v2/core/storage/token_storage.dart';
 import 'package:potato_4cut_v2/features/user/data/data_sources/users_data_source.dart';
 import 'package:potato_4cut_v2/features/user/data/data_sources/users_data_source_impl.dart';
 import 'package:potato_4cut_v2/features/user/data/repositories/users_repository_impl.dart';
-import 'package:potato_4cut_v2/features/user/domain/entities/profile_preset_response_entity.dart';
+import 'package:potato_4cut_v2/features/user/domain/entities/request/profile_update_request_entity.dart';
+import 'package:potato_4cut_v2/features/user/domain/entities/response/profile_preset_response_entity.dart';
 import 'package:potato_4cut_v2/features/user/domain/repositories/users_repository.dart';
 import 'package:potato_4cut_v2/features/user/domain/use_cases/get_profile_preset_use_case.dart';
 import 'package:potato_4cut_v2/features/user/domain/use_cases/users_use_cases.dart';
@@ -19,10 +18,12 @@ import 'package:potato_4cut_v2/features/user/domain/use_cases/profile_update_use
 import 'package:potato_4cut_v2/features/user/domain/use_cases/refresh_token_use_case.dart';
 import 'package:potato_4cut_v2/features/user/provider/auth_state.dart';
 import 'package:potato_4cut_v2/features/user/provider/stoarage_provider.dart';
-import 'package:potato_4cut_v2/features/user/domain/entities/get_my_info_response_entity.dart';
+import 'package:potato_4cut_v2/features/user/domain/entities/response/my_info_response_entity.dart';
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 
-final usersDataSourceProvider = Provider<UsersDataSource>((ref) => UsersDataSourceImpl(null));
+final usersDataSourceProvider = Provider<UsersDataSource>(
+  (ref) => UsersDataSourceImpl(null),
+);
 
 final usersRepositoryProvider = Provider<UsersRepository>((ref) {
   final dataSource = ref.watch(usersDataSourceProvider);
@@ -49,12 +50,20 @@ final usersUseCasesProvider = Provider<UsersUseCases>((ref) {
   );
 });
 
-final usersProvider = StateNotifierProvider<UsersViewModelNotifier, AuthState>((ref) {
+final usersProvider = StateNotifierProvider<UsersViewModelNotifier, AuthState>((
+  ref,
+) {
   final useCases = ref.watch(usersUseCasesProvider);
   final fcmService = ref.watch(fcmServiceProvider);
   final googleSignIn = ref.watch(googleSignInProvider);
   final storage = ref.watch(tokenStorageProvider);
-  return UsersViewModelNotifier(useCases, fcmService, googleSignIn, ref, storage);
+  return UsersViewModelNotifier(
+    useCases,
+    fcmService,
+    googleSignIn,
+    ref,
+    storage,
+  );
 });
 
 class UsersViewModelNotifier extends StateNotifier<AuthState> {
@@ -139,7 +148,10 @@ class UsersViewModelNotifier extends StateNotifier<AuthState> {
     }
   }
 
-  Future<void> _login({required AuthProviderType provider, required String token}) async {
+  Future<void> _login({
+    required AuthProviderType provider,
+    required String token,
+  }) async {
     try {
       final deviceToken = await _fcmService.getToken();
 
@@ -179,23 +191,15 @@ class UsersViewModelNotifier extends StateNotifier<AuthState> {
     }
   }
 
-  Future<MyInfoDataEntity> profileUpdate({
-    required String nickname,
-    String? bio,
-    required String profilePresetId,
-    File? profileImage,
-  }) async {
-    final response = await _useCases.profileUpdateUseCase.profileUpdate(
-      nickname,
-      bio,
-      profilePresetId,
-      profileImage,
-    );
+  Future<MyInfoDataEntity> profileUpdate(
+    ProfileUpdateRequestEntity request,
+  ) async {
+    final response = await _useCases.profileUpdateUseCase.profileUpdate(request);
 
     return response;
   }
 
-  Future<GetMyInfoResponseEntity> getMyInfo() async{
+  Future<MyInfoResponseEntity> getMyInfo() async {
     final response = await _useCases.getMyInfoUseCase.getMyInfo();
     return response;
   }
@@ -253,7 +257,7 @@ class UsersViewModelNotifier extends StateNotifier<AuthState> {
     }
   }
 
-  Future<ProfilePresetEntity> getProrilePreset() async {
+  Future<ProfilePresetResponseEntity> getProrilePreset() async {
     final response = await _useCases.getProfilePreset.getProfilePreset();
     return response;
   }

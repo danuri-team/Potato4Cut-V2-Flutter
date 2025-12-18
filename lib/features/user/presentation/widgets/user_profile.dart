@@ -5,7 +5,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:potato_4cut_v2/core/enum/auth_provider_type.dart';
 import 'package:potato_4cut_v2/core/theme/app_color.dart';
 import 'package:potato_4cut_v2/core/theme/app_text_style.dart';
-import 'package:potato_4cut_v2/features/user/domain/entities/get_my_info_response_entity.dart';
+import 'package:potato_4cut_v2/features/user/domain/entities/response/my_info_response_entity.dart';
 import 'package:potato_4cut_v2/features/user/provider/users_view_model.dart';
 
 class UserProfile extends ConsumerStatefulWidget {
@@ -16,7 +16,7 @@ class UserProfile extends ConsumerStatefulWidget {
 }
 
 class _UserProfileState extends ConsumerState<UserProfile> {
-  GetMyInfoResponseEntity? myInfo;
+  MyInfoResponseEntity? myInfo;
 
   @override
   void initState() {

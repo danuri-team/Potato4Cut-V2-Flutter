@@ -1,11 +1,11 @@
 import 'package:potato_4cut_v2/core/enum/auth_provider_type.dart';
 import 'package:potato_4cut_v2/core/enum/user_type.dart';
 
-class GetMyInfoResponseEntity {
+class MyInfoResponseEntity {
   final bool success;
   final MyInfoDataEntity data;
 
-  const GetMyInfoResponseEntity(this.success, this.data); 
+  const MyInfoResponseEntity(this.success, this.data); 
 }
 
 class MyInfoDataEntity{

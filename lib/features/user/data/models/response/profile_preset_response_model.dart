@@ -1,5 +1,5 @@
 import 'package:json_annotation/json_annotation.dart';
-import 'package:potato_4cut_v2/features/user/domain/entities/profile_preset_response_entity.dart';
+import 'package:potato_4cut_v2/features/user/domain/entities/response/profile_preset_response_entity.dart';
 
 part 'profile_preset_response_model.g.dart';
 
@@ -15,12 +15,12 @@ class ProfilePresetResponseModel {
 
   Map<String, dynamic> toJson() => _$ProfilePresetResponseModelToJson(this);
 
-  ProfilePresetEntity toEntity(){
+  ProfilePresetResponseEntity toEntity(){
     final List<ProfilePresetDataEntity> data  = [];
     for(var profilePresetResponseModel in this.data){
       data.add(profilePresetResponseModel.toEntity());
     }
-    return ProfilePresetEntity(success: success, data: data);
+    return ProfilePresetResponseEntity(success: success, data: data);
   }
 }
 

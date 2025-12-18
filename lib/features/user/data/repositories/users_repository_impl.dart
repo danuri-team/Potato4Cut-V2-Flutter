@@ -1,13 +1,13 @@
-import 'dart:io';
-
 import 'package:potato_4cut_v2/core/enum/auth_provider_type.dart';
-import 'package:potato_4cut_v2/features/user/domain/entities/profile_preset_response_entity.dart';
+import 'package:potato_4cut_v2/features/user/data/models/request/profile_update_request_model.dart';
+import 'package:potato_4cut_v2/features/user/domain/entities/request/profile_update_request_entity.dart';
+import 'package:potato_4cut_v2/features/user/domain/entities/response/profile_preset_response_entity.dart';
 import 'package:potato_4cut_v2/features/user/data/data_sources/users_data_source.dart';
 import 'package:potato_4cut_v2/features/user/data/models/request/login_request_model.dart';
-import 'package:potato_4cut_v2/features/user/domain/entities/login_response_entity.dart';
-import 'package:potato_4cut_v2/features/user/domain/entities/token_response_entity.dart';
+import 'package:potato_4cut_v2/features/user/domain/entities/response/login_response_entity.dart';
+import 'package:potato_4cut_v2/features/user/domain/entities/response/token_response_entity.dart';
 import 'package:potato_4cut_v2/features/user/domain/repositories/users_repository.dart';
-import 'package:potato_4cut_v2/features/user/domain/entities/get_my_info_response_entity.dart';
+import 'package:potato_4cut_v2/features/user/domain/entities/response/my_info_response_entity.dart';
 
 class UsersRepositoryImpl implements UsersRepository {
   final UsersDataSource _dataSource;
@@ -36,13 +36,21 @@ class UsersRepositoryImpl implements UsersRepository {
   }
 
   @override
-  Future<MyInfoDataEntity> profileUpdate(String nickname, String? bio, String profilePresetId, File? profileImage) async{
-    final response = await _dataSource.profileUpdate(nickname, bio, profilePresetId, profileImage);
+  Future<MyInfoDataEntity> profileUpdate(
+    ProfileUpdateRequestEntity request,
+  ) async {
+    final requestModel = ProfileUpdateRequestModel(
+      request.nickname,
+      request.bio,
+      request.profilePresetId,
+      request.profileImageKey,
+    );
+    final response = await _dataSource.profileUpdate(requestModel);
     return response.toEntity();
   }
 
   @override
-  Future<GetMyInfoResponseEntity> getMyInfo() async{
+  Future<MyInfoResponseEntity> getMyInfo() async {
     final response = await _dataSource.getMyInfo();
     return response.toEntity();
   }
@@ -52,10 +60,7 @@ class UsersRepositoryImpl implements UsersRepository {
     try {
       final response = await _dataSource.refreshToken(refreshToken);
 
-      return TokenResponseEntity(
-        response.accessToken,
-        response.refreshToken,
-      );
+      return TokenResponseEntity(response.accessToken, response.refreshToken);
     } catch (e) {
       rethrow;
     }
@@ -71,7 +76,7 @@ class UsersRepositoryImpl implements UsersRepository {
   }
 
   @override
-  Future<ProfilePresetEntity> getProfilePreset() async{
+  Future<ProfilePresetResponseEntity> getProfilePreset() async {
     final response = await _dataSource.getProfilePreset();
     return response.toEntity();
   }

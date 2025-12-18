@@ -1,14 +1,12 @@
-import 'dart:io';
-
 import 'package:dio/dio.dart';
 import 'package:potato_4cut_v2/core/network/dio.dart';
 import 'package:potato_4cut_v2/core/storage/token_storage.dart';
+import 'package:potato_4cut_v2/features/user/data/models/request/profile_update_request_model.dart';
 import 'package:potato_4cut_v2/features/user/data/models/response/profile_preset_response_model.dart';
 import 'package:potato_4cut_v2/features/user/data/data_sources/users_data_source.dart';
 import 'package:potato_4cut_v2/features/user/data/models/request/login_request_model.dart';
 import 'package:potato_4cut_v2/features/user/data/models/response/login_response_model.dart';
-import 'package:http_parser/http_parser.dart';
-import 'package:potato_4cut_v2/features/user/data/models/response/get_my_info_response_model.dart';
+import 'package:potato_4cut_v2/features/user/data/models/response/my_info_response_model.dart';
 import 'package:potato_4cut_v2/features/user/data/models/request/token_response_model.dart';
 
 class UsersDataSourceImpl implements UsersDataSource {
@@ -45,51 +43,13 @@ class UsersDataSourceImpl implements UsersDataSource {
 
   @override
   Future<MyInfoDataModel> profileUpdate(
-    String nickname,
-    String? bio,
-    String profilePresetId,
-    File? profileImage,
+    ProfileUpdateRequestModel request,
   ) async {
-    final dataMap = {};
-
-    final formNickname = MultipartFile.fromString(
-      nickname,
-      contentType: MediaType("application", "json"),
-    );
-    dataMap['nickname'] = formNickname;
-
-    if (bio != null) {
-      final formBio = MultipartFile.fromString(
-        bio,
-        contentType: MediaType("application", "json"),
-      );
-      dataMap['bio'] = formBio;
-    }
-
-    final formProfilePresetId = MultipartFile.fromString(
-      profilePresetId,
-      contentType: MediaType("application", "json"),
-    );
-    dataMap['profilePresetId'] = formProfilePresetId;
-
-    final formData = FormData.fromMap({
-      'data': dataMap,
-    });
-
-    if (profileImage != null) {
-      final fromProfileImage = await MultipartFile.fromFile(
-        profileImage.path,
-        filename: profileImage.uri.pathSegments.last,
-        contentType: MediaType("image", "jpeg"),
-      );
-      formData.files.add(MapEntry('profileImage', fromProfileImage));
-    }
-
     final token = _tokenStorage.getAccessToken();
 
     final response = await _dio.put(
       '/api/v1/users/me',
-      data: formData,
+      data: request.toJson(),
       options: Options(headers: {'Authorization': 'Bearer ${await token}'}),
     );
 
@@ -97,14 +57,14 @@ class UsersDataSourceImpl implements UsersDataSource {
   }
 
   @override
-  Future<GetMyInfoResponseModel> getMyInfo() async {
+  Future<MyInfoResponseModel> getMyInfo() async {
     final token = _tokenStorage.getAccessToken();
 
     final response = await _dio.get(
       '/api/v1/users/me',
       options: Options(headers: {'Authorization': 'Bearer ${await token}'}),
     );
-    return GetMyInfoResponseModel.fromJson(response.data);
+    return MyInfoResponseModel.fromJson(response.data);
   }
 
   @override
@@ -162,7 +122,11 @@ class UsersDataSourceImpl implements UsersDataSource {
   Future<ProfilePresetResponseModel> getProfilePreset() async {
     final response = await _dio.get(
       '/api/v1/assets/profile',
-      options: Options(headers: {'Authorization': 'Bearer ${await _tokenStorage.getAccessToken()}'}),
+      options: Options(
+        headers: {
+          'Authorization': 'Bearer ${await _tokenStorage.getAccessToken()}',
+        },
+      ),
     );
     return ProfilePresetResponseModel.fromJson(response.data);
   }
