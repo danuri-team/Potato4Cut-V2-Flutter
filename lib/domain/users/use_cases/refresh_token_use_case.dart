@@ -1,0 +1,13 @@
+import 'package:potato_4cut_v2/domain/users/entities/response/token_response_entity.dart';
+import 'package:potato_4cut_v2/domain/users/repositories/users_repository.dart';
+
+class RefreshTokenUseCase {
+  final UsersRepository repository;
+
+  const RefreshTokenUseCase(this.repository);
+
+  Future<TokenResponseEntity> refreshToken(String refreshToken) async {
+    final response = await repository.refreshToken(refreshToken);
+    return response;
+  }
+}

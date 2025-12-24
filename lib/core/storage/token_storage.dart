@@ -46,7 +46,7 @@ class TokenStorage {
         .difference(DateTime.parse(tokenIssuanceDate))
         .inDays;
 
-    if(differenceDay < 7){
+    if(differenceDay > 6){
       return true;
     }else{
       return false;
