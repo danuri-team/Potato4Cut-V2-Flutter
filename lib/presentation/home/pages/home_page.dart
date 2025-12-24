@@ -137,10 +137,6 @@ class _HomePageState extends State<HomePage> {
           Text('감자네컷', style: AppTextStyle.ownglyph.copyWith(fontSize: 24.sp)),
           GestureDetector(
             onTap: () {
-              // AppNavigation.goLogin(context);
-              TokenStorage().setRefreshToken(
-                'eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiIwZjlmMDI4ZC0zMWNkLTRlMjItOTk1ZS0yMjFmMWYzZGM4NDUiLCJyb2xlIjoiVVNFUiIsImlhdCI6MTc2NjQ0NzMxMCwiZXhwIjoxNzY2NDUwOTEwfQ.qeoOoS9bwhvgqaF1FOgaR8kaIVA0r_GduzOqrt0OjBGwAMoYgv8ySVgwpzIjSb_i',
-              );
             },
             child: SvgPicture.asset('assets/images/bell.svg'),
           ),
