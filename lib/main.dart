@@ -1,4 +1,5 @@
 import 'package:clarity_flutter/clarity_flutter.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -9,16 +10,20 @@ import 'package:sentry_flutter/sentry_flutter.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await ScreenUtil.ensureScreenSize();
   await dotenv.load(fileName: "assets/config/.env");
-  await SentryFlutter.init((options) {
-    options.sendDefaultPii = true;
-    options.tracesSampleRate = 1.0;
-    options.profilesSampleRate = 1.0;
-    options.replay.onErrorSampleRate = 1.0;
-    options.replay.sessionSampleRate = 1.0;
-    options.dsn = dotenv.env['SENTRY_DSN'];
-  }, appRunner: () => runApp(const App()));
+  if (!kDebugMode) {
+    await ScreenUtil.ensureScreenSize();
+    await SentryFlutter.init((options) {
+      options.sendDefaultPii = true;
+      options.tracesSampleRate = 1.0;
+      options.profilesSampleRate = 1.0;
+      options.replay.onErrorSampleRate = 1.0;
+      options.replay.sessionSampleRate = 1.0;
+      options.dsn = dotenv.env['SENTRY_DSN'];
+    }, appRunner: () => runApp(const App()));
+  }else{
+    runApp(const App());
+  }
 }
 
 class App extends StatelessWidget {

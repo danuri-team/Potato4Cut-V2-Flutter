@@ -11,6 +11,7 @@ abstract class RoutePath{
   static const String signUpStep3 = '/sign-up-step3';
   static const String home = '/home';
   static const String selectFrame = '/select-frame';
+  static const String checkFrame = '/check-frame';
   static const String cameraView = '/camera-view';
   static const String photoView = '/photo-view';
   static const String finishedPhoto = '/finished-photo';
@@ -45,6 +46,7 @@ abstract class AppNavigation{
 
   //take a photo
   static void goSelectFrame(BuildContext context) => context.push(RoutePath.selectFrame);
+  static void goCheckFrame(BuildContext context) => context.push(RoutePath.checkFrame);
   static void goCameraView(BuildContext context) => context.push(RoutePath.cameraView);
   static void goPhotoView(BuildContext context) => context.push(RoutePath.photoView);
   static void goFinishedPhoto(BuildContext context) => context.push(RoutePath.finishedPhoto);

@@ -2,20 +2,21 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:go_router/go_router.dart';
 import 'package:potato_4cut_v2/core/router/router_helper.dart';
-import 'package:potato_4cut_v2/features/gallery/presentation/pages/gallery_page.dart';
-import 'package:potato_4cut_v2/features/user/presentation/pages/login_page.dart';
-import 'package:potato_4cut_v2/features/user/presentation/pages/profile_page.dart';
-import 'package:potato_4cut_v2/features/library/presentation/pages/puchase_and_production_history_page.dart';
-import 'package:potato_4cut_v2/features/user/presentation/pages/sign_up_step1_page.dart';
-import 'package:potato_4cut_v2/features/user/presentation/pages/sign_up_step2_page.dart';
-import 'package:potato_4cut_v2/features/user/presentation/pages/sign_up_step3_page.dart';
-import 'package:potato_4cut_v2/features/splash/presentation/pages/splash_page.dart';
+import 'package:potato_4cut_v2/presentation/gallery/pages/gallery_page.dart';
+import 'package:potato_4cut_v2/presentation/login/pages/login_page.dart';
+import 'package:potato_4cut_v2/presentation/photo/pages/check_frame_page.dart';
+import 'package:potato_4cut_v2/presentation/profile/pages/profile_page.dart';
+import 'package:potato_4cut_v2/presentation/profile/pages/puchase_and_production_history_page.dart';
+import 'package:potato_4cut_v2/presentation/sign_up/pages/sign_up_step1_page.dart';
+import 'package:potato_4cut_v2/presentation/sign_up/pages/sign_up_step2_page.dart';
+import 'package:potato_4cut_v2/presentation/sign_up/pages/sign_up_step3_page.dart';
+import 'package:potato_4cut_v2/presentation/splash/pages/splash_page.dart';
 import 'package:potato_4cut_v2/core/ui/bottom_nav_bar.dart';
-import 'package:potato_4cut_v2/features/home/presentation/pages/home_page.dart';
-import 'package:potato_4cut_v2/features/photo/presentation/pages/camera_view_page.dart';
-import 'package:potato_4cut_v2/features/photo/presentation/pages/photo_view_page.dart';
-import 'package:potato_4cut_v2/features/photo/presentation/pages/select_frame_page.dart';
-import 'package:potato_4cut_v2/features/photo/presentation/pages/finished_photo_page.dart';
+import 'package:potato_4cut_v2/presentation/home/pages/home_page.dart';
+import 'package:potato_4cut_v2/presentation/photo/pages/camera_view_page.dart';
+import 'package:potato_4cut_v2/presentation/photo/pages/photo_view_page.dart';
+import 'package:potato_4cut_v2/presentation/photo/pages/select_frame_page.dart';
+import 'package:potato_4cut_v2/presentation/photo/pages/finished_photo_page.dart';
 
 final GlobalKey<NavigatorState> routerNavigationKey =
     GlobalKey<NavigatorState>();
@@ -54,6 +55,10 @@ GoRouter router = GoRouter(
     GoRoute(
       path: RoutePath.selectFrame,
       builder: (context, state) => const SelectFramePage(),
+    ),
+    GoRoute(
+      path: RoutePath.checkFrame,
+      builder: (context, state) => const CheckFramePage(),
     ),
     GoRoute(
       path: RoutePath.cameraView,
