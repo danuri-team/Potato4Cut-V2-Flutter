@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class DefaultLayout extends StatelessWidget {
-  DefaultLayout({
+  const DefaultLayout({
     super.key,
     this.appBar,
     required this.body,
@@ -18,10 +18,10 @@ class DefaultLayout extends StatelessWidget {
   final Widget body;
   final BottomNavigationBar? bottomNavigationBar;
   final bool resizeToAvoidBottomInset;
-  bool top;
-  bool left;
-  bool right;
-  bool bottom;
+  final bool top;
+  final bool left;
+  final bool right;
+  final bool bottom;
 
   @override
   Widget build(BuildContext context) {

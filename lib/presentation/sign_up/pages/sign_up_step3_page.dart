@@ -46,7 +46,7 @@ class SignUpStep3Page extends ConsumerWidget {
               isActivate: true,
               suffixSvg: SvgPicture.asset(
                 'assets/images/chevron_right.svg',
-                color: AppColor.static1,
+                colorFilter: ColorFilter.mode(AppColor.static1, BlendMode.srcIn),
               ),
             ),
           ),

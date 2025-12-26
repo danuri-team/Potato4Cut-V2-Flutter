@@ -91,7 +91,7 @@ class PhotoViewPageState extends ConsumerState<PhotoViewPage> {
                         },
                         child: SvgPicture.asset(
                           'assets/images/chevron_left.svg',
-                          color: AppColor.static1,
+                          colorFilter: ColorFilter.mode(AppColor.static1, BlendMode.srcIn),
                         ),
                       ),
                     ),

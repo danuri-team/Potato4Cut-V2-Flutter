@@ -1,3 +1,4 @@
+import 'dart:ui';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -41,10 +42,9 @@ class ImportExistingPhotos extends ConsumerWidget {
           children: [
             SvgPicture.asset(
               'assets/images/upload.svg',
-              color:
-                  takePhotoFlow == PhotoFlowType.TakePhoto ||
+              colorFilter: takePhotoFlow == PhotoFlowType.TakePhoto ||
                       photos[currentPageIndex].isConfirmed
-                  ? Color(0xFFC4C4C4)
+                  ? ColorFilter.mode(Color(0xFFC4C4C4), BlendMode.srcIn)
                   : null,
             ),
             SizedBox(width: 10.w),

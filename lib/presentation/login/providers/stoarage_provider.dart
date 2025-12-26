@@ -21,12 +21,12 @@ class StoarageNotifier extends StateNotifier<FlutterSecureStorage> {
     final tokenStorage = TokenStorage();
     final tokenExpiration = await tokenStorage.checkTokenExpiration();
 
+    if(!context.mounted) return;
+
     if(tokenExpiration){
       AppNavigation.goLogin(context);
       return;
     }
-
-    if(!context.mounted) return;
 
     if (authStatusString == null || authStatusString == AuthStatus.unauthenticated.toString()) {
         AppNavigation.goLogin(context);

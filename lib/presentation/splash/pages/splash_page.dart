@@ -19,6 +19,7 @@ class SplashPage extends ConsumerWidget {
     await Firebase.initializeApp(
       options: DefaultFirebaseOptions.currentPlatform,
     );
+    if (!context.mounted) return;
     await ref.read(storageProvider.notifier).checkAuthAndNavigate(context);
   }
 

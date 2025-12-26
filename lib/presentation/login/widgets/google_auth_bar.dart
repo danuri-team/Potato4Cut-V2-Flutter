@@ -21,6 +21,7 @@ class GoogleAuthBar extends ConsumerWidget {
       await ref.read(usersProvider.notifier).loginWithGoogle();
       final status = ref.read(usersProvider).status;
       if (status == AuthStatus.authenticated) {
+        if (!context.mounted) return;
         if (authState.newUser == true) {
           AppNavigation.goSignUpStep1(context);
         } else if (authState.newUser == false) {

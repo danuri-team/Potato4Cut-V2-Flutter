@@ -29,6 +29,7 @@ class SignUpStep2Page extends ConsumerWidget {
                 'profileImageKey',
               ),
             );
+        if (!context.mounted) return;
         AppNavigation.goSignUpStep3(context);
       });
     }

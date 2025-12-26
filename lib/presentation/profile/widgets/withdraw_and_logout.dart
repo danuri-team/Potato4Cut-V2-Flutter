@@ -29,6 +29,7 @@ class WithdrawAndLogout extends ConsumerWidget {
           'https://docs.google.com/forms/d/e/1FAIpQLSfPIZTFkRChyt6ZqziaruC_DybLJRYEMasiNlycwJFeVgF9AA/viewform',
         ),
       );
+      if (!context.mounted) return;
       AppNavigation.goLogin(context);
     });
   }

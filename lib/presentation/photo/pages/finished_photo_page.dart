@@ -90,7 +90,7 @@ class FinishedPhotoPage extends ConsumerWidget {
                 isActivate: true,
                 prefixSvg: SvgPicture.asset(
                   'assets/images/upload.svg',
-                  color: AppColor.static1,
+                  colorFilter: ColorFilter.mode(AppColor.static1, BlendMode.srcIn),
                 ),
               ),
             ],

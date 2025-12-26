@@ -1,16 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:potato_4cut_v2/core/theme/app_color.dart';
-import 'package:potato_4cut_v2/core/theme/app_text_style.dart';
 import 'package:potato_4cut_v2/data/common/domain/entities/request/issue_upload_link_request_entity.dart';
 import 'package:potato_4cut_v2/presentation/photo/providers/photo_view_model.dart';
 import 'package:potato_4cut_v2/presentation/photo/providers/finished_photo_provider.dart';
 import 'package:potato_4cut_v2/presentation/photo/providers/object_key_provider.dart';
-import 'package:potato_4cut_v2/presentation/photo/providers/photo_provider.dart';
 import 'package:potato_4cut_v2/presentation/photo/providers/selected_frame_provider.dart';
 
 class FinishedPhoto extends ConsumerStatefulWidget {
@@ -56,7 +52,6 @@ class _FinishedPhotoState extends ConsumerState<FinishedPhoto> {
 
   @override
   Widget build(BuildContext context) {
-    final photos = ref.watch(photoProvider);
     final selectedFrame = ref.watch(selectedFrameProvider);
     return SizedBox(
       width: double.infinity,

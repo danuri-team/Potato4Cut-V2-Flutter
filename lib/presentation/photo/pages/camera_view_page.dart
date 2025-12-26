@@ -258,6 +258,7 @@ class _CameraViewPageState extends ConsumerState<CameraViewPage> {
                     await _takePhoto(currentPageIndex);
                   }
                 }
+                if (!mounted) return;
                 AppNavigation.goPhotoView(context);
               });
             },
@@ -323,7 +324,7 @@ class _CameraViewPageState extends ConsumerState<CameraViewPage> {
                     },
                     child: SvgPicture.asset(
                       'assets/images/chevron_left.svg',
-                      color: AppColor.static1,
+                      colorFilter: ColorFilter.mode(AppColor.static1, BlendMode.srcIn),
                     ),
                   ),
                 ),

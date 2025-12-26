@@ -5,7 +5,6 @@ import 'package:hive_ce_flutter/hive_flutter.dart';
 import 'package:potato_4cut_v2/core/constants/hive_keys.dart';
 import 'package:potato_4cut_v2/core/enum/local_storage_event_type.dart';
 import 'package:potato_4cut_v2/core/router/router_helper.dart';
-import 'package:potato_4cut_v2/core/storage/token_storage.dart';
 import 'package:potato_4cut_v2/core/theme/app_color.dart';
 import 'package:potato_4cut_v2/core/theme/app_text_style.dart';
 import 'package:potato_4cut_v2/core/ui/default_layout.dart';
@@ -136,8 +135,7 @@ class _HomePageState extends State<HomePage> {
         children: [
           Text('감자네컷', style: AppTextStyle.ownglyph.copyWith(fontSize: 24.sp)),
           GestureDetector(
-            onTap: () {
-            },
+            onTap: () {},
             child: SvgPicture.asset('assets/images/bell.svg'),
           ),
         ],

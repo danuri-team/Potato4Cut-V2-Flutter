@@ -32,8 +32,8 @@ class FrameDataSourceImpl implements FrameDataSource {
   }
   
   @override
-  Future addFrame(AddFrameRequestModel request) async{
-    final response = await _dio.post(
+  Future addFrame(AddFrameRequestModel request) async {
+    await _dio.post(
       '/api/v1/frames',
       options: await _getOptions(),
     );
@@ -49,8 +49,8 @@ class FrameDataSourceImpl implements FrameDataSource {
   }
 
   @override
-  Future updateFrame(String frameId, UpdateFrameRequestModel request) async{
-    final response = await _dio.put(
+  Future updateFrame(String frameId, UpdateFrameRequestModel request) async {
+    await _dio.put(
       '/api/v1/frames/$frameId',
       data: request.toJson(),
       options: await _getOptions(),
@@ -96,8 +96,8 @@ class FrameDataSourceImpl implements FrameDataSource {
   }
 
   @override
-  Future madedFrame() async{
-    final response = await _dio.get(
+  Future madedFrame() async {
+    await _dio.get(
       '/api/v1/frames/my',
       options: await _getOptions(),
     );
