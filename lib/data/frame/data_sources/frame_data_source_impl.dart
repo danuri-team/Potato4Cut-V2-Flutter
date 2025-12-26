@@ -5,7 +5,7 @@ import 'package:potato_4cut_v2/core/enum/sortby_type.dart';
 import 'package:potato_4cut_v2/core/network/dio.dart';
 import 'package:potato_4cut_v2/core/storage/token_storage.dart';
 import 'package:potato_4cut_v2/data/common/data/models/response/upload_link_response_model.dart';
-import 'package:potato_4cut_v2/data/frame/data_source.dart/frame_data_source.dart';
+import 'package:potato_4cut_v2/data/frame/data_sources/frame_data_source.dart';
 import 'package:potato_4cut_v2/data/frame/models/request/add_frame_comment_request_model.dart';
 import 'package:potato_4cut_v2/data/frame/models/request/add_frame_request_model.dart';
 import 'package:potato_4cut_v2/data/common/data/models/request/issue_upload_link_request_model.dart';
