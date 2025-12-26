@@ -9,6 +9,7 @@ import 'package:potato_4cut_v2/core/ui/default_layout.dart';
 import 'package:potato_4cut_v2/core/ui/labeled_checkbox.dart';
 import 'package:potato_4cut_v2/core/ui/submit_button.dart';
 import 'package:potato_4cut_v2/core/ui/tag_input_field.dart';
+import 'package:potato_4cut_v2/core/util/throttle.dart';
 import 'package:potato_4cut_v2/domain/make_frame/entities/request/create_frame_request_entity.dart';
 import 'package:potato_4cut_v2/domain/make_frame/entities/request/issue_frame_upload_link_request_entity.dart';
 import 'package:potato_4cut_v2/presentation/make_frame/provider/frame_provider.dart';
@@ -70,9 +71,8 @@ class _MakeFrameStep2PageState extends ConsumerState<MakeFrameStep2Page> {
       final baseFrameBytes = await state.baseFrameFile!.readAsBytes();
       final baseFrameSize = baseFrameBytes.length.toString();
 
-      final baseUploadLinkResponse = await useCases.issueFrameUploadLink.execute(
-        IssueFrameUploadLinkRequestEntity(baseFrameSize),
-      );
+      final baseUploadLinkResponse = await useCases.issueFrameUploadLink
+          .execute(IssueFrameUploadLinkRequestEntity(baseFrameSize));
 
       await useCases.uploadFileToS3.execute(
         baseUploadLinkResponse.data.uploadUrl,
@@ -86,9 +86,8 @@ class _MakeFrameStep2PageState extends ConsumerState<MakeFrameStep2Page> {
         final overlayFrameBytes = await state.overlayFrameFile!.readAsBytes();
         final overlayFrameSize = overlayFrameBytes.length.toString();
 
-        final overlayUploadLinkResponse = await useCases.issueFrameUploadLink.execute(
-          IssueFrameUploadLinkRequestEntity(overlayFrameSize),
-        );
+        final overlayUploadLinkResponse = await useCases.issueFrameUploadLink
+            .execute(IssueFrameUploadLinkRequestEntity(overlayFrameSize));
 
         await useCases.uploadFileToS3.execute(
           overlayUploadLinkResponse.data.uploadUrl,
@@ -99,9 +98,8 @@ class _MakeFrameStep2PageState extends ConsumerState<MakeFrameStep2Page> {
         notifier.setOverlayFrameKey(overlayFrameKey);
       }
 
-      final previewUploadLinkResponse = await useCases.issuePreviewUploadLink.execute(
-        IssueFrameUploadLinkRequestEntity(baseFrameSize),
-      );
+      final previewUploadLinkResponse = await useCases.issuePreviewUploadLink
+          .execute(IssueFrameUploadLinkRequestEntity(baseFrameSize));
 
       await useCases.uploadFileToS3.execute(
         previewUploadLinkResponse.data.uploadUrl,
@@ -110,7 +108,9 @@ class _MakeFrameStep2PageState extends ConsumerState<MakeFrameStep2Page> {
       );
       notifier.setPreviewKey(previewUploadLinkResponse.data.key);
 
-      final price = _isCommercialAllowed ? 0 : int.tryParse(_priceController.text) ?? 0;
+      final price = _isCommercialAllowed
+          ? 0
+          : int.tryParse(_priceController.text) ?? 0;
 
       final createFrameRequest = CreateFrameRequestEntity(
         title: _titleController.text,
@@ -225,7 +225,7 @@ class _MakeFrameStep2PageState extends ConsumerState<MakeFrameStep2Page> {
             child: Padding(
               padding: EdgeInsets.only(top: 16.h, bottom: 16.h),
               child: SubmitButton(
-                onTap: _submitFrame,
+                onTap: () => Throttle.run(() => _submitFrame),
                 width: double.infinity,
                 text: _isLoading ? '처리 중...' : '다음으로',
                 isActivate: _isFormValid && !_isLoading,
