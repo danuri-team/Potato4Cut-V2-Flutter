@@ -3,7 +3,7 @@ import 'package:flutter/scheduler.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:potato_4cut_v2/data/common/domain/entities/request/issue_upload_link_request_entity.dart';
+import 'package:potato_4cut_v2/domain/common/entities/request/issue_upload_link_request_entity.dart';
 import 'package:potato_4cut_v2/presentation/photo/providers/photo_view_model.dart';
 import 'package:potato_4cut_v2/presentation/photo/providers/finished_photo_provider.dart';
 import 'package:potato_4cut_v2/presentation/photo/providers/object_key_provider.dart';

@@ -1,10 +1,10 @@
 import 'package:potato_4cut_v2/core/enum/direction_type.dart';
 import 'package:potato_4cut_v2/core/enum/frame_category_type.dart';
 import 'package:potato_4cut_v2/core/enum/sortby_type.dart';
-import 'package:potato_4cut_v2/data/common/data/models/response/upload_link_response_model.dart';
+import 'package:potato_4cut_v2/data/common/models/response/upload_link_response_model.dart';
 import 'package:potato_4cut_v2/data/frame/models/request/add_frame_comment_request_model.dart';
 import 'package:potato_4cut_v2/data/frame/models/request/add_frame_request_model.dart';
-import 'package:potato_4cut_v2/data/common/data/models/request/issue_upload_link_request_model.dart';
+import 'package:potato_4cut_v2/data/common/models/request/issue_upload_link_request_model.dart';
 import 'package:potato_4cut_v2/data/frame/models/request/update_frame_request_model.dart';
 import 'package:potato_4cut_v2/data/frame/models/response/add_frame_comment_response_model.dart';
 import 'package:potato_4cut_v2/data/frame/models/response/detailed_frame_response_model.dart';

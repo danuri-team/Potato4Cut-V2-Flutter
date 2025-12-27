@@ -1,6 +1,6 @@
-import 'package:potato_4cut_v2/data/common/domain/entities/request/issue_upload_link_request_entity.dart';
+import 'package:potato_4cut_v2/domain/common/entities/request/issue_upload_link_request_entity.dart';
 import 'package:potato_4cut_v2/domain/photos/entites/request/save_4cut_photos_request_entity.dart';
-import 'package:potato_4cut_v2/data/common/domain/entities/response/upload_link_response_entity.dart';
+import 'package:potato_4cut_v2/domain/common/entities/response/upload_link_response_entity.dart';
 import 'package:potato_4cut_v2/domain/photos/entites/response/save_4cut_photos_response_entity.dart';
 
 abstract class PhotoRepository {

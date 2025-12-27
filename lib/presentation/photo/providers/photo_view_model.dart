@@ -1,9 +1,9 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:potato_4cut_v2/data/photos/data_sources/photo_data_source_impl.dart';
 import 'package:potato_4cut_v2/data/photos/repositories/photo_repository_impl.dart';
-import 'package:potato_4cut_v2/data/common/domain/entities/request/issue_upload_link_request_entity.dart';
+import 'package:potato_4cut_v2/domain/common/entities/request/issue_upload_link_request_entity.dart';
 import 'package:potato_4cut_v2/domain/photos/entites/request/save_4cut_photos_request_entity.dart';
-import 'package:potato_4cut_v2/data/common/domain/entities/response/upload_link_response_entity.dart';
+import 'package:potato_4cut_v2/domain/common/entities/response/upload_link_response_entity.dart';
 import 'package:potato_4cut_v2/domain/photos/entites/response/save_4cut_photos_response_entity.dart';
 import 'package:potato_4cut_v2/domain/photos/usecases/delete_photo_use_case.dart';
 import 'package:potato_4cut_v2/domain/photos/usecases/import_specific_photo_use_case.dart';

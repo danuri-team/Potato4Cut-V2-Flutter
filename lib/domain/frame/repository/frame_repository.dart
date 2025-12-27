@@ -1,8 +1,8 @@
 import 'package:potato_4cut_v2/core/enum/direction_type.dart';
 import 'package:potato_4cut_v2/core/enum/frame_category_type.dart';
 import 'package:potato_4cut_v2/core/enum/sortby_type.dart';
-import 'package:potato_4cut_v2/data/common/domain/entities/request/issue_upload_link_request_entity.dart';
-import 'package:potato_4cut_v2/data/common/domain/entities/response/upload_link_response_entity.dart';
+import 'package:potato_4cut_v2/domain/common/entities/request/issue_upload_link_request_entity.dart';
+import 'package:potato_4cut_v2/domain/common/entities/response/upload_link_response_entity.dart';
 import 'package:potato_4cut_v2/domain/frame/entities/request/add_frame_comment_request_entity.dart';
 import 'package:potato_4cut_v2/domain/frame/entities/response/add_frame_comment_response_entity.dart';
 import 'package:potato_4cut_v2/domain/frame/entities/response/frame_comment_response_entity.dart';

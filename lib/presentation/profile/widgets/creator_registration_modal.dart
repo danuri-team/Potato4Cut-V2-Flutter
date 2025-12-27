@@ -1,19 +1,23 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:potato_4cut_v2/core/router/router_helper.dart';
 import 'package:potato_4cut_v2/core/theme/app_color.dart';
 import 'package:potato_4cut_v2/core/theme/app_text_style.dart';
 import 'package:potato_4cut_v2/core/ui/submit_button.dart';
+import 'package:potato_4cut_v2/presentation/view_models/creator_view_model.dart';
 
-class CreatorRegistrationModal extends StatefulWidget {
+class CreatorRegistrationModal extends ConsumerStatefulWidget {
   const CreatorRegistrationModal({super.key});
 
   @override
-  State<CreatorRegistrationModal> createState() =>
+  ConsumerState<CreatorRegistrationModal> createState() =>
       _CreatorRegistrationModalState();
 }
 
-class _CreatorRegistrationModalState extends State<CreatorRegistrationModal> {
+class _CreatorRegistrationModalState
+    extends ConsumerState<CreatorRegistrationModal> {
   bool serviceUseAgree = false;
   bool settlementTermsAndConditionsAgree = false;
   bool termsAndConditionsAgree = false;
@@ -219,7 +223,10 @@ class _CreatorRegistrationModalState extends State<CreatorRegistrationModal> {
           ),
           SizedBox(height: 28.h),
           SubmitButton(
-            onTap: () {},
+            onTap: () async {
+              await ref.read(creatorViewModelProvider.notifier).registerCreator();
+              AppNavigation.pop(context);
+            },
             width: 327.w,
             text: '확인',
             isActivate: allAgree,
