@@ -4,6 +4,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:potato_4cut_v2/core/theme/app_color.dart';
 import 'package:potato_4cut_v2/core/theme/app_text_style.dart';
+import 'package:potato_4cut_v2/presentation/profile/widgets/creator_registration_modal.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class SettingCardList extends StatefulWidget {
@@ -52,12 +53,22 @@ class _SettingCardListState extends State<SettingCardList> {
     );
   }
 
+  void creatorRegistrationModal() {
+    showModalBottomSheet(
+      context: context,
+      builder: (context) {
+        return CreatorRegistrationModal();
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
         // card(text: '언어 설정', onTap: () {}),
-        // SizedBox(height: 16.h),
+        card(text: '크리에이터 신청', onTap: () => creatorRegistrationModal()),
+        SizedBox(height: 16.h),
         card(
           text: '개인정보 처리방침',
           onTap: () {
