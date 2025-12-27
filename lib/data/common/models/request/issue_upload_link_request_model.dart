@@ -1,5 +1,5 @@
 import 'package:json_annotation/json_annotation.dart';
-import 'package:potato_4cut_v2/data/common/domain/entities/request/issue_upload_link_request_entity.dart';
+import 'package:potato_4cut_v2/domain/common/entities/request/issue_upload_link_request_entity.dart';
 
 part 'issue_upload_link_request_model.g.dart';
 
