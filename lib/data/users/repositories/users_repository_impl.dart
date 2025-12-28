@@ -7,6 +7,7 @@ import 'package:potato_4cut_v2/domain/users/entities/response/login_response_ent
 import 'package:potato_4cut_v2/domain/users/entities/response/token_response_entity.dart';
 import 'package:potato_4cut_v2/domain/users/repositories/users_repository.dart';
 import 'package:potato_4cut_v2/domain/users/entities/response/my_info_response_entity.dart';
+import 'package:potato_4cut_v2/domain/users/entities/response/user_photos_response_entity.dart';
 
 class UsersRepositoryImpl implements UsersRepository {
   final UsersDataSource _dataSource;
@@ -69,6 +70,16 @@ class UsersRepositoryImpl implements UsersRepository {
   Future<void> logout() async {
     try {
       await _dataSource.logout();
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  @override
+  Future<UserPhotosResponseEntity> getUserPhotos(int page, int size) async {
+    try {
+      final response = await _dataSource.getUserPhotos(page, size);
+      return response.toEntity();
     } catch (e) {
       rethrow;
     }

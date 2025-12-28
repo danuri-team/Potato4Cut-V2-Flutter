@@ -3,6 +3,7 @@ import 'package:potato_4cut_v2/domain/users/entities/request/profile_update_requ
 import 'package:potato_4cut_v2/domain/users/entities/response/login_response_entity.dart';
 import 'package:potato_4cut_v2/domain/users/entities/response/my_info_response_entity.dart';
 import 'package:potato_4cut_v2/domain/users/entities/response/token_response_entity.dart';
+import 'package:potato_4cut_v2/domain/users/entities/response/user_photos_response_entity.dart';
 
 abstract class UsersRepository {
   Future<LoginResponseEntity> login({
@@ -18,4 +19,6 @@ abstract class UsersRepository {
   Future<TokenResponseEntity> refreshToken(String refreshToken);
 
   Future<void> logout();
+
+  Future<UserPhotosResponseEntity> getUserPhotos(int page, int size);
 }

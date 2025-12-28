@@ -14,8 +14,10 @@ import 'package:potato_4cut_v2/domain/users/use_cases/login_use_case.dart';
 import 'package:potato_4cut_v2/domain/users/use_cases/logout_use_case.dart';
 import 'package:potato_4cut_v2/domain/users/use_cases/profile_update_use_case.dart';
 import 'package:potato_4cut_v2/domain/users/use_cases/refresh_token_use_case.dart';
+import 'package:potato_4cut_v2/domain/users/use_cases/get_user_photos_use_case.dart';
 import 'package:potato_4cut_v2/presentation/login/providers/stoarage_provider.dart';
 import 'package:potato_4cut_v2/domain/users/entities/response/my_info_response_entity.dart';
+import 'package:potato_4cut_v2/domain/users/entities/response/user_photos_response_entity.dart';
 import 'package:potato_4cut_v2/presentation/sign_up/providers/auth_state.dart';
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 
@@ -37,12 +39,14 @@ final usersUseCasesProvider = Provider<UsersUseCases>((ref) {
   final getMyInfoUsecase = GetMyInfoUseCase(repository);
   final refreshTokenUseCase = RefreshTokenUseCase(repository);
   final logoutUseCase = LogoutUseCase(repository);
+  final getUserPhotosUseCase = GetUserPhotosUseCase(repository);
   return UsersUseCases(
     loginUseCase,
     profileUpdateUseCase,
     getMyInfoUsecase,
     refreshTokenUseCase,
     logoutUseCase,
+    getUserPhotosUseCase,
   );
 });
 
@@ -251,6 +255,11 @@ class UsersViewModelNotifier extends StateNotifier<AuthState> {
       state = state.copyWith(isLoading: false, errorMessage: e.toString());
       rethrow;
     }
+  }
+
+  Future<UserPhotosResponseEntity> getUserPhotos(int page, int size) async {
+    final response = await _useCases.getUserPhotosUseCase.getUserPhotos(page, size);
+    return response;
   }
 
   void clearError() {

@@ -7,6 +7,7 @@ import 'package:potato_4cut_v2/data/users/models/request/login_request_model.dar
 import 'package:potato_4cut_v2/data/users/models/response/login_response_model.dart';
 import 'package:potato_4cut_v2/data/users/models/response/my_info_response_model.dart';
 import 'package:potato_4cut_v2/data/users/models/request/token_response_model.dart';
+import 'package:potato_4cut_v2/data/users/models/response/user_photos_response_model.dart';
 
 class UsersDataSourceImpl implements UsersDataSource {
   final Dio _dio;
@@ -115,5 +116,16 @@ class UsersDataSourceImpl implements UsersDataSource {
     } catch (e) {
       throw Exception('Unexpected error during logout: $e');
     }
+  }
+
+  @override
+  Future<UserPhotosResponseModel> getUserPhotos(int page, int size) async {
+    final token = _tokenStorage.getAccessToken();
+
+    final response = await _dio.get(
+      '/api/v1/users/me/photos?page=$page&size=$size',
+      options: Options(headers: {'Authorization': 'Bearer ${await token}'}),
+    );
+    return UserPhotosResponseModel.fromJson(response.data);
   }
 }
