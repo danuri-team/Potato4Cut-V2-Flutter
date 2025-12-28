@@ -8,6 +8,7 @@ import 'package:potato_4cut_v2/core/theme/app_color.dart';
 import 'package:potato_4cut_v2/core/theme/app_text_style.dart';
 import 'package:potato_4cut_v2/core/util/throttle.dart';
 import 'package:potato_4cut_v2/presentation/photo/providers/finished_photo_provider.dart';
+import 'package:potato_4cut_v2/presentation/photo/widgets/share_bottom_sheet.dart';
 import 'package:share_plus/share_plus.dart';
 
 class ShareButton extends ConsumerWidget {
@@ -22,9 +23,14 @@ class ShareButton extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final finishedPhoto = ref.watch(finishedPhotoProvider);
     return GestureDetector(
-      onTap: finishedPhoto == null
-          ? null
-          : () => Throttle.run(() => sharePhoto(finishedPhoto, context)),
+      // onTap: finishedPhoto == null
+      //     ? null
+      //     : () => Throttle.run(() => showModalBottomSheet(context: context, builder: (context) => ShareBottomSheet(),),
+      //     ),
+      onTap: () => showModalBottomSheet(
+        context: context,
+        builder: (context) => ShareBottomSheet(),
+      ),
       child: Container(
         width: 166.w,
         height: 48.h,
