@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:potato_4cut_v2/core/ui/in_development.dart';
+import 'package:potato_4cut_v2/core/router/router_helper.dart';
+import 'package:potato_4cut_v2/core/util/throttle.dart';
 
 class MakeFrameCard extends StatelessWidget {
   const MakeFrameCard({super.key});
@@ -9,11 +10,7 @@ class MakeFrameCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () => showDialog(
-        barrierDismissible: false,
-        context: context,
-        builder: (context) => const InDevelopment(),
-      ),
+      onTap: () => Throttle.run(()=>AppNavigation.goMakeFrameStep1),
       child: Container(
         width: 343.w,
         height: 174.h,
