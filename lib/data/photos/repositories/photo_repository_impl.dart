@@ -7,30 +7,40 @@ import 'package:potato_4cut_v2/domain/common/entities/response/upload_link_respo
 import 'package:potato_4cut_v2/domain/photos/entites/response/save_4cut_photos_response_entity.dart';
 import 'package:potato_4cut_v2/domain/photos/repositories/photo_repository.dart';
 
-class PhotoRepositoryImpl implements PhotoRepository{
+class PhotoRepositoryImpl implements PhotoRepository {
   final PhotoDataSource _dataSource;
 
-  PhotoRepositoryImpl({required PhotoDataSource dataSource}) : _dataSource = dataSource;
+  PhotoRepositoryImpl({required PhotoDataSource dataSource})
+    : _dataSource = dataSource;
 
   @override
-  Future<Save4cutPhotosResponseEntity> save4CutPhotos(Save4cutPhotosRequestEntity request) async{
-    final requestModel = Save4cutPhotosRequestModel(request.frameId, request.objectKey);
+  Future<Save4cutPhotosResponseEntity> save4CutPhotos(
+    Save4cutPhotosRequestEntity request,
+  ) async {
+    final requestModel = Save4cutPhotosRequestModel(
+      request.frameId,
+      request.objectKey,
+      request.photoShareType,
+      request.expireAt,
+    );
     final response = await _dataSource.save4CutPhotos(requestModel);
     return response.toEntity();
   }
 
   @override
-  Future importSpecificPhoto(String id) async{
+  Future importSpecificPhoto(String id) async {
     await _dataSource.importSpecificPhoto(id);
   }
 
   @override
-  Future<void> deletePhoto(String id) async{
+  Future<void> deletePhoto(String id) async {
     await _dataSource.deletePhoto(id);
   }
 
   @override
-  Future<UploadLinkResponseEntity> issue4CutUploadLink(IssueUploadLinkRequestEntity request) async{
+  Future<UploadLinkResponseEntity> issue4CutUploadLink(
+    IssueUploadLinkRequestEntity request,
+  ) async {
     final requestModel = IssueUploadLinkRequestModel(request.fileSize);
     final response = await _dataSource.issue4CutUploadLink(requestModel);
     return response.toEntity();

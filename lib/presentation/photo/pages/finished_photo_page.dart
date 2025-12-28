@@ -14,6 +14,7 @@ import 'package:potato_4cut_v2/core/ui/submit_button.dart';
 import 'package:potato_4cut_v2/core/util/throttle.dart';
 import 'package:potato_4cut_v2/domain/photos/entites/request/save_4cut_photos_request_entity.dart';
 import 'package:potato_4cut_v2/presentation/photo/providers/photo_view_model.dart';
+import 'package:potato_4cut_v2/presentation/photo/providers/save_photo_field_provider.dart';
 import 'package:potato_4cut_v2/presentation/photo/widgets/finished_photo.dart';
 import 'package:potato_4cut_v2/presentation/photo/widgets/share_button.dart';
 import 'package:potato_4cut_v2/presentation/photo/providers/finished_photo_provider.dart';
@@ -30,6 +31,8 @@ class FinishedPhotoPage extends ConsumerWidget {
       await Gal.requestAccess();
     }
 
+    final savePhotoField = ref.read(savePhotoFieldProvider);
+
     final objectKey = ref.watch(objectKeyProvider);
 
     if (objectKey == null) return;
@@ -37,7 +40,14 @@ class FinishedPhotoPage extends ConsumerWidget {
     Throttle.run(() async {
       await ref
           .read(photoViewModel.notifier)
-          .save4cutPhotos(Save4cutPhotosRequestEntity('frameId', objectKey));
+          .save4cutPhotos(
+            Save4cutPhotosRequestEntity(
+              savePhotoField.frameId!,
+              objectKey,
+              savePhotoField.photoShareType!,
+              savePhotoField.expireAt!,
+            ),
+          );
 
       await Gal.putImage(photo.path);
     });
@@ -90,7 +100,10 @@ class FinishedPhotoPage extends ConsumerWidget {
                 isActivate: true,
                 prefixSvg: SvgPicture.asset(
                   'assets/images/upload.svg',
-                  colorFilter: ColorFilter.mode(AppColor.static1, BlendMode.srcIn),
+                  colorFilter: ColorFilter.mode(
+                    AppColor.static1,
+                    BlendMode.srcIn,
+                  ),
                 ),
               ),
             ],

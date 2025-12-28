@@ -10,7 +10,7 @@ import 'package:potato_4cut_v2/core/ui/custom_back_button.dart';
 import 'package:potato_4cut_v2/core/ui/default_layout.dart';
 import 'package:potato_4cut_v2/core/ui/submit_button.dart';
 import 'package:potato_4cut_v2/core/util/throttle.dart';
-import 'package:potato_4cut_v2/presentation/photo/providers/selected_frame_provider.dart';
+import 'package:potato_4cut_v2/presentation/photo/providers/frame_base_image_url_provider.dart';
 import 'package:potato_4cut_v2/presentation/photo/widgets/selected_frame.dart';
 import 'package:potato_4cut_v2/presentation/photo/providers/current_page_index_provider.dart';
 import 'package:potato_4cut_v2/presentation/photo/providers/finished_photo_provider.dart';
@@ -47,7 +47,7 @@ class CheckFramePage extends ConsumerWidget {
             SizedBox(height: 33.h),
             GestureDetector(
       onTap: () => Throttle.run(() {
-        ref.read(selectedFrameProvider.notifier).update((state) => null);
+        ref.read(frameBaseImageUrlProvider.notifier).update((state) => null);
         AppNavigation.goSelectFrame(context);
       }),
       child: Row(

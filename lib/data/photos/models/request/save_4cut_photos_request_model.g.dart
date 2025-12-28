@@ -11,6 +11,8 @@ Save4cutPhotosRequestModel _$Save4cutPhotosRequestModelFromJson(
 ) => Save4cutPhotosRequestModel(
   json['frameId'] as String,
   json['objectKey'] as String,
+  $enumDecode(_$PhotoShareTypeEnumMap, json['photoShareType']),
+  json['expireAt'] as String,
 );
 
 Map<String, dynamic> _$Save4cutPhotosRequestModelToJson(
@@ -18,4 +20,11 @@ Map<String, dynamic> _$Save4cutPhotosRequestModelToJson(
 ) => <String, dynamic>{
   'frameId': instance.frameId,
   'objectKey': instance.objectKey,
+  'photoShareType': _$PhotoShareTypeEnumMap[instance.photoShareType]!,
+  'expireAt': instance.expireAt,
+};
+
+const _$PhotoShareTypeEnumMap = {
+  PhotoShareType.LINK: 'LINK',
+  PhotoShareType.PRIVATE: 'PRIVATE',
 };

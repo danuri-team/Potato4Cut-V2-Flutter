@@ -8,7 +8,7 @@ import 'package:potato_4cut_v2/core/ui/custom_back_button.dart';
 import 'package:potato_4cut_v2/core/ui/default_layout.dart';
 import 'package:potato_4cut_v2/core/ui/submit_button.dart';
 import 'package:potato_4cut_v2/core/util/throttle.dart';
-import 'package:potato_4cut_v2/presentation/photo/providers/selected_frame_provider.dart';
+import 'package:potato_4cut_v2/presentation/photo/providers/frame_base_image_url_provider.dart';
 import 'package:potato_4cut_v2/presentation/photo/widgets/frame_list.dart';
 import 'package:potato_4cut_v2/presentation/photo/providers/current_page_index_provider.dart';
 import 'package:potato_4cut_v2/presentation/photo/providers/finished_photo_provider.dart';
@@ -29,7 +29,7 @@ class SelectFramePage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final selectedFrame = ref.watch(selectedFrameProvider);
+    final selectedFrame = ref.watch(frameBaseImageUrlProvider);
     return DefaultLayout(
       appBar: CustomBackButton(),
       body: Padding(

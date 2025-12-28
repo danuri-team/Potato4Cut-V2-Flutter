@@ -8,7 +8,8 @@ import 'package:potato_4cut_v2/core/enum/sortby_type.dart';
 import 'package:potato_4cut_v2/core/theme/app_color.dart';
 import 'package:potato_4cut_v2/core/theme/app_text_style.dart';
 import 'package:potato_4cut_v2/domain/library/entities/response/possession_products_response_entity.dart';
-import 'package:potato_4cut_v2/presentation/photo/providers/selected_frame_provider.dart';
+import 'package:potato_4cut_v2/presentation/photo/providers/frame_base_image_url_provider.dart';
+import 'package:potato_4cut_v2/presentation/photo/providers/save_photo_field_provider.dart';
 import 'package:potato_4cut_v2/presentation/view_models/library_view_model.dart';
 
 class FrameList extends ConsumerStatefulWidget {
@@ -73,7 +74,7 @@ class _FrameListState extends ConsumerState<FrameList> {
 
   @override
   Widget build(BuildContext context) {
-    final selectedFrame = ref.watch(selectedFrameProvider);
+    final selectedFrame = ref.watch(frameBaseImageUrlProvider);
     return Column(
       children: [
         SizedBox(
@@ -128,16 +129,14 @@ class _FrameListState extends ConsumerState<FrameList> {
                       onTap: () {
                         if (selectedFrame == null) {
                           ref
-                              .read(selectedFrameProvider.notifier)
-                              .update(
-                                (state) => FrameModel(
-                                  frameId,
-                                  frameBaseImageUrl,
-                                ),
-                              );
+                              .read(savePhotoFieldProvider.notifier)
+                              .addField(frameId: frameId);
+                          ref
+                              .read(frameBaseImageUrlProvider.notifier)
+                              .update((state) => frameBaseImageUrl);
                         } else {
                           ref
-                              .read(selectedFrameProvider.notifier)
+                              .read(frameBaseImageUrlProvider.notifier)
                               .update((state) => null);
                         }
                       },
