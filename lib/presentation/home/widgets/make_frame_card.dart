@@ -10,7 +10,7 @@ class MakeFrameCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () => Throttle.run(()=>AppNavigation.goMakeFrameStep1),
+      onTap: () => Throttle.run(() => AppNavigation.goMakeFrameStep1(context)),
       child: Container(
         width: 343.w,
         height: 174.h,
