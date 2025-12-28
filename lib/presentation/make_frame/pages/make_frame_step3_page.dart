@@ -8,6 +8,7 @@ import 'package:potato_4cut_v2/core/theme/app_text_style.dart';
 import 'package:potato_4cut_v2/core/ui/custom_back_button.dart';
 import 'package:potato_4cut_v2/core/ui/default_layout.dart';
 import 'package:potato_4cut_v2/core/ui/submit_button.dart';
+import 'package:potato_4cut_v2/core/util/throttle.dart';
 import 'package:potato_4cut_v2/presentation/make_frame/provider/make_frame_state_provider.dart';
 
 class MakeFrameStep3Page extends ConsumerWidget {
@@ -43,7 +44,9 @@ class MakeFrameStep3Page extends ConsumerWidget {
                                 Wrap(
                                   spacing: 8.w,
                                   runSpacing: 8.h,
-                                  children: state.tags.map((tag) => Tag(text: tag)).toList(),
+                                  children: state.tags
+                                      .map((tag) => Tag(text: tag))
+                                      .toList(),
                                 ),
                                 SizedBox(height: 12.h),
                               ],
@@ -65,7 +68,9 @@ class MakeFrameStep3Page extends ConsumerWidget {
                     Text("설명", style: AppTextStyle.heading1),
                     SizedBox(height: 16.h),
                     Text(
-                      state.description.isNotEmpty ? state.description : "설명 없음",
+                      state.description.isNotEmpty
+                          ? state.description
+                          : "설명 없음",
                       style: AppTextStyle.body1Reading,
                     ),
                   ],
@@ -94,15 +99,9 @@ class MakeFrameStep3Page extends ConsumerWidget {
             ? Stack(
                 fit: StackFit.expand,
                 children: [
-                  Image.file(
-                    state.baseFrameFile!,
-                    fit: BoxFit.cover,
-                  ),
+                  Image.file(state.baseFrameFile!, fit: BoxFit.cover),
                   if (state.overlayFrameFile != null)
-                    Image.file(
-                      state.overlayFrameFile!,
-                      fit: BoxFit.cover,
-                    ),
+                    Image.file(state.overlayFrameFile!, fit: BoxFit.cover),
                 ],
               )
             : Center(
@@ -143,8 +142,10 @@ class MakeFrameStep3Page extends ConsumerWidget {
               padding: EdgeInsets.only(top: 16.h, bottom: 16.h),
               child: SubmitButton(
                 onTap: () {
-                  ref.read(makeFrameStateProvider.notifier).reset();
-                  AppNavigation.goHome(context);
+                  Throttle.run(() {
+                    ref.read(makeFrameStateProvider.notifier).reset();
+                    AppNavigation.goHome(context);
+                  });
                 },
                 width: double.infinity,
                 text: '확인',

@@ -8,6 +8,7 @@ import 'package:potato_4cut_v2/core/theme/app_text_style.dart';
 import 'package:potato_4cut_v2/core/ui/custom_back_button.dart';
 import 'package:potato_4cut_v2/core/ui/default_layout.dart';
 import 'package:potato_4cut_v2/core/ui/submit_button.dart';
+import 'package:potato_4cut_v2/core/util/throttle.dart';
 import 'package:potato_4cut_v2/presentation/make_frame/provider/make_frame_state_provider.dart';
 import 'package:potato_4cut_v2/presentation/make_frame/widgets/upload_frame.dart';
 
@@ -71,11 +72,8 @@ class MakeFrameStep1Page extends ConsumerWidget {
               ),
               SizedBox(height: 35.h),
               SubmitButton(
-                onTap: () {
-                  if (notifier.isStep1Valid) {
-                    AppNavigation.goMakeFrameStep2(context);
-                  }
-                },
+                onTap: () =>
+                    Throttle.run(() => AppNavigation.goMakeFrameStep2(context)),
                 width: 344.w,
                 text: "다음으로",
                 isActivate: notifier.isStep1Valid,
