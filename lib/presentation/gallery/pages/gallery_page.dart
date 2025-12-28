@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:potato_4cut_v2/core/ui/default_layout.dart';
-import 'package:potato_4cut_v2/presentation/gallery/widgets/gallery_frame_list.dart';
+import 'package:potato_4cut_v2/presentation/gallery/widgets/photo_taken_list.dart';
 
 class GalleryPage extends StatelessWidget {
   const GalleryPage({super.key});
@@ -23,7 +23,7 @@ class GalleryPage extends StatelessWidget {
           // const Filter(),
         ],
       ),
-      body: const GalleryFrameList(),
+      body: PhotoTakenList(),
     );
   }
 }
