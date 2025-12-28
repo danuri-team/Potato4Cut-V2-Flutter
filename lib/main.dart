@@ -7,6 +7,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:potato_4cut_v2/core/router/router.dart';
 import 'package:potato_4cut_v2/core/theme/app_color.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -21,7 +22,7 @@ void main() async {
       options.replay.sessionSampleRate = 1.0;
       options.dsn = dotenv.env['SENTRY_DSN'];
     }, appRunner: () => runApp(const App()));
-  }else{
+  } else {
     runApp(const App());
   }
 }
@@ -42,6 +43,11 @@ class App extends StatelessWidget {
           designSize: const Size(375, 812),
           builder: (context, child) => MaterialApp.router(
             title: 'Potato 4Cut V2',
+            localizationsDelegates: [
+              GlobalMaterialLocalizations.delegate,
+              GlobalCupertinoLocalizations.delegate,
+            ],
+            supportedLocales: [Locale('ko', 'KR')],
             theme: ThemeData(
               scaffoldBackgroundColor: AppColor.background1,
               splashColor: Colors.transparent,
