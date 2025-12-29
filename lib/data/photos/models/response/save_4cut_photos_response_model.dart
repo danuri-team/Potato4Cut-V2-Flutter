@@ -1,4 +1,5 @@
 import 'package:json_annotation/json_annotation.dart';
+import 'package:potato_4cut_v2/core/enum/photo_share_type.dart';
 import 'package:potato_4cut_v2/domain/photos/entites/response/save_4cut_photos_response_entity.dart';
 
 part 'save_4cut_photos_response_model.g.dart';
@@ -26,14 +27,20 @@ class Save4cutPhotosResponseModel {
 class Save4cutPhotosDataModel {
   final String photoId;
   final String composedImageUrl;
-  String? frameId;
-  String? frameTitle;
+  final String frameId;
+  final String frameTitle;
+  final String shareExpireAt;
+  final PhotoShareType shareType;
+  String? shareCode;
 
   Save4cutPhotosDataModel(
     this.photoId,
     this.composedImageUrl,
     this.frameId,
     this.frameTitle,
+    this.shareExpireAt,
+    this.shareType,
+    this.shareCode,
   );
 
   factory Save4cutPhotosDataModel.fromJson(Map<String, dynamic> json) =>
@@ -47,6 +54,9 @@ class Save4cutPhotosDataModel {
       composedImageUrl,
       frameId,
       frameTitle,
+      shareExpireAt,
+      shareType,
+      shareCode,
     );
   }
 }

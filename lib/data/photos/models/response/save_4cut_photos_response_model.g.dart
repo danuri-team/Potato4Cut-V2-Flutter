@@ -27,8 +27,11 @@ Save4cutPhotosDataModel _$Save4cutPhotosDataModelFromJson(
 ) => Save4cutPhotosDataModel(
   json['photoId'] as String,
   json['composedImageUrl'] as String,
-  json['frameId'] as String?,
-  json['frameTitle'] as String?,
+  json['frameId'] as String,
+  json['frameTitle'] as String,
+  json['shareExpireAt'] as String,
+  $enumDecode(_$PhotoShareTypeEnumMap, json['shareType']),
+  json['shareCode'] as String?,
 );
 
 Map<String, dynamic> _$Save4cutPhotosDataModelToJson(
@@ -38,4 +41,12 @@ Map<String, dynamic> _$Save4cutPhotosDataModelToJson(
   'composedImageUrl': instance.composedImageUrl,
   'frameId': instance.frameId,
   'frameTitle': instance.frameTitle,
+  'shareExpireAt': instance.shareExpireAt,
+  'shareType': _$PhotoShareTypeEnumMap[instance.shareType]!,
+  'shareCode': instance.shareCode,
+};
+
+const _$PhotoShareTypeEnumMap = {
+  PhotoShareType.LINK: 'LINK',
+  PhotoShareType.PRIVATE: 'PRIVATE',
 };
