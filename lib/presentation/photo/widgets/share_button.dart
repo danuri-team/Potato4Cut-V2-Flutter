@@ -23,14 +23,14 @@ class ShareButton extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final finishedPhoto = ref.watch(finishedPhotoProvider);
     return GestureDetector(
-      // onTap: finishedPhoto == null
-      //     ? null
-      //     : () => Throttle.run(() => showModalBottomSheet(context: context, builder: (context) => ShareBottomSheet(),),
-      //     ),
-      onTap: () => showModalBottomSheet(
-        context: context,
-        builder: (context) => ShareBottomSheet(),
-      ),
+      onTap: finishedPhoto == null
+          ? null
+          : () => Throttle.run(
+              () => showModalBottomSheet(
+                context: context,
+                builder: (context) => ShareBottomSheet(),
+              ),
+            ),
       child: Container(
         width: 166.w,
         height: 48.h,
