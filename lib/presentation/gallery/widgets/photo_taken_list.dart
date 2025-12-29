@@ -30,23 +30,16 @@ class PhotoTakenList extends ConsumerWidget {
           childAspectRatio: 112.w / 140.h,
         ),
         itemBuilder: (context, index) {
+          final imageUrl = userPhotos!.data.content[index].imageUrl;
           return Container(
             decoration: ShapeDecoration(
               shape: RoundedRectangleBorder(
                 side: BorderSide(width: 1.w, color: AppColor.line2),
                 borderRadius: BorderRadius.circular(6),
               ),
+              image: DecorationImage(image: NetworkImage(imageUrl)),
             ),
-            alignment: Alignment.center,
-            child: SvgPicture.asset('assets/images/potato4cut_frame.svg'),
           );
-          // return Column(
-          //   children: [
-          // const LoadingFrame(),
-          //     SizedBox(height: 8.h),
-          //     Text('프레임 ${index + 1}', style: AppTextStyle.caption1),
-          //   ],
-          // );
         },
       ),
     );
