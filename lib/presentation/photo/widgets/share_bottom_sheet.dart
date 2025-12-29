@@ -1,6 +1,3 @@
-import 'dart:developer';
-import 'dart:io';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -11,7 +8,6 @@ import 'package:potato_4cut_v2/core/theme/app_color.dart';
 import 'package:potato_4cut_v2/core/theme/app_text_style.dart';
 import 'package:potato_4cut_v2/core/ui/submit_button.dart';
 import 'package:potato_4cut_v2/presentation/photo/providers/save_photo_field_provider.dart';
-import 'package:share_plus/share_plus.dart';
 
 class ShareBottomSheet extends ConsumerStatefulWidget {
   const ShareBottomSheet({super.key});
@@ -35,7 +31,7 @@ class _ShareBottomSheetState extends ConsumerState<ShareBottomSheet> {
           photoShareType: linkShare
               ? PhotoShareType.LINK
               : PhotoShareType.PRIVATE,
-              
+          expireAt: expirationMinute.toString(),
         );
   }
 
@@ -155,8 +151,12 @@ class _ShareBottomSheetState extends ConsumerState<ShareBottomSheet> {
                         child: SingleChildScrollView(
                           child: CupertinoTimerPicker(
                             onTimerDurationChanged: (value) {
-                              expirationHour = value.inHours;
-                              expirationMinute = value.inMinutes - 60;
+                              setState(() {
+                                expirationHour = value.inHours;
+                                expirationMinute = value.inHours > 0
+                                    ? value.inMinutes - 60
+                                    : value.inMinutes;
+                              });
                             },
                             alignment: Alignment.center,
                             mode: CupertinoTimerPickerMode.hm,
@@ -216,7 +216,7 @@ class _ShareBottomSheetState extends ConsumerState<ShareBottomSheet> {
             onTap: () => share(),
             width: 343.w,
             text: '공유하기',
-            isActivate: true,
+            isActivate: expirationHour != null || expirationMinute != null,
             prefixSvg: SvgPicture.asset('assets/images/share.svg'),
           ),
         ],
