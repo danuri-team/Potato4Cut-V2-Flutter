@@ -26,7 +26,7 @@ abstract class FrameDataSource {
   );
   Future<FrameProductsListResponseModel> searchFrame(String keyword, int page, int size);
   Future<FrameProductsListResponseModel> frameByTag(String tags, int page, int size);
-  Future madedFrame();
+  Future<FrameProductsListResponseModel> madedFrame();
   Future<SuccessResponseModel> likeFrame(String frameId);
   Future<SuccessResponseModel> cancleLikeFrame(String frameId); 
   Future<FrameCommentResponseModel> getFrameComment(String frameId);

@@ -26,7 +26,7 @@ abstract class FrameRepository {
   );
   Future<FrameProductsListResponseEntity> searchFrame(String keyword, int page, int size);
   Future<FrameProductsListResponseEntity> frameByTag(String tags, int page, int size);
-  Future madedFrame();
+  Future<FrameProductsListResponseEntity> madedFrame();
   Future<SuccessResponseEntity> likeFrame(String frameId);
   Future<SuccessResponseEntity> cancleLikeFrame(String frameId); 
   Future<FrameCommentResponseEntity> getFrameComment(String frameId);

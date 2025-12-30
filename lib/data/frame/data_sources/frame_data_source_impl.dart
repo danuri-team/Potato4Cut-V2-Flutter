@@ -96,11 +96,12 @@ class FrameDataSourceImpl implements FrameDataSource {
   }
 
   @override
-  Future madedFrame() async {
-    await _dio.get(
+  Future<FrameProductsListResponseModel> madedFrame() async {
+    final response = await _dio.get(
       '/api/v1/frames/my',
       options: await _getOptions(),
     );
+    return FrameProductsListResponseModel.fromJson(response.data);
   }
 
   @override
