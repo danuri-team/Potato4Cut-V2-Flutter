@@ -1,4 +1,5 @@
 import 'package:potato_4cut_v2/core/enum/frame_category_type.dart';
+import 'package:potato_4cut_v2/data/frame/models/request/add_frame_request_model.dart';
 
 class AddFrameRequestEntity {
   final String title;
@@ -22,4 +23,18 @@ class AddFrameRequestEntity {
     this.category,
     this.tags,
   );
+
+  AddFrameRequestModel toModel() {
+    return AddFrameRequestModel(
+      title,
+      description,
+      isPublic,
+      price,
+      frameBaseImageKey,
+      frameOverlayImageKey,
+      previewImageKey,
+      category,
+      tags,
+    );
+  }
 }
