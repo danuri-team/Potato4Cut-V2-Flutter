@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -7,7 +9,9 @@ import 'package:potato_4cut_v2/core/enum/photo_share_type.dart';
 import 'package:potato_4cut_v2/core/theme/app_color.dart';
 import 'package:potato_4cut_v2/core/theme/app_text_style.dart';
 import 'package:potato_4cut_v2/core/ui/submit_button.dart';
+import 'package:potato_4cut_v2/presentation/photo/providers/finished_photo_provider.dart';
 import 'package:potato_4cut_v2/presentation/photo/providers/save_photo_field_provider.dart';
+import 'package:share_plus/share_plus.dart';
 
 class ShareBottomSheet extends ConsumerStatefulWidget {
   const ShareBottomSheet({super.key});
@@ -20,19 +24,9 @@ class _ShareBottomSheetState extends ConsumerState<ShareBottomSheet> {
   bool linkShare = false;
   bool onlyMe = true;
 
-  // Future<void> share(File photo, BuildContext context) async {
-  //   final xfile = XFile(photo.path);
-  //   SharePlus.instance.share(ShareParams(files: [xfile]));
-  // }
-  Future<void> share() async {
-    ref
-        .read(savePhotoFieldProvider.notifier)
-        .addField(
-          photoShareType: linkShare
-              ? PhotoShareType.LINK
-              : PhotoShareType.PRIVATE,
-          expireAt: expirationMinute.toString(),
-        );
+  Future<void> share(File photo, BuildContext context) async {
+    final xfile = XFile(photo.path);
+    SharePlus.instance.share(ShareParams(files: [xfile]));
   }
 
   int? expirationHour;
@@ -40,6 +34,7 @@ class _ShareBottomSheetState extends ConsumerState<ShareBottomSheet> {
 
   @override
   Widget build(BuildContext context) {
+    final finishedPhoto = ref.watch(finishedPhotoProvider);
     return Container(
       padding: EdgeInsets.only(
         top: 16.h,
@@ -75,6 +70,11 @@ class _ShareBottomSheetState extends ConsumerState<ShareBottomSheet> {
                         onTap: () => setState(() {
                           linkShare = !linkShare;
                           onlyMe = !onlyMe;
+                          ref
+                              .read(savePhotoFieldProvider.notifier)
+                              .updateField(
+                                photoShareType: PhotoShareType.PRIVATE,
+                              );
                         }),
                         child: Container(
                           width: 78.w,
@@ -104,6 +104,9 @@ class _ShareBottomSheetState extends ConsumerState<ShareBottomSheet> {
                         onTap: () => setState(() {
                           onlyMe = !onlyMe;
                           linkShare = !linkShare;
+                          ref
+                              .read(savePhotoFieldProvider.notifier)
+                              .updateField(photoShareType: PhotoShareType.LINK);
                         }),
                         child: Container(
                           width: 78.w,
@@ -153,10 +156,17 @@ class _ShareBottomSheetState extends ConsumerState<ShareBottomSheet> {
                             onTimerDurationChanged: (value) {
                               setState(() {
                                 expirationHour = value.inHours;
-                                expirationMinute = value.inHours > 0
-                                    ? value.inMinutes - 60
-                                    : value.inMinutes;
+                                expirationMinute =
+                                    value.inMinutes - 60 * expirationHour!;
                               });
+                              ref
+                                  .read(savePhotoFieldProvider.notifier)
+                                  .updateField(
+                                    expireAt:
+                                        (expirationMinute! +
+                                                60 * expirationHour!)
+                                            .toString(),
+                                  );
                             },
                             alignment: Alignment.center,
                             mode: CupertinoTimerPickerMode.hm,
@@ -213,7 +223,7 @@ class _ShareBottomSheetState extends ConsumerState<ShareBottomSheet> {
           ),
           SizedBox(height: 32.h),
           SubmitButton(
-            onTap: () => share(),
+            onTap: () => share(finishedPhoto!, context),
             width: 343.w,
             text: '공유하기',
             isActivate: expirationHour != null || expirationMinute != null,

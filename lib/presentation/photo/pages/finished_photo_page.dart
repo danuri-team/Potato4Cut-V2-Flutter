@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:gal/gal.dart';
+import 'package:potato_4cut_v2/core/enum/photo_share_type.dart';
 import 'package:potato_4cut_v2/core/router/router_helper.dart';
 import 'package:potato_4cut_v2/core/theme/app_color.dart';
 import 'package:potato_4cut_v2/core/theme/app_text_style.dart';
@@ -13,6 +14,7 @@ import 'package:potato_4cut_v2/core/ui/default_layout.dart';
 import 'package:potato_4cut_v2/core/ui/submit_button.dart';
 import 'package:potato_4cut_v2/core/util/throttle.dart';
 import 'package:potato_4cut_v2/domain/photos/entites/request/save_4cut_photos_request_entity.dart';
+import 'package:potato_4cut_v2/presentation/photo/providers/frame_base_image_url_provider.dart';
 import 'package:potato_4cut_v2/presentation/photo/providers/photo_view_model.dart';
 import 'package:potato_4cut_v2/presentation/photo/providers/save_photo_field_provider.dart';
 import 'package:potato_4cut_v2/presentation/photo/widgets/finished_photo.dart';
@@ -44,8 +46,8 @@ class FinishedPhotoPage extends ConsumerWidget {
             Save4cutPhotosRequestEntity(
               savePhotoField.frameId!,
               objectKey,
-              savePhotoField.photoShareType!,
-              savePhotoField.expireAt!,
+              savePhotoField.photoShareType ?? PhotoShareType.PRIVATE,
+              savePhotoField.expireAt ?? '0',
             ),
           );
 
@@ -64,11 +66,17 @@ class FinishedPhotoPage extends ConsumerWidget {
           SizedBox(height: 24.h),
           Text('잘 나온 사진을 바로 공유해요', style: AppTextStyle.heading1),
           SizedBox(height: 16.h),
-          // ListView.builder(itemBuilder: (context, index) =>,)
           FinishedPhoto(repaintBoundaryKey: repaintBoundaryKey),
           SizedBox(height: 25.h),
           GestureDetector(
-            onTap: () => Throttle.run(() => AppNavigation.goHome(context)),
+            onTap: () => Throttle.run(() {
+              AppNavigation.goHome(context);
+              ref.read(savePhotoFieldProvider.notifier).resetField();
+              ref.read(objectKeyProvider.notifier).update((state) => null);
+              ref
+                  .read(frameBaseImageUrlProvider.notifier)
+                  .update((state) => null);
+            }),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
