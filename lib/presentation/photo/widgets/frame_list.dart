@@ -130,7 +130,7 @@ class _FrameListState extends ConsumerState<FrameList> {
                         if (selectedFrame == null) {
                           ref
                               .read(savePhotoFieldProvider.notifier)
-                              .addField(frameId: frameId);
+                              .updateField(frameId: frameId);
                           ref
                               .read(frameBaseImageUrlProvider.notifier)
                               .update((state) => frameBaseImageUrl);

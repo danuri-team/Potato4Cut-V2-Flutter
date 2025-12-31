@@ -29,7 +29,7 @@ final savePhotoFieldProvider =
 class SavePHotoFieldNotifier extends StateNotifier<PhotoModel> {
   SavePHotoFieldNotifier() : super(PhotoModel());
 
-  void addField({
+  void updateField({
     String? frameId,
     PhotoShareType? photoShareType,
     String? expireAt,
@@ -39,5 +39,9 @@ class SavePHotoFieldNotifier extends StateNotifier<PhotoModel> {
       photoShareType: photoShareType,
       expireAt: expireAt,
     );
+  }
+
+  void resetField() {
+    state = PhotoModel();
   }
 }
