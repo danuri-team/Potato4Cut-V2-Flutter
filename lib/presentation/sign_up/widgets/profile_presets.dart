@@ -35,7 +35,9 @@ class _ProfilePresetsState extends ConsumerState<ProfilePresets> {
   }
 
   Future<void> getProfilePreset() async {
-    profilePreset = await ref.read(assetsViewModelProvider.notifier).getProfilePreset();
+    profilePreset = await ref
+        .read(assetsViewModelProvider.notifier)
+        .getProfilePreset();
     setState(() {});
   }
 
@@ -91,7 +93,7 @@ class _ProfilePresetsState extends ConsumerState<ProfilePresets> {
               ),
               child: Column(
                 children: [
-                  SvgPicture.network(imgUrl),
+                  SvgPicture.network(imgUrl, width: 80.w, height: 80.h),
                   const Spacer(),
                   Text(
                     title,
