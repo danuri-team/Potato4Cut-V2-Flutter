@@ -156,6 +156,15 @@ class _FrameListState extends ConsumerState<FrameList> {
                           ref
                               .read(framePreviewImageUrlProvider.notifier)
                               .update((state) => previewImageUrl);
+
+                          precacheImage(
+                            NetworkImage(frameBaseImageUrl),
+                            context,
+                          );
+                          precacheImage(
+                            NetworkImage(frameOverlayImageUrl),
+                            context,
+                          );
                         }
                       },
                       child: Container(
