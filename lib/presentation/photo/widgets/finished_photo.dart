@@ -25,6 +25,7 @@ class FinishedPhoto extends ConsumerStatefulWidget {
 
 class _FinishedPhotoState extends ConsumerState<FinishedPhoto> {
   bool isUploaded = false;
+  bool _imagesLoaded = false;
 
   @override
   void initState() {
@@ -33,18 +34,67 @@ class _FinishedPhotoState extends ConsumerState<FinishedPhoto> {
   }
 
   void _scheduleAutoUpload() {
-    // 이미지가 완전히 렌더링된 후 자동 업로드
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      SchedulerBinding.instance.addPostFrameCallback((_) {
-        SchedulerBinding.instance.addPostFrameCallback((_) async {
-          if (mounted && !isUploaded) {
-            isUploaded = true;
-            await Future.delayed(const Duration(milliseconds: 500));
-            await _uploadToServer();
-          }
-        });
-      });
+    // 이미지 로딩 완료 후 자동 업로드
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      await _waitForImagesLoaded();
+      if (mounted && !isUploaded) {
+        isUploaded = true;
+        // 추가 렌더링 대기
+        await Future.delayed(const Duration(milliseconds: 200));
+        await _uploadToServer();
+      }
     });
+  }
+
+  Future<void> _waitForImagesLoaded() async {
+    final frameBaseImageUrl = ref.read(frameBaseImageUrlProvider);
+    final frameOverlayImageUrl = ref.read(frameOverlayImageUrlProvider);
+
+    if (frameBaseImageUrl == null) return;
+
+    final completer = Completer<void>();
+    int loadedCount = 0;
+    int totalImages = frameOverlayImageUrl != null ? 2 : 1;
+
+    // Base image 로딩 대기
+    final baseImage = NetworkImage(frameBaseImageUrl);
+    final baseStream = baseImage.resolve(ImageConfiguration.empty);
+    baseStream.addListener(ImageStreamListener(
+      (info, synchronousCall) {
+        loadedCount++;
+        if (loadedCount >= totalImages) {
+          _imagesLoaded = true;
+          if (!completer.isCompleted) completer.complete();
+        }
+      },
+      onError: (error, stackTrace) {
+        if (!completer.isCompleted) completer.complete();
+      },
+    ));
+
+    // Overlay image 로딩 대기 (있는 경우)
+    if (frameOverlayImageUrl != null) {
+      final overlayImage = NetworkImage(frameOverlayImageUrl);
+      final overlayStream = overlayImage.resolve(ImageConfiguration.empty);
+      overlayStream.addListener(ImageStreamListener(
+        (info, synchronousCall) {
+          loadedCount++;
+          if (loadedCount >= totalImages) {
+            _imagesLoaded = true;
+            if (!completer.isCompleted) completer.complete();
+          }
+        },
+        onError: (error, stackTrace) {
+          if (!completer.isCompleted) completer.complete();
+        },
+      ));
+    }
+
+    // 최대 5초 대기 (타임아웃)
+    await Future.any([
+      completer.future,
+      Future.delayed(const Duration(seconds: 5)),
+    ]);
   }
 
   Future<void> _uploadToServer() async {

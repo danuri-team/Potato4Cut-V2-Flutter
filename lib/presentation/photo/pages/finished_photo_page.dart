@@ -1,11 +1,14 @@
 import 'dart:io';
+import 'dart:ui';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:gal/gal.dart';
-import 'package:potato_4cut_v2/core/enum/photo_share_type.dart';
+import 'package:intl/intl.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:potato_4cut_v2/core/router/router_helper.dart';
 import 'package:potato_4cut_v2/core/theme/app_color.dart';
 import 'package:potato_4cut_v2/core/theme/app_text_style.dart';
@@ -13,51 +16,59 @@ import 'package:potato_4cut_v2/core/ui/custom_back_button.dart';
 import 'package:potato_4cut_v2/core/ui/default_layout.dart';
 import 'package:potato_4cut_v2/core/ui/submit_button.dart';
 import 'package:potato_4cut_v2/core/util/throttle.dart';
-import 'package:potato_4cut_v2/domain/photos/entites/request/save_4cut_photos_request_entity.dart';
 import 'package:potato_4cut_v2/presentation/photo/providers/frame_base_image_url_provider.dart';
-import 'package:potato_4cut_v2/presentation/photo/providers/photo_view_model.dart';
 import 'package:potato_4cut_v2/presentation/photo/providers/save_photo_field_provider.dart';
 import 'package:potato_4cut_v2/presentation/photo/widgets/finished_photo.dart';
 import 'package:potato_4cut_v2/presentation/photo/widgets/share_button.dart';
-import 'package:potato_4cut_v2/presentation/photo/providers/finished_photo_provider.dart';
-import 'package:potato_4cut_v2/presentation/photo/providers/object_key_provider.dart';
 
 class FinishedPhotoPage extends ConsumerWidget {
   FinishedPhotoPage({super.key});
 
   final repaintBoundaryKey = GlobalKey();
 
-  Future<void> save4CutPhotos(File photo, WidgetRef ref) async {
-    final hasAccess = await Gal.hasAccess();
-    if (!hasAccess) {
-      await Gal.requestAccess();
+  Future<void> save4CutPhotos(
+    BuildContext context,
+    GlobalKey repaintBoundaryKey,
+    WidgetRef ref,
+  ) async {
+    try {
+      final hasAccess = await Gal.hasAccess();
+      if (!hasAccess) {
+        await Gal.requestAccess();
+      }
+
+      // 실시간으로 이미지 캡처 (고화질)
+      final boundary =
+          repaintBoundaryKey.currentContext?.findRenderObject()
+              as RenderRepaintBoundary;
+      final image = await boundary.toImage(pixelRatio: 4.0);
+      final byteData = await image.toByteData(format: ImageByteFormat.png);
+      final pngBytes = byteData!.buffer.asUint8List();
+      final dir = await getApplicationDocumentsDirectory();
+      final formatDate = DateFormat("yyyy.MM.dd.HH.mm").format(DateTime.now());
+      final file = File('${dir.path}/$formatDate.png');
+      final savedFile = await file.writeAsBytes(pngBytes);
+
+      Throttle.run(() async {
+        await Gal.putImage(savedFile.path);
+
+        if (context.mounted) {
+          ScaffoldMessenger.of(
+            context,
+          ).showSnackBar(SnackBar(content: Text('사진이 저장되었습니다.')));
+        }
+      });
+    } catch (e) {
+      if (context.mounted) {
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text('저장 중 오류가 발생했습니다.')));
+      }
     }
-
-    final savePhotoField = ref.read(savePhotoFieldProvider);
-
-    final objectKey = ref.watch(objectKeyProvider);
-
-    if (objectKey == null) return;
-
-    Throttle.run(() async {
-      await ref
-          .read(photoViewModel.notifier)
-          .save4cutPhotos(
-            Save4cutPhotosRequestEntity(
-              savePhotoField.frameId!,
-              objectKey,
-              savePhotoField.photoShareType ?? PhotoShareType.PRIVATE,
-              savePhotoField.expireAt ?? '0',
-            ),
-          );
-
-      await Gal.putImage(photo.path);
-    });
   }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final finishedPhoto = ref.watch(finishedPhotoProvider);
     return DefaultLayout(
       appBar: CustomBackButton(),
       body: Column(
@@ -72,9 +83,11 @@ class FinishedPhotoPage extends ConsumerWidget {
             onTap: () => Throttle.run(() {
               AppNavigation.goHome(context);
               ref.read(savePhotoFieldProvider.notifier).resetField();
-              ref.read(objectKeyProvider.notifier).update((state) => null);
               ref
                   .read(frameBaseImageUrlProvider.notifier)
+                  .update((state) => null);
+              ref
+                  .read(frameOverlayImageUrlProvider.notifier)
                   .update((state) => null);
             }),
             child: Row(
@@ -99,10 +112,12 @@ class FinishedPhotoPage extends ConsumerWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const ShareButton(),
+              ShareButton(repaintBoundaryKey: repaintBoundaryKey),
               SizedBox(width: 12.w),
               SubmitButton(
-                onTap: () => save4CutPhotos(finishedPhoto!, ref),
+                onTap: () {
+                  save4CutPhotos(context, repaintBoundaryKey, ref);
+                },
                 width: 166.w,
                 text: '저장하기',
                 isActivate: true,

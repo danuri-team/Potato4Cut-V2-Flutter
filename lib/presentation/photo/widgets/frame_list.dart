@@ -125,6 +125,8 @@ class _FrameListState extends ConsumerState<FrameList> {
                     final frameId = possessionProductsContent[index].frameId;
                     final frameBaseImageUrl =
                         possessionProductsContent[index].frameBaseImageUrl;
+                    final frameOverlayImageUrl =
+                        possessionProductsContent[index].frameOverlayImageUrl;
                     final isSelected = selectedFrame == frameBaseImageUrl;
                     return GestureDetector(
                       onTap: () {
@@ -136,6 +138,9 @@ class _FrameListState extends ConsumerState<FrameList> {
                               .read(frameBaseImageUrlProvider.notifier)
                               .update((state) => null);
                           ref
+                              .read(frameOverlayImageUrlProvider.notifier)
+                              .update((state) => null);
+                          ref
                               .read(framePreviewImageUrlProvider.notifier)
                               .update((state) => null);
                         } else {
@@ -145,6 +150,9 @@ class _FrameListState extends ConsumerState<FrameList> {
                           ref
                               .read(frameBaseImageUrlProvider.notifier)
                               .update((state) => frameBaseImageUrl);
+                          ref
+                              .read(frameOverlayImageUrlProvider.notifier)
+                              .update((state) => frameOverlayImageUrl);
                           ref
                               .read(framePreviewImageUrlProvider.notifier)
                               .update((state) => previewImageUrl);
