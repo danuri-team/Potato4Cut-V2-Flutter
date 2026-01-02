@@ -11,6 +11,8 @@ plugins {
     id("dev.flutter.flutter-gradle-plugin")
 }
 
+project.extra.set("use_camera_x_implementation", false)
+
 val keystoreProperties = Properties()
 val keystorePropertiesFile = rootProject.file("key.properties")
 if (keystorePropertiesFile.exists()) {

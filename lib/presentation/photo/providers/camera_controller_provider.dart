@@ -13,11 +13,15 @@ class CameraControllerNotifier extends StateNotifier<CameraController?> {
     try {
       final cameras = await availableCameras();
 
+      final frontCamera = cameras.firstWhere(
+        (camera) => camera.lensDirection == CameraLensDirection.front,
+        orElse: () => cameras[0],
+      );
+
       final controller = CameraController(
-        cameras.length > 1 ? cameras[1] : cameras[0],
+        frontCamera,
         ResolutionPreset.max,
-        enableAudio: true,
-        
+        enableAudio: false,
       );
 
       await controller.initialize();

@@ -162,38 +162,41 @@ class _CameraViewPageState extends ConsumerState<CameraViewPage> {
     final photoFlow = ref.watch(photoFlowProvider);
     final photoCount = ref.watch(photoProvider.notifier).photoCount;
 
-    final size = MediaQuery.of(context).size;
-    final deviceRatio = size.width / size.width;
+    if (cameraController == null || !cameraController.value.isInitialized) {
+      return Container(
+        width: double.infinity,
+        height: double.infinity,
+        color: AppColor.static2,
+      );
+    }
+
     return SizedBox(
       width: double.infinity,
       height: double.infinity,
-      child: (cameraController == null)
-          ? Container(color: AppColor.static2)
-          : Transform.scale(
-              scale: cameraController.value.aspectRatio / deviceRatio,
-              child: AspectRatio(
-                // aspectRatio: 16 / 9,
-                aspectRatio: cameraController.value.aspectRatio,
-                child: CameraPreview(
-                  cameraController,
-                  child: countdown != null && countdown > 0
-                      ? Center(
-                          child: Text(
-                            photoFlow == PhotoFlowType.TakePhoto &&
-                                    countdown == 4
-                                ? _photoLabel(photoCount)
-                                : '$countdown',
-                            style: AppTextStyle.ownglyph.copyWith(
-                              color: AppColor.static1,
-                              fontSize: 80.sp,
-                            ),
-                            textAlign: TextAlign.center,
-                          ),
-                        )
-                      : const SizedBox.shrink(),
-                ),
-              ),
-            ),
+      child: FittedBox(
+        fit: BoxFit.cover,
+        child: SizedBox(
+          width: cameraController.value.previewSize?.height ?? 1,
+          height: cameraController.value.previewSize?.width ?? 1,
+          child: CameraPreview(
+            cameraController,
+            child: countdown != null && countdown > 0
+                ? Center(
+                    child: Text(
+                      photoFlow == PhotoFlowType.TakePhoto && countdown == 4
+                          ? _photoLabel(photoCount)
+                          : '$countdown',
+                      style: AppTextStyle.ownglyph.copyWith(
+                        color: AppColor.static1,
+                        fontSize: 80.sp,
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                  )
+                : const SizedBox.shrink(),
+          ),
+        ),
+      ),
     );
   }
 
