@@ -77,6 +77,10 @@ class PhotoDataSourceImpl implements PhotoDataSource {
   @override
   Future<void> uploadToS3(String uploadUrl, Uint8List imageData) async {
     final dio = Dio();
-    await dio.put(uploadUrl, data: imageData);
+    await dio.put(
+      uploadUrl,
+      data: imageData,
+      options: Options(headers: {'Content-Type': 'image/png'}),
+    );
   }
 }
