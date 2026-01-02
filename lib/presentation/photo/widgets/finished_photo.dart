@@ -1,14 +1,18 @@
+import 'dart:io';
+import 'dart:ui';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:potato_4cut_v2/domain/common/entities/request/issue_upload_link_request_entity.dart';
+import 'package:intl/intl.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:potato_4cut_v2/core/enum/photo_share_type.dart';
 import 'package:potato_4cut_v2/presentation/photo/providers/photo_provider.dart';
-import 'package:potato_4cut_v2/presentation/photo/providers/photo_view_model.dart';
-import 'package:potato_4cut_v2/presentation/photo/providers/finished_photo_provider.dart';
-import 'package:potato_4cut_v2/presentation/photo/providers/object_key_provider.dart';
 import 'package:potato_4cut_v2/presentation/photo/providers/frame_base_image_url_provider.dart';
+import 'package:potato_4cut_v2/presentation/photo/providers/photo_view_model.dart';
+import 'package:potato_4cut_v2/presentation/photo/providers/save_photo_field_provider.dart';
 
 class FinishedPhoto extends ConsumerStatefulWidget {
   const FinishedPhoto({super.key, required this.repaintBoundaryKey});
@@ -20,40 +24,68 @@ class FinishedPhoto extends ConsumerStatefulWidget {
 }
 
 class _FinishedPhotoState extends ConsumerState<FinishedPhoto> {
-  bool isGenerated = false;
+  bool isUploaded = false;
 
   @override
   void initState() {
     super.initState();
-    _schedulePhotoGeneration();
+    _scheduleAutoUpload();
   }
 
-  void _schedulePhotoGeneration() {
+  void _scheduleAutoUpload() {
+    // 이미지가 완전히 렌더링된 후 자동 업로드
     WidgetsBinding.instance.addPostFrameCallback((_) {
       SchedulerBinding.instance.addPostFrameCallback((_) {
         SchedulerBinding.instance.addPostFrameCallback((_) async {
-          if (mounted && !isGenerated) {
-            isGenerated = true;
-            final fileSize = await ref
-                .read(finishedPhotoProvider.notifier)
-                .generateFinishedPhoto(widget.repaintBoundaryKey);
-            final response = await ref
-                .read(photoViewModel.notifier)
-                .issue4cutUploadLink(
-                  IssueUploadLinkRequestEntity(fileSize.toString()),
-                );
-            ref
-                .read(objectKeyProvider.notifier)
-                .update((state) => response.data.key);
+          if (mounted && !isUploaded) {
+            isUploaded = true;
+            await Future.delayed(const Duration(milliseconds: 500));
+            await _uploadToServer();
           }
         });
       });
     });
   }
 
+  Future<void> _uploadToServer() async {
+    try {
+      final savePhotoField = ref.read(savePhotoFieldProvider);
+
+      if (savePhotoField.frameId == null) {
+        return;
+      }
+
+      final boundary =
+          widget.repaintBoundaryKey.currentContext?.findRenderObject()
+              as RenderRepaintBoundary;
+      final image = await boundary.toImage(pixelRatio: 4.0);
+      final byteData = await image.toByteData(format: ImageByteFormat.png);
+      final pngBytes = byteData!.buffer.asUint8List();
+
+      // 파일 저장
+      final dir = await getApplicationDocumentsDirectory();
+      final formatDate = DateFormat("yyyy.MM.dd.HH.mm").format(DateTime.now());
+      final file = File('${dir.path}/auto_$formatDate.png');
+      await file.writeAsBytes(pngBytes);
+
+      // S3에 업로드 및 서버에 저장
+      await ref
+          .read(photoViewModel.notifier)
+          .uploadPhotoAndSave(
+            imageData: pngBytes,
+            frameId: savePhotoField.frameId!,
+            photoShareType: PhotoShareType.PRIVATE,
+            expireAt: '0',
+          );
+    } catch (e) {
+      //
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final frameBaseImageUrl = ref.watch(frameBaseImageUrlProvider);
+    final frameOverlayImageUrl = ref.watch(frameOverlayImageUrlProvider);
     final photos = ref.watch(photoProvider);
     return SizedBox(
       width: double.infinity,
@@ -88,42 +120,61 @@ class _FinishedPhotoState extends ConsumerState<FinishedPhoto> {
           Center(
             child: RepaintBoundary(
               key: widget.repaintBoundaryKey,
-              child: Container(
-                padding: EdgeInsets.symmetric(horizontal: 18.w, vertical: 18.h),
+              child: SizedBox(
                 width: 296.w,
                 height: 472.h,
-                decoration: BoxDecoration(
-                  image: DecorationImage(
-                    image: NetworkImage(frameBaseImageUrl!),
-                    fit: BoxFit.fill,
-                  ),
-                ),
-                alignment: Alignment.topCenter,
-                child: SizedBox(
-                  width: 250.w,
-                  height: 376.h,
-                  child: GridView.builder(
-                    itemCount: 4,
-                    physics: NeverScrollableScrollPhysics(),
-                    padding: EdgeInsets.zero,
-                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 2,
-                      crossAxisSpacing: 8.w,
-                      mainAxisSpacing: 8.h,
-                      childAspectRatio: 121.w / 184.h,
+                child: Stack(
+                  fit: StackFit.expand,
+                  children: [
+                    // 베이스 이미지
+                    Container(
+                      decoration: BoxDecoration(
+                        image: DecorationImage(
+                          image: NetworkImage(frameBaseImageUrl!),
+                          fit: BoxFit.fill,
+                        ),
+                      ),
                     ),
-                    itemBuilder: (context, index) {
-                      final photo = photos[index];
-                      return Container(
+                    // 4컷 사진들
+                    Positioned(
+                      top: 18.h,
+                      left: 18.w,
+                      right: 18.w,
+                      height: 376.h,
+                      child: GridView.builder(
+                        itemCount: 4,
+                        physics: NeverScrollableScrollPhysics(),
+                        padding: EdgeInsets.zero,
+                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 2,
+                          crossAxisSpacing: 8.w,
+                          mainAxisSpacing: 8.h,
+                          childAspectRatio: 121.w / 184.h,
+                        ),
+                        itemBuilder: (context, index) {
+                          final photo = photos[index];
+                          return Container(
+                            decoration: BoxDecoration(
+                              image: DecorationImage(
+                                image: FileImage(photo.file!),
+                                fit: BoxFit.cover,
+                              ),
+                            ),
+                          );
+                        },
+                      ),
+                    ),
+                    // 오버레이 이미지
+                    if (frameOverlayImageUrl != null)
+                      Container(
                         decoration: BoxDecoration(
                           image: DecorationImage(
-                            image: FileImage(photo.file!),
-                            fit: BoxFit.cover,
+                            image: NetworkImage(frameOverlayImageUrl),
+                            fit: BoxFit.fill,
                           ),
                         ),
-                      );
-                    },
-                  ),
+                      ),
+                  ],
                 ),
               ),
             ),

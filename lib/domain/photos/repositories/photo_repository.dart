@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'package:potato_4cut_v2/domain/common/entities/request/issue_upload_link_request_entity.dart';
 import 'package:potato_4cut_v2/domain/photos/entites/request/save_4cut_photos_request_entity.dart';
 import 'package:potato_4cut_v2/domain/common/entities/response/upload_link_response_entity.dart';
@@ -11,4 +13,6 @@ abstract class PhotoRepository {
   Future<void> deletePhoto(String id);
 
   Future<UploadLinkResponseEntity> issue4CutUploadLink(IssueUploadLinkRequestEntity request);
+
+  Future<void> uploadToS3(String uploadUrl, Uint8List imageData);
 }

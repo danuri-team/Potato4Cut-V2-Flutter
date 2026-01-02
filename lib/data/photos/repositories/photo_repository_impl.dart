@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'package:potato_4cut_v2/data/common/models/request/issue_upload_link_request_model.dart';
 import 'package:potato_4cut_v2/data/photos/data_sources/photo_data_source.dart';
 import 'package:potato_4cut_v2/data/photos/models/request/save_4cut_photos_request_model.dart';
@@ -44,5 +46,10 @@ class PhotoRepositoryImpl implements PhotoRepository {
     final requestModel = IssueUploadLinkRequestModel(request.fileSize);
     final response = await _dataSource.issue4CutUploadLink(requestModel);
     return response.toEntity();
+  }
+
+  @override
+  Future<void> uploadToS3(String uploadUrl, Uint8List imageData) async {
+    await _dataSource.uploadToS3(uploadUrl, imageData);
   }
 }

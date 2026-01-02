@@ -1,4 +1,7 @@
+import 'dart:typed_data';
+
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:potato_4cut_v2/core/enum/photo_share_type.dart';
 import 'package:potato_4cut_v2/data/photos/data_sources/photo_data_source_impl.dart';
 import 'package:potato_4cut_v2/data/photos/repositories/photo_repository_impl.dart';
 import 'package:potato_4cut_v2/domain/common/entities/request/issue_upload_link_request_entity.dart';
@@ -10,6 +13,7 @@ import 'package:potato_4cut_v2/domain/photos/usecases/import_specific_photo_use_
 import 'package:potato_4cut_v2/domain/photos/usecases/issue_4cut_upload_link_use_case.dart';
 import 'package:potato_4cut_v2/domain/photos/usecases/photo_use_cases.dart';
 import 'package:potato_4cut_v2/domain/photos/usecases/save_4cut_photos_use_case.dart';
+import 'package:potato_4cut_v2/domain/photos/usecases/upload_photo_use_case.dart';
 
 final photoDataSourceProvider = Provider((ref) => PhotoDataSourceImpl(null));
 
@@ -38,16 +42,23 @@ final issue4CutUploadLinkProvider = Provider((ref) {
   return Issue4cutUploadLinkUseCase(repository);
 });
 
+final uploadPhotoProvider = Provider((ref) {
+  final repository = ref.watch(photoRepositoryProvider);
+  return UploadPhotoUseCase(repository);
+});
+
 final photoUseCaseProvider = Provider((ref) {
   final save4cutPhotos = ref.watch(save4cutPhotosProvider);
   final importSpecificPhoto = ref.watch(importSpecificPhotoProvider);
   final deletePhoto = ref.watch(deletePhotoProvider);
   final issue4cutUploadLink = ref.watch(issue4CutUploadLinkProvider);
+  final uploadPhoto = ref.watch(uploadPhotoProvider);
   return PhotoUseCases(
     save4cutPhotos: save4cutPhotos,
     importSpecificPhoto: importSpecificPhoto,
     deletePhoto: deletePhoto,
     issue4cutUploadLink: issue4cutUploadLink,
+    uploadPhoto: uploadPhoto,
   );
 });
 
@@ -76,5 +87,20 @@ class PhotoViewModelNotifier extends StateNotifier<PhotoUseCases> {
   Future<UploadLinkResponseEntity> issue4cutUploadLink(IssueUploadLinkRequestEntity request) async{
     final response = await state.issue4cutUploadLink.issue4CutUploadLink(request);
     return response;
+  }
+
+  Future<String> uploadPhotoAndSave({
+    required Uint8List imageData,
+    required String frameId,
+    required PhotoShareType photoShareType,
+    required String expireAt,
+  }) async {
+    final key = await state.uploadPhoto.uploadPhotoAndSave(
+      imageData: imageData,
+      frameId: frameId,
+      photoShareType: photoShareType,
+      expireAt: expireAt,
+    );
+    return key;
   }
 }

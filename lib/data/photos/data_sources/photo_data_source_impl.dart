@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'package:dio/dio.dart';
 import 'package:potato_4cut_v2/core/network/dio.dart';
 import 'package:potato_4cut_v2/core/storage/token_storage.dart';
@@ -15,11 +17,17 @@ class PhotoDataSourceImpl implements PhotoDataSource {
   final tokenStorage = TokenStorage();
 
   @override
-  Future<Save4cutPhotosResponseModel> save4CutPhotos(Save4cutPhotosRequestModel request) async {
+  Future<Save4cutPhotosResponseModel> save4CutPhotos(
+    Save4cutPhotosRequestModel request,
+  ) async {
     final response = await _dio.post(
       '/api/v1/photos',
       data: request.toJson(),
-      options: Options(headers: {"Authorization": "Bearer ${await tokenStorage.getAccessToken()}"}),
+      options: Options(
+        headers: {
+          "Authorization": "Bearer ${await tokenStorage.getAccessToken()}",
+        },
+      ),
     );
     return Save4cutPhotosResponseModel.fromJson(response.data);
   }
@@ -28,7 +36,11 @@ class PhotoDataSourceImpl implements PhotoDataSource {
   Future importSpecificPhoto(String id) async {
     final response = await _dio.get(
       '/api/v1/photos/$id',
-      options: Options(headers: {'Authorization': 'Bearer ${await tokenStorage.getAccessToken()}'}),
+      options: Options(
+        headers: {
+          'Authorization': 'Bearer ${await tokenStorage.getAccessToken()}',
+        },
+      ),
     );
 
     return response;
@@ -38,7 +50,11 @@ class PhotoDataSourceImpl implements PhotoDataSource {
   Future<void> deletePhoto(String id) async {
     await _dio.delete(
       '/api/v1/photos/$id',
-      options: Options(headers: {'Authorization': 'Bearer ${await tokenStorage.getAccessToken()}'}),
+      options: Options(
+        headers: {
+          'Authorization': 'Bearer ${await tokenStorage.getAccessToken()}',
+        },
+      ),
     );
   }
 
@@ -49,8 +65,18 @@ class PhotoDataSourceImpl implements PhotoDataSource {
     final response = await _dio.post(
       '/api/v1/photos/presigned-url',
       data: request.toJson(),
-      options: Options(headers: {'Authorization': 'Bearer ${await tokenStorage.getAccessToken()}'}),
+      options: Options(
+        headers: {
+          'Authorization': 'Bearer ${await tokenStorage.getAccessToken()}',
+        },
+      ),
     );
     return UploadLinkResponseModel.fromJson(response.data);
+  }
+
+  @override
+  Future<void> uploadToS3(String uploadUrl, Uint8List imageData) async {
+    final dio = Dio();
+    await dio.put(uploadUrl, data: imageData);
   }
 }

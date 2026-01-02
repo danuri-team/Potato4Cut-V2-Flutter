@@ -4,6 +4,8 @@ import 'package:potato_4cut_v2/data/common/models/response/upload_link_response_
 import 'package:potato_4cut_v2/data/photos/models/response/save_4cut_photos_response_model.dart';
 
 
+import 'dart:typed_data';
+
 abstract class PhotoDataSource {
   Future<Save4cutPhotosResponseModel> save4CutPhotos(Save4cutPhotosRequestModel request);
 
@@ -12,4 +14,6 @@ abstract class PhotoDataSource {
   Future<void> deletePhoto(String id);
 
   Future<UploadLinkResponseModel> issue4CutUploadLink(IssueUploadLinkRequestModel request);
+
+  Future<void> uploadToS3(String uploadUrl, Uint8List imageData);
 }
