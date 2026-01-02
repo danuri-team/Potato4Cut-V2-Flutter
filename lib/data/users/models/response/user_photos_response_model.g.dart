@@ -48,7 +48,7 @@ Map<String, dynamic> _$UserPhotosDataModelToJson(
 
 UserPhotoModel _$UserPhotoModelFromJson(Map<String, dynamic> json) =>
     UserPhotoModel(
-      json['id'] as String,
+      json['photoId'] as String,
       json['imageUrl'] as String,
       json['frameId'] as String,
       DateTime.parse(json['createdAt'] as String),
@@ -56,7 +56,7 @@ UserPhotoModel _$UserPhotoModelFromJson(Map<String, dynamic> json) =>
 
 Map<String, dynamic> _$UserPhotoModelToJson(UserPhotoModel instance) =>
     <String, dynamic>{
-      'id': instance.id,
+      'photoId': instance.photoId,
       'imageUrl': instance.imageUrl,
       'frameId': instance.frameId,
       'createdAt': instance.createdAt.toIso8601String(),

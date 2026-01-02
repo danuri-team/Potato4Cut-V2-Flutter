@@ -67,13 +67,13 @@ class UserPhotosDataModel {
 
 @JsonSerializable()
 class UserPhotoModel {
-  final String id;
+  final String photoId;
   final String imageUrl;
   final String frameId;
   final DateTime createdAt;
 
   const UserPhotoModel(
-    this.id,
+    this.photoId,
     this.imageUrl,
     this.frameId,
     this.createdAt,
@@ -85,6 +85,6 @@ class UserPhotoModel {
   Map<String, dynamic> toJson() => _$UserPhotoModelToJson(this);
 
   UserPhotoEntity toEntity() {
-    return UserPhotoEntity(id, imageUrl, frameId, createdAt);
+    return UserPhotoEntity(photoId, imageUrl, frameId, createdAt);
   }
 }

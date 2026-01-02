@@ -17,7 +17,7 @@ class Save4cutPhotosResponseModel {
 
   Map<String, dynamic> toJson() => _$Save4cutPhotosResponseModelToJson(this);
 
-  Save4cutPhotosResponseEntity toEntity(){
+  Save4cutPhotosResponseEntity toEntity() {
     final data = this.data.toEntity();
     return Save4cutPhotosResponseEntity(success, data, message);
   }
@@ -26,7 +26,7 @@ class Save4cutPhotosResponseModel {
 @JsonSerializable()
 class Save4cutPhotosDataModel {
   final String photoId;
-  final String composedImageUrl;
+  final String imageUrl;
   final String frameId;
   final String frameTitle;
   final String shareExpireAt;
@@ -35,7 +35,7 @@ class Save4cutPhotosDataModel {
 
   Save4cutPhotosDataModel(
     this.photoId,
-    this.composedImageUrl,
+    this.imageUrl,
     this.frameId,
     this.frameTitle,
     this.shareExpireAt,
@@ -51,7 +51,7 @@ class Save4cutPhotosDataModel {
   Save4cutPhotosDataEntity toEntity() {
     return Save4cutPhotosDataEntity(
       photoId,
-      composedImageUrl,
+      imageUrl,
       frameId,
       frameTitle,
       shareExpireAt,

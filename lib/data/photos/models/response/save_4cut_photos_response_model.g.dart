@@ -26,7 +26,7 @@ Save4cutPhotosDataModel _$Save4cutPhotosDataModelFromJson(
   Map<String, dynamic> json,
 ) => Save4cutPhotosDataModel(
   json['photoId'] as String,
-  json['composedImageUrl'] as String,
+  json['imageUrl'] as String,
   json['frameId'] as String,
   json['frameTitle'] as String,
   json['shareExpireAt'] as String,
@@ -38,7 +38,7 @@ Map<String, dynamic> _$Save4cutPhotosDataModelToJson(
   Save4cutPhotosDataModel instance,
 ) => <String, dynamic>{
   'photoId': instance.photoId,
-  'composedImageUrl': instance.composedImageUrl,
+  'imageUrl': instance.imageUrl,
   'frameId': instance.frameId,
   'frameTitle': instance.frameTitle,
   'shareExpireAt': instance.shareExpireAt,

@@ -10,7 +10,7 @@ class Save4cutPhotosResponseEntity {
 
 class Save4cutPhotosDataEntity {
   final String photoId;
-  final String composedImageUrl;
+  final String imageUrl;
   final String frameId;
   final String frameTitle;
   final String shareExpireAt;
@@ -19,7 +19,7 @@ class Save4cutPhotosDataEntity {
 
   Save4cutPhotosDataEntity(
     this.photoId,
-    this.composedImageUrl,
+    this.imageUrl,
     this.frameId,
     this.frameTitle,
     this.shareExpireAt,

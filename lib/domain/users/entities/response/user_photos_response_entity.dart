@@ -30,13 +30,13 @@ class UserPhotosDataEntity {
 }
 
 class UserPhotoEntity {
-  final String id;
+  final String photoId;
   final String imageUrl;
   final String frameId;
   final DateTime createdAt;
 
   const UserPhotoEntity(
-    this.id,
+    this.photoId,
     this.imageUrl,
     this.frameId,
     this.createdAt,
