@@ -69,6 +69,15 @@ Map<String, dynamic> _$DetailedFrameDataModelToJson(
   'inLibrary': instance.inLibrary,
 };
 
-const _$FrameCategoryTypeEnumMap = {FrameCategoryType.CUTE: 'CUTE'};
+const _$FrameCategoryTypeEnumMap = {
+  FrameCategoryType.CUTE: 'CUTE',
+  FrameCategoryType.EMOTIONAL: 'EMOTIONAL',
+  FrameCategoryType.COUPLE: 'COUPLE',
+  FrameCategoryType.SEASONAL: 'SEASONAL',
+  FrameCategoryType.CHARACTER: 'CHARACTER',
+  FrameCategoryType.MINIMAL: 'MINIMAL',
+  FrameCategoryType.RETRO: 'RETRO',
+  FrameCategoryType.ETC: 'ETC',
+};
 
 const _$FrameStatusTypeEnumMap = {FrameStatusType.APPROVED: 'APPROVED'};

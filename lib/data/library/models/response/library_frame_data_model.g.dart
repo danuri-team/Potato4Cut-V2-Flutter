@@ -38,4 +38,13 @@ Map<String, dynamic> _$LibraryFrameDataModelToJson(
   'creatorNickname': instance.creatorNickname,
 };
 
-const _$FrameCategoryTypeEnumMap = {FrameCategoryType.CUTE: 'CUTE'};
+const _$FrameCategoryTypeEnumMap = {
+  FrameCategoryType.CUTE: 'CUTE',
+  FrameCategoryType.EMOTIONAL: 'EMOTIONAL',
+  FrameCategoryType.COUPLE: 'COUPLE',
+  FrameCategoryType.SEASONAL: 'SEASONAL',
+  FrameCategoryType.CHARACTER: 'CHARACTER',
+  FrameCategoryType.MINIMAL: 'MINIMAL',
+  FrameCategoryType.RETRO: 'RETRO',
+  FrameCategoryType.ETC: 'ETC',
+};

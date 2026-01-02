@@ -8,14 +8,17 @@ class SelectedFrame extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final frameBaseImageUrl = ref.read(frameBaseImageUrlProvider);
+    final framePreviewImageUrl = ref.watch(framePreviewImageUrlProvider);
     return Container(
       width: 286.w,
       height: 472.h,
       decoration: BoxDecoration(
-        image: DecorationImage(
-          image: NetworkImage(frameBaseImageUrl!),
-        ),
+        image: framePreviewImageUrl != null
+            ? DecorationImage(
+                image: NetworkImage(framePreviewImageUrl),
+                fit: BoxFit.contain,
+              )
+            : null,
       ),
     );
   }

@@ -125,36 +125,53 @@ class _FrameListState extends ConsumerState<FrameList> {
                     final frameId = possessionProductsContent[index].frameId;
                     final frameBaseImageUrl =
                         possessionProductsContent[index].frameBaseImageUrl;
+                    final isSelected = selectedFrame == frameBaseImageUrl;
                     return GestureDetector(
                       onTap: () {
-                        if (selectedFrame == null) {
+                        if (selectedFrame == frameBaseImageUrl) {
+                          ref
+                              .read(savePhotoFieldProvider.notifier)
+                              .updateField(frameId: null);
+                          ref
+                              .read(frameBaseImageUrlProvider.notifier)
+                              .update((state) => null);
+                          ref
+                              .read(framePreviewImageUrlProvider.notifier)
+                              .update((state) => null);
+                        } else {
                           ref
                               .read(savePhotoFieldProvider.notifier)
                               .updateField(frameId: frameId);
                           ref
                               .read(frameBaseImageUrlProvider.notifier)
                               .update((state) => frameBaseImageUrl);
-                        } else {
                           ref
-                              .read(frameBaseImageUrlProvider.notifier)
-                              .update((state) => null);
+                              .read(framePreviewImageUrlProvider.notifier)
+                              .update((state) => previewImageUrl);
                         }
                       },
                       child: Container(
                         decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(6),
                           image: DecorationImage(
                             fit: BoxFit.fill,
                             image: NetworkImage(previewImageUrl),
                           ),
                         ),
-                        alignment: Alignment.center,
-                        child: (selectedFrame != null)
-                            ? SvgPicture.asset(
-                                'assets/images/check.svg',
-                                width: 40.w,
-                                height: 40.h,
+                        child: isSelected
+                            ? Container(
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(6),
+                                  color: Colors.black.withValues(alpha: 0.4),
+                                ),
+                                alignment: Alignment.center,
+                                child: Icon(
+                                  Icons.check_circle,
+                                  color: AppColor.m300,
+                                  size: 40.w,
+                                ),
                               )
-                            : SizedBox.shrink(),
+                            : null,
                       ),
                     );
                   }

@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:potato_4cut_v2/core/theme/app_text_style.dart';
 import 'package:potato_4cut_v2/presentation/gallery/providers/maded_frame_provider.dart';
 
 class MadedFrameList extends ConsumerStatefulWidget {
@@ -31,9 +32,7 @@ class _MadedFrameListState extends ConsumerState<MadedFrameList> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text('오류가 발생했습니다'),
-            SizedBox(height: 8.h),
-            Text(state.errorMessage ?? '알 수 없는 오류'),
+            Text('제작한 프레임이 없어요', style: AppTextStyle.body1Reading),
             SizedBox(height: 16.h),
             CupertinoButton(
               onPressed: () {
