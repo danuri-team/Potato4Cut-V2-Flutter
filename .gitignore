@@ -51,3 +51,4 @@ android/app/google-services.json
 .env
 
 GoogleService-Info.plist
+.claude
