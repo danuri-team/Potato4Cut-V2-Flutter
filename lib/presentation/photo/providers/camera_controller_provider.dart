@@ -9,9 +9,17 @@ final cameraControllerProvider =
 class CameraControllerNotifier extends StateNotifier<CameraController?> {
   CameraControllerNotifier() : super(null);
 
+  // 카메라 목록 캐싱
+  List<CameraDescription>? _cachedCameras;
+
+  Future<List<CameraDescription>> _getCameras() async {
+    _cachedCameras ??= await availableCameras();
+    return _cachedCameras!;
+  }
+
   Future<void> initCamera() async {
     try {
-      final cameras = await availableCameras();
+      final cameras = await _getCameras();
 
       final frontCamera = cameras.firstWhere(
         (camera) => camera.lensDirection == CameraLensDirection.front,
@@ -42,7 +50,7 @@ class CameraControllerNotifier extends StateNotifier<CameraController?> {
   Future<void> switchCamera() async {
     if (state == null) return;
 
-      final cameras = await availableCameras();
+      final cameras = await _getCameras();
       if (cameras.length < 2) return;
 
       final currentDirection = state!.description.lensDirection;

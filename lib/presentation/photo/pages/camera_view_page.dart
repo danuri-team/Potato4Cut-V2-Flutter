@@ -18,6 +18,7 @@ import 'package:potato_4cut_v2/presentation/photo/providers/countdown_provider.d
 import 'package:potato_4cut_v2/presentation/photo/providers/current_page_index_provider.dart';
 import 'package:potato_4cut_v2/presentation/photo/providers/photo_provider.dart';
 import 'package:potato_4cut_v2/presentation/photo/providers/photo_flow_provider.dart';
+import 'package:potato_4cut_v2/presentation/photo/providers/frame_base_image_url_provider.dart';
 import 'package:image/image.dart' as img;
 
 Future<String> _flipImageHorizontallyIsolate(String imagePath) async {
@@ -51,6 +52,31 @@ class _CameraViewPageState extends ConsumerState<CameraViewPage> {
     if (cameraController == null) {
       ref.read(cameraControllerProvider.notifier).initCamera();
     }
+
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      if (!mounted) return;
+
+      try {
+        final frameBaseUrl = ref.read(frameBaseImageUrlProvider);
+        final frameOverlayUrl = ref.read(frameOverlayImageUrlProvider);
+
+        if (frameBaseUrl != null && mounted) {
+          await precacheImage(NetworkImage(frameBaseUrl), context);
+        }
+        if (frameOverlayUrl != null && mounted) {
+          await precacheImage(NetworkImage(frameOverlayUrl), context);
+        }
+      } catch (e) {
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text('프레임 이미지를 가져오는데 실패했어요'),
+              backgroundColor: Colors.red,
+            ),
+          );
+        }
+      }
+    });
   }
 
   @override
@@ -110,12 +136,15 @@ class _CameraViewPageState extends ConsumerState<CameraViewPage> {
               }
             });
           } else if (photoFlow == PhotoFlowType.Updating) {
-            final imgaePath = await _flipImageHorizontallyIsolate(xFile.path);
-            ref
-                .read(photoProvider.notifier)
-                .takePhoto(photoIndex, File(imgaePath));
-            ref.read(countdownProvider.notifier).resetCountdown();
-            completer.complete();
+            compute(_flipImageHorizontallyIsolate, xFile.path).then((
+              flippedImagePath,
+            ) {
+              ref
+                  .read(photoProvider.notifier)
+                  .takePhoto(photoIndex, File(flippedImagePath));
+              ref.read(countdownProvider.notifier).resetCountdown();
+              completer.complete();
+            });
           }
         } else if (cameraController?.description.lensDirection ==
             CameraLensDirection.back) {
@@ -327,7 +356,10 @@ class _CameraViewPageState extends ConsumerState<CameraViewPage> {
                     },
                     child: SvgPicture.asset(
                       'assets/images/chevron_left.svg',
-                      colorFilter: ColorFilter.mode(AppColor.static1, BlendMode.srcIn),
+                      colorFilter: ColorFilter.mode(
+                        AppColor.static1,
+                        BlendMode.srcIn,
+                      ),
                     ),
                   ),
                 ),

@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:typed_data';
 import 'dart:ui';
 
 import 'package:flutter/rendering.dart';
@@ -15,23 +16,36 @@ final finishedPhotoProvider =
 class FinishedPhotoNotifier extends StateNotifier<File?> {
   FinishedPhotoNotifier() : super(null);
 
-  Future<int> generateFinishedPhoto(GlobalKey key) async {
-    final formatDate = DateFormat("yyyy.MM.dd.HH.mm").format(DateTime.now());
+  Future<Uint8List> captureImage(
+    GlobalKey key, {
+    double pixelRatio = 4.0,
+  }) async {
+    if (state != null) {
+      return await state!.readAsBytes();
+    }
 
     final boundary =
         key.currentContext?.findRenderObject() as RenderRepaintBoundary;
-    final image = await boundary.toImage(pixelRatio: 2);
+    final image = await boundary.toImage(pixelRatio: pixelRatio);
     final byteData = await image.toByteData(format: ImageByteFormat.png);
     final pngBytes = byteData!.buffer.asUint8List();
+
+    final formatDate = DateFormat("yyyy.MM.dd.HH.mm").format(DateTime.now());
     final dir = await getApplicationDocumentsDirectory();
-    final file1 = File('${dir.path}/$formatDate.png');
-    final file2 = await file1.writeAsBytes(pngBytes);
-    state = file2;
-    final fileSize = await file2.length();
+    final file = File('${dir.path}/finished_$formatDate.png');
+    await file.writeAsBytes(pngBytes);
+
+    state = file;
+    return pngBytes;
+  }
+
+  Future<int> generateFinishedPhoto(GlobalKey key) async {
+    await captureImage(key, pixelRatio: 2);
+    final fileSize = state?.lengthSync() ?? 0;
     return fileSize;
   }
 
-  void resetState(){
+  void resetState() {
     state = null;
   }
 }

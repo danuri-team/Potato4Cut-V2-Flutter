@@ -1,8 +1,5 @@
 import 'dart:io';
-import 'dart:ui';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
-
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
@@ -20,6 +17,7 @@ import 'package:potato_4cut_v2/presentation/photo/providers/frame_base_image_url
 import 'package:potato_4cut_v2/presentation/photo/providers/save_photo_field_provider.dart';
 import 'package:potato_4cut_v2/presentation/photo/widgets/finished_photo.dart';
 import 'package:potato_4cut_v2/presentation/photo/widgets/share_button.dart';
+import 'package:potato_4cut_v2/presentation/photo/providers/finished_photo_provider.dart';
 
 class FinishedPhotoPage extends ConsumerWidget {
   FinishedPhotoPage({super.key});
@@ -37,13 +35,10 @@ class FinishedPhotoPage extends ConsumerWidget {
         await Gal.requestAccess();
       }
 
-      // 실시간으로 이미지 캡처 (고화질)
-      final boundary =
-          repaintBoundaryKey.currentContext?.findRenderObject()
-              as RenderRepaintBoundary;
-      final image = await boundary.toImage(pixelRatio: 4.0);
-      final byteData = await image.toByteData(format: ImageByteFormat.png);
-      final pngBytes = byteData!.buffer.asUint8List();
+      final pngBytes = await ref
+          .read(finishedPhotoProvider.notifier)
+          .captureImage(repaintBoundaryKey, pixelRatio: 4.0);
+
       final dir = await getApplicationDocumentsDirectory();
       final formatDate = DateFormat("yyyy.MM.dd.HH.mm").format(DateTime.now());
       final file = File('${dir.path}/$formatDate.png');

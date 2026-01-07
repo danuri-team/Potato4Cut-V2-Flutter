@@ -16,6 +16,7 @@ import 'package:potato_4cut_v2/presentation/photo/providers/current_page_index_p
 import 'package:potato_4cut_v2/presentation/photo/providers/finished_photo_provider.dart';
 import 'package:potato_4cut_v2/presentation/photo/providers/photo_flow_provider.dart';
 import 'package:potato_4cut_v2/presentation/photo/providers/photo_provider.dart';
+import 'package:potato_4cut_v2/presentation/photo/providers/camera_controller_provider.dart';
 
 class CheckFramePage extends ConsumerWidget {
   const CheckFramePage({super.key});
@@ -46,29 +47,35 @@ class CheckFramePage extends ConsumerWidget {
             const SelectedFrame(),
             SizedBox(height: 33.h),
             GestureDetector(
-      onTap: () => Throttle.run(() {
-        ref.read(frameBaseImageUrlProvider.notifier).update((state) => null);
-        AppNavigation.goSelectFrame(context);
-      }),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Text(
-            '프레임 선택하기',
-            style: AppTextStyle.label1Normal.copyWith(
-              color: AppColor.label2,
-              fontWeight: FontWeight.w400,
+              onTap: () => Throttle.run(() {
+                ref
+                    .read(frameBaseImageUrlProvider.notifier)
+                    .update((state) => null);
+                AppNavigation.goSelectFrame(context);
+              }),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    '프레임 선택하기',
+                    style: AppTextStyle.label1Normal.copyWith(
+                      color: AppColor.label2,
+                      fontWeight: FontWeight.w400,
+                    ),
+                  ),
+                  SizedBox(width: 8.w),
+                  SvgPicture.asset('assets/images/refresh.svg'),
+                ],
+              ),
             ),
-          ),
-          SizedBox(width: 8.w),
-          SvgPicture.asset('assets/images/refresh.svg'),
-        ],
-      ),
-    ),
             const Spacer(),
             SubmitButton(
               onTap: () {
                 resetState(ref);
+                final cameraController = ref.read(cameraControllerProvider);
+                if (cameraController == null) {
+                  ref.read(cameraControllerProvider.notifier).initCamera();
+                }
                 Throttle.run(() {
                   AppNavigation.goCameraView(context);
                 });

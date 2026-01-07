@@ -12,6 +12,7 @@ import 'package:potato_4cut_v2/presentation/photo/providers/photo_provider.dart'
 import 'package:potato_4cut_v2/presentation/photo/providers/frame_base_image_url_provider.dart';
 import 'package:potato_4cut_v2/presentation/photo/providers/photo_view_model.dart';
 import 'package:potato_4cut_v2/presentation/photo/providers/save_photo_field_provider.dart';
+import 'package:potato_4cut_v2/presentation/photo/providers/finished_photo_provider.dart';
 
 class FinishedPhoto extends ConsumerStatefulWidget {
   const FinishedPhoto({super.key, required this.repaintBoundaryKey});
@@ -45,18 +46,9 @@ class _FinishedPhotoState extends ConsumerState<FinishedPhoto> {
         return;
       }
 
-      final boundary =
-          widget.repaintBoundaryKey.currentContext?.findRenderObject()
-              as RenderRepaintBoundary;
-      final image = await boundary.toImage(pixelRatio: 4.0);
-      final byteData = await image.toByteData(format: ImageByteFormat.png);
-      final pngBytes = byteData!.buffer.asUint8List();
-
-      // 파일 저장
-      final dir = await getApplicationDocumentsDirectory();
-      final formatDate = DateFormat("yyyy.MM.dd.HH.mm").format(DateTime.now());
-      final file = File('${dir.path}/auto_$formatDate.png');
-      await file.writeAsBytes(pngBytes);
+      final pngBytes = await ref
+          .read(finishedPhotoProvider.notifier)
+          .captureImage(widget.repaintBoundaryKey, pixelRatio: 4.0);
 
       // S3에 업로드 및 서버에 저장
       await ref
