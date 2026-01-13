@@ -225,7 +225,7 @@ class _MakeFrameStep2PageState extends ConsumerState<MakeFrameStep2Page> {
             child: Padding(
               padding: EdgeInsets.only(top: 16.h, bottom: 16.h),
               child: SubmitButton(
-                onTap: () => Throttle.run(() => _submitFrame),
+                onTap: () => Throttle.run(_submitFrame),
                 width: double.infinity,
                 text: _isLoading ? '처리 중...' : '다음으로',
                 isActivate: _isFormValid && !_isLoading,
